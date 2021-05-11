@@ -1,7 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import { Request, Response } from 'express';
 import * as dotenv from 'dotenv';
-import authorizationCodeGenerator from '../jwt/GenerateAuthorizationCode';
+import authorizationCodeGenerator from '../../jwt/GenerateAuthorizationCode';
 dotenv.config();
 const EmailValidationCheck = (email: string) => {
 	function validateEmail(email: string) {
@@ -31,7 +31,7 @@ const EmailValidationCheck = (email: string) => {
 	}
 };
 
-export const emailController = async (req: Request, res: Response) => {
+const sendEmail = async (req: Request, res: Response) => {
 	const { email } = req.body;
 	if (EmailValidationCheck(email)) {
 		const username = email.split('@')[0];
@@ -126,3 +126,5 @@ export const emailController = async (req: Request, res: Response) => {
 	}
 };
 // main().catch(console.error);
+
+export default sendEmail;

@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv';
-import { accessTokenGenerator } from '../jwt/GenerateAccessToken';
-import { refreshTokenGenerator } from '../jwt/GenerateRefreshToken';
-import { Users } from '../src/entity/Users';
+import { accessTokenGenerator } from '../../jwt/GenerateAccessToken';
+import { refreshTokenGenerator } from '../../jwt/GenerateRefreshToken';
+import { Users } from '../../src/entity/Users';
 dotenv.config();
 //------------------------------------------------------------------
-const emailAuthController = {
+const loginEmail = {
 	authorizationCode: async (req: Request, res: Response) => {
 		const authorizationCode: string = req.body.authorizationCode as string;
 		const email: string = req.body.email as string;
@@ -41,4 +41,4 @@ const emailAuthController = {
 	},
 };
 
-export { emailAuthController };
+export default loginEmail;

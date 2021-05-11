@@ -2,9 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
-import userRouter from './route'
-dotenv.config();
 import loginRouter from './routes/login';
+dotenv.config();
 
 const PORT = process.env.PORT;
 
@@ -17,14 +16,14 @@ const corsOption = {
 	method: ['post', 'get', 'delete', 'options'],
 	credentials: true,
 };
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
 	cors(corsOption);
 	next();
 });
 app.use(express.json());
-app.use('/', loginRouter);
 
-app.use('/', userRouter);
+// routes
+app.use('/', loginRouter);
 
 app.listen(PORT, () => {
 	console.log(PORT, '포트 열림');
