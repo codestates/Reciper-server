@@ -1,6 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, BaseEntity } from 'typeorm';
 @Entity()
-export class Stacks {
+export class Stacks extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 

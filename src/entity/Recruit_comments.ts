@@ -1,8 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	CreateDateColumn,
+	UpdateDateColumn,
+	ManyToOne,
+	BaseEntity,
+} from 'typeorm';
 import { Recruits } from './Recruits';
 
 @Entity()
-export class Recruit_comments {
+export class Recruit_comments extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
