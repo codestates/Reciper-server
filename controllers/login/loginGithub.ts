@@ -3,7 +3,6 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import { Users } from '../../src/entity/Users';
-import { getRepository } from 'typeorm';
 
 const githubLoginURL = 'https://github.com/login/oauth/access_token';
 const githubInfoURL = 'https://api.github.com/user';
@@ -42,7 +41,7 @@ const loginGithub = async (req: Request, res: Response) => {
 					console.log('💙github: ', err.message);
 				});
 			// 유저정보 확인하여 새로운 유저면 데이터베이스에 저장
-			const userInfo = await getRepository(Users).findOne({
+			const userInfo = await Users.findOne({
 				email: `${resInfo}@github.com`,
 			});
 			if (userInfo == null && resInfo !== undefined) {
@@ -71,7 +70,7 @@ const loginGithub = async (req: Request, res: Response) => {
 		.catch(err => {
 			console.log('💙github: ', err.message);
 			res.status(401).json({
-				message: 'authorizationCode Error!',
+				message: 'authorizationCode Error!' + err.message,
 			});
 		});
 };
