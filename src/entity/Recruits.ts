@@ -7,11 +7,12 @@ import {
 	OneToMany,
 	ManyToMany,
 	JoinTable,
+	BaseEntity,
 } from 'typeorm';
 import { Recruit_comments } from './Recruit_comments';
 import { Stacks } from './Stacks';
 @Entity()
-export class Recruits {
+export class Recruits extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 

@@ -6,11 +6,12 @@ import {
 	UpdateDateColumn,
 	ManyToMany,
 	JoinTable,
+	BaseEntity,
 } from 'typeorm';
 import { Stacks } from './Stacks';
 
 @Entity()
-export class Users {
+export class Users extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
