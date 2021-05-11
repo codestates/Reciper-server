@@ -16,10 +16,11 @@ const corsOption = {
 	method: ['post', 'get', 'delete', 'options'],
 	credentials: true,
 };
-app.use((req, res, next) => {
-	cors(corsOption);
-	next();
-});
+// app.use('/', (req, res, next) => {
+// 	cors(corsOption);
+// 	next();
+// });
+app.use(cors(corsOption));
 app.use(express.json());
 
 // routes
