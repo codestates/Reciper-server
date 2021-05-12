@@ -40,6 +40,9 @@ export class Users extends BaseEntity {
 	@Column()
 	profile_image!: string;
 
+	@Column()
+	profile_color!: string;
+
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
 
