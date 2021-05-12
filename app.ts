@@ -3,6 +3,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
 import loginRouter from './routes/login';
+import authChecker from './middlewares/authChecker';
 import profileRouter from './routes/profile';
 dotenv.config();
 
@@ -24,7 +25,8 @@ app.use(express.json());
 // routes
 app.use('/images', express.static('uploads'));
 app.use('/', loginRouter);
-app.use('/', profileRouter);
+app.use('/', authChecker, profileRouter);
+
 app.listen(PORT, () => {
 	console.log(PORT, '포트 열림');
 });
