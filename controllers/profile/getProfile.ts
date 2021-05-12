@@ -4,7 +4,7 @@ import { Users } from '../../src/entity/Users';
 const getProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 조회
 	console.log('🧡getProfile- ', req.body);
-	const userId = req.userId ? req.userId : 3;
+	const userId = req.userId;
 	// 저장된 유저 정보 불러오기
 	const userInfo = await Users.findOne({
 		id: userId,
