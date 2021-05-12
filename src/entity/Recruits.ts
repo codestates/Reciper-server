@@ -23,22 +23,29 @@ export class Recruits extends BaseEntity {
 	simple_desc!: string;
 
 	@Column()
-	recruit_members!: string;
+	recruit_members!: string; // 배열 형태 - JSON.stringify()
 
 	@Column()
-	require_stack!: string;
+	require_stack!: string; // 배열 형태 - JSON.stringify()
 
 	@Column()
 	service_step!: string;
 
 	@Column()
-	period!: boolean;
+	period!: string;
 
 	@Column()
 	detail_title!: string;
 
-	@Column()
+	@Column({
+		length: 10000,
+	})
 	detail_desc!: string;
+
+	@Column({
+		default: 0,
+	})
+	view!: number;
 
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
