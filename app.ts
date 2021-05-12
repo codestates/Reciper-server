@@ -3,6 +3,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
 import loginRouter from './routes/login';
+import profileRouter from 'routes/profile';
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -16,15 +17,13 @@ const corsOption = {
 	method: ['post', 'get', 'delete', 'options'],
 	credentials: true,
 };
-// app.use('/', (req, res, next) => {
-// 	cors(corsOption);
-// 	next();
-// });
 app.use(cors(corsOption));
+
 app.use(express.json());
 
 // routes
 app.use('/', loginRouter);
+app.use('/', profileRouter);
 
 app.listen(PORT, () => {
 	console.log(PORT, '포트 열림');
