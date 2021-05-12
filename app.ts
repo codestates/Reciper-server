@@ -5,6 +5,7 @@ import createConnection from './src/index';
 import loginRouter from './routes/login';
 import authChecker from './middlewares/authChecker';
 import profileRouter from './routes/profile';
+import recruitRouter from './routes/recruit';
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use('/images', express.static('uploads'));
 app.use('/', loginRouter);
 app.use('/', authChecker, profileRouter);
+app.use('/', authChecker, recruitRouter);
 
 app.listen(PORT, () => {
 	console.log(PORT, '포트 열림');
