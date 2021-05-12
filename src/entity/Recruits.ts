@@ -40,6 +40,9 @@ export class Recruits extends BaseEntity {
 	@Column()
 	detail_desc!: string;
 
+	@Column()
+	view!: number;
+
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
 

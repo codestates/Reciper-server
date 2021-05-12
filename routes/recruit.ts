@@ -3,7 +3,7 @@ import express from 'express';
 const recruitRouter = express.Router();
 
 // 팀원모집 게시글 리스트 조회
-recruitRouter.get('/recruitList', controller.recruitList);
+recruitRouter.get('/recruitList/:order', controller.recruitList);
 // 팀원모집 게시글 상세내용 조회
 recruitRouter.get('/recruitBoard/:board_id', controller.showRecruitBoard);
 // 팀원모집 게시글 등록
