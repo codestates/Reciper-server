@@ -15,10 +15,16 @@ const loginEmail = {
 		// authorization code를 이용해 access token을 발급
 		try {
 			const verified = jwt.verify(authorizationCode, process.env.AUTHORIZATION_SECRET as string);
-			const user = await Users.findOne({ where: { email } });
+			const user = await Users.findOne({
+				where: {
+					email,
+				},
+			});
 			if (!user) {
 				//not found userData
-				const newUser = await Users.create({ email });
+				const newUser = await Users.create({
+					email,
+				});
 				const saved = await newUser.save();
 				accessToken = await accessTokenGenerator(saved.id, email);
 				refreshToken = await refreshTokenGenerator(saved.id, email);
@@ -34,9 +40,15 @@ const loginEmail = {
 				// secure: true,
 				// sameSite: 'none',
 			});
-			res.json({ accessToken, email, loginType: 'email' });
+			res.json({
+				accessToken,
+				email,
+				loginType: 'email',
+			});
 		} catch (err) {
-			res.status(400).json({ message: err.message });
+			res.status(400).json({
+				message: err.message,
+			});
 		}
 	},
 };
