@@ -3,7 +3,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
 import loginRouter from './routes/login';
-import profileRouter from 'routes/profile';
+import profileRouter from './routes/profile';
 dotenv.config();
 
 const PORT = process.env.PORT;
