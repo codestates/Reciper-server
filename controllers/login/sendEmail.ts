@@ -102,7 +102,7 @@ const sendEmail = async (req: Request, res: Response) => {
                               <a href="${
 																process.env.CLIENT_URL + '/loginloading/?code=' + AuthorizationCode + '&email=' + email
 															}" style="color: #067df7; text-decoration: none;" target="_blank" rel="noreferrer noopener">
-															${process.env.CLIENT_URL + '/login/?code=' + AuthorizationCode + '&email=' + email}
+															${process.env.CLIENT_URL + '/loginloading/?code=' + AuthorizationCode + '&email=' + email}
                               </a>
                             </p>
                             <br>

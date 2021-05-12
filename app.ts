@@ -22,9 +22,9 @@ app.use(cors(corsOption));
 app.use(express.json());
 
 // routes
+app.use('/images', express.static('uploads'));
 app.use('/', loginRouter);
 app.use('/', profileRouter);
-
 app.listen(PORT, () => {
 	console.log(PORT, '포트 열림');
 });
