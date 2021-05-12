@@ -17,7 +17,7 @@ const loginGoogle = async (req: Request, res: Response) => {
 			client_id: process.env.GOOGLE_CLIENT_ID,
 			client_secret: process.env.GOOGLE_CLIENT_SECRET,
 			code: req.body.authorizationCode,
-			redirect_uri: `${process.env.CLIENT_URL}`,
+			redirect_uri: `${process.env.CLIENT_URL}/loginloading`,
 			grant_type: 'authorization_code',
 		})
 		.then(async result => {
