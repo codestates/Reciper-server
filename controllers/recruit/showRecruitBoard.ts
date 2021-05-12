@@ -36,13 +36,22 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		} catch (err) {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
-		// 댓글 개수 세기
+		// 댓글 개수 세기 + 댓글 전체 데이터 가져오기
 		let countComments = 0;
+		let commentsAll: any[] = [];
 		try {
 			let findComments = await getRepository(Recruit_comments).findAndCount({
 				relations: ['recruits'],
 			});
-			countComments = Number(findComments.pop());
+			// countComments = Number(findComments.pop());
+			// commentsAll = findComments.slice(0, findComments.length - 1);
+			findComments.forEach(el => {
+				if (typeof el === 'number') {
+					countComments = Number(el);
+				} else {
+					commentsAll.push(el);
+				}
+			});
 		} catch (err) {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
@@ -50,6 +59,7 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		res.status(200).json({
 			...boardInfo,
 			countComments,
+			commentsAll,
 		});
 	}
 };
