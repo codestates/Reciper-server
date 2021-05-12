@@ -32,7 +32,7 @@ export class Recruits extends BaseEntity {
 	service_step!: string;
 
 	@Column()
-	period!: boolean;
+	period!: string;
 
 	@Column()
 	detail_title!: string;
