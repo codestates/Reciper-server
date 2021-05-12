@@ -84,7 +84,7 @@ const sendEmail = async (req: Request, res: Response) => {
                               <tbody><tr><td align="center">
                                     <div>
                                       <a href=${
-																				process.env.CLIENT_URL + '/login/?code=' + AuthorizationCode + '&email=' + email
+																				process.env.CLIENT_URL + '/?code=' + AuthorizationCode + '&email=' + email
 																			} style="                                background-color: #1c64f2;                                border-radius: 5px;                                color: #fff;                                display: inline-block;                                font-family: -apple-system, blinkmacsystemfont,                                  'segoe ui', 'roboto', 'oxygen', 'ubuntu',                                  'cantarell', 'fira sans', 'droid sans',                                  'helvetica neue', sans-serif;                                font-size: 12px;                                font-weight: 500;                                line-: 50px;                                text-align: center;                                text-decoration: none;                                : 200px;                              " target="_blank" rel="noreferrer noopener">Log in →</a>
                                     </div>
                                   </td></tr></tbody>
@@ -96,9 +96,9 @@ const sendEmail = async (req: Request, res: Response) => {
                             </p>
                             <p style="                      color: #000;                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',                        'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',                        'Droid Sans', 'Helvetica Neue', sans-serif;                      font-size: 14px;                      line-height: 24px;                    ">
                               <a href="${
-																process.env.CLIENT_URL + '/login/?code=' + AuthorizationCode + '&email=' + email
+																process.env.CLIENT_URL + '/?code=' + AuthorizationCode + '&email=' + email
 															}" style="color: #067df7; text-decoration: none;" target="_blank" rel="noreferrer noopener">
-															${process.env.CLIENT_URL + '/login/?code=' + AuthorizationCode + '&email=' + email}
+															${process.env.CLIENT_URL + '/?code=' + AuthorizationCode + '&email=' + email}
                               </a>
                             </p>
                             <br>
