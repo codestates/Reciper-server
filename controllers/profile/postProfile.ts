@@ -1,12 +1,17 @@
 import { Request, Response } from 'express';
 import { Users } from '../../src/entity/Users';
 
+const randomColorGenerator = (): string => {
+	const initialColorList: string[] = [];
+	return initialColorList[Math.floor(Math.random() * 10)];
+};
+
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
 	console.log('🧡postProfile- ', req.body);
 	//8,9번줄은 authChecker에서 얻을수있게됩니다. 지금은 하드코딩 되어있습니다.
-	const user_Id = 3;
-	const user_Email = 'nsg8957@naver.com';
+	const userId = req.userId;
+	const userEmail = req.userEmail;
 	// req.body = {
 	// 	name:"신승길",
 	// 	mobile:"010-1234-5678",
@@ -18,7 +23,7 @@ const postProfile = async (req: Request, res: Response) => {
 	// }
 	const { name, mobile, about_me, git_id, career, isOpen, profile_image } = req.body;
 	// JSON.stringify(career);
-	const foundUser = await Users.findOne({ where: { id: user_Id } });
+	const foundUser = await Users.findOne({ where: { id: userId } });
 	if (foundUser) {
 		foundUser.name = name;
 		foundUser.mobile = mobile;
@@ -27,7 +32,7 @@ const postProfile = async (req: Request, res: Response) => {
 		foundUser.career = JSON.stringify(career);
 		foundUser.isOpen = isOpen;
 		foundUser.profile_image = req.profileImageName ? req.profileImageName : '/image/basic.png';
-
+		foundUser.profile_color = randomColorGenerator();
 		const saved = await foundUser.save();
 
 		res.status(200).json({ message: 'success', body: saved });
