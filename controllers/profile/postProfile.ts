@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Users } from '../../src/entity/Users';
+import { Stacks } from '../../src/entity/Stacks';
 
 const randomColorGenerator = (): string => {
 	const initialColorList: string[] = [
@@ -23,21 +24,13 @@ const randomColorGenerator = (): string => {
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
 	console.log('🧡postProfile- ', req.body);
-	//8,9번줄은 authChecker에서 얻을수있게됩니다. 지금은 하드코딩 되어있습니다.
 	const userId = req.userId;
-	const userEmail = req.userEmail;
-	// req.body = {
-	// 	name:"신승길",
-	// 	mobile:"010-1234-5678",
-	// 	about_me:"성장하는개발자가 되자",
-	// 	git_id:"gatsukichi",
-	// 	career:['코드스테이츠','인턴','6개월'],
-	// 	isOpen:true,
-	// 	profile_image:이미지파일.jpg
-	// }
-	const { name, mobile, about_me, git_id, career, isOpen, profile_image } = req.body;
-	// JSON.stringify(career);
-	const foundUser = await Users.findOne({ where: { id: userId } });
+	const { name, mobile, about_me, git_id, career, stacks, isOpen, profile_image } = req.body;
+	const foundUser = await Users.findOne({
+		where: {
+			id: userId,
+		},
+	});
 	if (foundUser) {
 		foundUser.name = name;
 		foundUser.mobile = mobile;
@@ -47,13 +40,25 @@ const postProfile = async (req: Request, res: Response) => {
 		foundUser.isOpen = isOpen;
 		foundUser.profile_image = req.profileImageName ? req.profileImageName : '/image/basic.png';
 		foundUser.profile_color = randomColorGenerator();
+		const stackArray = [];
+		for (let i = 0; i < stacks.length; i++) {
+			const foundStack = await Stacks.findOne({
+				where: {
+					name: stacks[i],
+				},
+			});
+			stackArray.push(foundStack!);
+		}
+		foundUser.join = stackArray;
 		const saved = await foundUser.save();
+		console.log(saved, stackArray); // test
 		res.status(200).json({
 			...saved,
+			stacks: stackArray.map(el => el.name),
 		});
 	} else {
 		res.status(400).json({
-			message: 'err no user plz login',
+			message: 'error no user please login',
 		});
 	}
 };

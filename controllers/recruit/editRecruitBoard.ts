@@ -5,16 +5,6 @@ import { Recruits } from '../../src/entity/Recruits';
 const editRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 수정
 	console.log('💜editRecruitBoard- ', req.body, req.params);
-	// req.body = {
-	// 	name:"같이해요 레시퍼 ",
-	// 	simple_desc:"팀원 구합니다 백엔드 3분",
-	// 	recruit_members: "{포지션:백엔드,경력:3년,인원:3,모집기한:7일}", //대략 이렇다는것
-	// 	require_stack:['node.js','express.js','aws'],
-	// 	service_step:"모집중?",
-	// 	period:"6개월",
-	// 	detail_title:"",
-	// 	detail_desc:"",
-	// }
 	try {
 		const { name, simple_desc, recruit_members, require_stack, service_step, period, detail_title, detail_desc } =
 			req.body;
@@ -28,7 +18,6 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			});
 			stackArray.push(foundStack!);
 		}
-
 		if (found) {
 			found.name = name;
 			found.simple_desc = simple_desc;
@@ -43,14 +32,15 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			found.detail_title = detail_title;
 			found.detail_desc = detail_desc;
 			found.join = stackArray;
-			// created.remove();
 			found.save();
-			console.log(found);
+			console.log(found); // test
 			res.status(200).json({
 				...found,
 			});
 		} else {
-			res.status(400).json({ message: 'not found board' });
+			res.status(400).json({
+				message: 'not found board',
+			});
 		}
 	} catch (err) {
 		console.log('💜editRecruitBoard- err: ', err.message);

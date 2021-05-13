@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { Recruits } from './../../src/entity/Recruits';
 import { getRepository } from 'typeorm';
 import { Recruit_comments } from './../../src/entity/Recruit_comments';
-import { Stacks } from './../../src/entity/Stacks';
 
 const showRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 상세내용 조회
@@ -25,23 +24,24 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		});
 	} else {
 		// 형태 변환
-		// if (boardInfo.recruit_members !== '') {
-		// 	boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
-		// }
-		// if (boardInfo.require_stack !== '') {
-		// 	boardInfo.require_stack = JSON.parse(boardInfo.require_stack);
-		// }
-		// view 1 증가
+		if (boardInfo.recruit_members !== '') {
+			boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
+		}
+		// stack 데이터 가져오기
 		const stackArray: any = [];
-		const re = await getRepository(Recruits).find({ relations: ['join'], where: { id: boardInfo.id } });
-		re.map(el => {
+		const stackData = await getRepository(Recruits).find({
+			relations: ['join'],
+			where: {
+				id: boardInfo.id,
+			},
+		});
+		stackData.map(el => {
 			el.join.map(e => {
 				stackArray.push(e.name);
 			});
-			// stackArray.push(el.join);
 		});
-		console.log(stackArray);
 		boardInfo.require_stack = JSON.stringify(stackArray);
+		// view 1 증가
 		boardInfo.view += 1;
 		try {
 			boardInfo.save();
@@ -71,6 +71,7 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		// 데이터 보내기
+		console.log(boardInfo, commentsCount, [...commentsList[0]]); // test
 		res.status(200).json({
 			...boardInfo,
 			commentsCount,
