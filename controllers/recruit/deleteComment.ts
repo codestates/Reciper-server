@@ -64,6 +64,7 @@ const deleteComment = async (req: Request, res: Response) => {
 		} catch (err) {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
+		console.log(boardInfo, [...commentsList[0]]); // test
 		res.status(200).json({
 			...boardInfo,
 			commentsList: [...commentsList[0]],

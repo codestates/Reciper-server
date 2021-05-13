@@ -40,6 +40,7 @@ const registerComment = async (req: Request, res: Response) => {
 					createdAt: 'ASC',
 				},
 			});
+			console.log(commentsList); // test
 			res.status(200).json({
 				commentsList,
 			});

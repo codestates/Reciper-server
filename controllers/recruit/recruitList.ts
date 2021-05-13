@@ -21,6 +21,7 @@ const recruitList = async (req: Request, res: Response) => {
 		// 0,24
 		// 24,48,
 		// 48,72
+		console.log(slicedFound); // test
 		res.status(200).json({
 			boardList: slicedFound,
 		});
