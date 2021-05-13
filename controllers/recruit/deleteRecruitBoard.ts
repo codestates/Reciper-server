@@ -14,9 +14,14 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 	try {
 		const deleteComments = await getRepository(Recruit_comments).find({
 			relations: ['recruits'],
+			where: {
+				recruits: {
+					id: boardId,
+				},
+			},
 		});
 		for (let idx = 0; idx < deleteComments.length; idx++) {
-			const deleteComment = await getRepository(Recruit_comments).remove(deleteComments[idx]);
+			await getRepository(Recruit_comments).remove(deleteComments[idx]);
 		}
 	} catch (err) {
 		console.log('💜deleteRecruitBoard- err: ', err.message);

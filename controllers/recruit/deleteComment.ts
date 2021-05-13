@@ -24,10 +24,12 @@ const deleteComment = async (req: Request, res: Response) => {
 	} else {
 		// 게시글에서 해당 댓글 지우기
 		const commentData = boardInfo.recruit_commentId;
-		for (let idx = 0; idx < commentData.length; idx++) {
-			if (commentData[idx].id === commentId) {
-				commentData.splice(idx, 1);
-				break;
+		if (commentData !== undefined) {
+			for (let idx = 0; idx < commentData.length; idx++) {
+				if (commentData[idx].id === commentId) {
+					commentData.splice(idx, 1);
+					break;
+				}
 			}
 		}
 		try {
@@ -48,6 +50,11 @@ const deleteComment = async (req: Request, res: Response) => {
 		try {
 			let findComments = await getRepository(Recruit_comments).findAndCount({
 				relations: ['recruits'],
+				where: {
+					recruits: {
+						id: boardId,
+					},
+				},
 			});
 			findComments.forEach(el => {
 				if (typeof el !== 'number') {
