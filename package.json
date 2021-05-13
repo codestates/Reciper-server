@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "nodemon --exec ts-node -T app.ts"
+    "start": "nodemon --exec ts-node -T app.ts",
+    "update_stacks":"./node_modules/ts-node/dist/bin.js ./seeders/stack.ts"
   },
   "devDependencies": {
     "@types/cors": "^2.8.10",
