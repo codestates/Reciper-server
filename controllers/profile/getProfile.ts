@@ -30,9 +30,6 @@ const getProfile = async (req: Request, res: Response) => {
 			});
 		});
 		// 형태 변환
-		if (userInfo.career !== '') {
-			userInfo.career = JSON.parse(userInfo.career);
-		}
 		console.log(userInfo, stackArray); // test
 		res.status(200).json({
 			...userInfo,

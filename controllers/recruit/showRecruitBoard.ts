@@ -24,9 +24,9 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		});
 	} else {
 		// 형태 변환
-		if (boardInfo.recruit_members !== '') {
-			boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
-		}
+		// if (boardInfo.recruit_members !== '') {
+		// 	boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
+		// }
 		// stack 데이터 가져오기
 		const stackArray: any = [];
 		const stackData = await getRepository(Recruits).find({
@@ -75,7 +75,7 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		res.status(200).json({
 			...boardInfo,
 			recruit_members: JSON.parse(boardInfo.recruit_members),
-			require_stack: JSON.parse(stackArray),
+			require_stack: stackArray,
 			commentsCount,
 			commentsList: [...commentsList[0]],
 		});

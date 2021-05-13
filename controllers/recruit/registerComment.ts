@@ -41,10 +41,13 @@ const registerComment = async (req: Request, res: Response) => {
 				},
 			});
 			console.log(commentsList); // test
+			if (foundBoard.require_stack.length !== 0) {
+				foundBoard.require_stack = JSON.parse(foundBoard.require_stack);
+			}
 			res.status(200).json({
 				...foundBoard,
 				recruit_members: JSON.parse(foundBoard.recruit_members),
-				require_stack: JSON.parse(foundBoard.require_stack),
+				require_stack: foundBoard.require_stack,
 				commentsList,
 			});
 		} else {

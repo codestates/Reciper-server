@@ -65,10 +65,16 @@ const deleteComment = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		console.log(boardInfo, [...commentsList[0]]); // test
+		if (boardInfo.recruit_members) {
+			boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
+		}
+		if (boardInfo.require_stack.length !== 0) {
+			boardInfo.require_stack = JSON.parse(boardInfo.require_stack);
+		}
 		res.status(200).json({
 			...boardInfo,
-			recruit_members: JSON.parse(boardInfo.recruit_members),
-			require_stack: JSON.parse(boardInfo.require_stack),
+			recruit_members: boardInfo.recruit_members,
+			require_stack: boardInfo.require_stack,
 			commentsList: [...commentsList[0]],
 		});
 	}

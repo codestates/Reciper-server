@@ -41,14 +41,17 @@ const postProfile = async (req: Request, res: Response) => {
 		foundUser.profile_image = req.profileImageName ? req.profileImageName : '/image/basic.png';
 		foundUser.profile_color = randomColorGenerator();
 		const stackArray = [];
-		for (let i = 0; i < stacks.length; i++) {
-			const foundStack = await Stacks.findOne({
-				where: {
-					name: stacks[i],
-				},
-			});
-			stackArray.push(foundStack!);
+		if (stacks) {
+			for (let i = 0; i < stacks.length; i++) {
+				const foundStack = await Stacks.findOne({
+					where: {
+						name: stacks[i],
+					},
+				});
+				stackArray.push(foundStack!);
+			}
 		}
+
 		foundUser.join = stackArray;
 		const saved = await foundUser.save();
 		console.log(saved, stackArray); // test
