@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Recruits } from './../../src/entity/Recruits';
 import { getRepository } from 'typeorm';
 import { Recruit_comments } from './../../src/entity/Recruit_comments';
+import { Stacks } from './../../src/entity/Stacks';
 
 const showRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 상세내용 조회
@@ -31,6 +32,16 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		// 	boardInfo.require_stack = JSON.parse(boardInfo.require_stack);
 		// }
 		// view 1 증가
+		const stackArray: any = [];
+		const re = await getRepository(Recruits).find({ relations: ['join'], where: { id: boardInfo.id } });
+		re.map(el => {
+			el.join.map(e => {
+				stackArray.push(e.name);
+			});
+			// stackArray.push(el.join);
+		});
+		console.log(stackArray);
+		boardInfo.require_stack = JSON.stringify(stackArray);
 		boardInfo.view += 1;
 		try {
 			boardInfo.save();
