@@ -42,9 +42,12 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		try {
 			let findComments = await getRepository(Recruit_comments).findAndCount({
 				relations: ['recruits'],
+				where: {
+					recruits: {
+						id: boardId,
+					},
+				},
 			});
-			// countComments = Number(findComments.pop());
-			// commentsAll = findComments.slice(0, findComments.length - 1);
 			findComments.forEach(el => {
 				if (typeof el === 'number') {
 					countComments = Number(el);
