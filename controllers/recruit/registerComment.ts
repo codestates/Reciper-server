@@ -43,6 +43,8 @@ const registerComment = async (req: Request, res: Response) => {
 			console.log(commentsList); // test
 			res.status(200).json({
 				...foundBoard,
+				recruit_members: JSON.parse(foundBoard.recruit_members),
+				require_stack: JSON.parse(foundBoard.require_stack),
 				commentsList,
 			});
 		} else {

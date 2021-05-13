@@ -36,6 +36,8 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			console.log(found); // test
 			res.status(200).json({
 				...found,
+				recruit_members: JSON.parse(found.recruit_members),
+				require_stack: JSON.parse(found.require_stack),
 			});
 		} else {
 			res.status(400).json({
