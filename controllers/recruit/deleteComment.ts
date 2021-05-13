@@ -67,6 +67,8 @@ const deleteComment = async (req: Request, res: Response) => {
 		console.log(boardInfo, [...commentsList[0]]); // test
 		res.status(200).json({
 			...boardInfo,
+			recruit_members: JSON.parse(boardInfo.recruit_members),
+			require_stack: JSON.parse(boardInfo.require_stack),
 			commentsList: [...commentsList[0]],
 		});
 	}

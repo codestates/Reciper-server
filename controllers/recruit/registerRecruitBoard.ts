@@ -37,6 +37,8 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 		console.log(created);
 		res.status(200).json({
 			...created,
+			recruit_members: JSON.parse(created.recruit_members),
+			require_stack: JSON.parse(created.require_stack),
 		});
 	} catch (err) {
 		console.log('💜registerRecruitBoard- err: ', err.message);

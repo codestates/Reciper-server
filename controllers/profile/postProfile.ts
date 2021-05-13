@@ -54,6 +54,7 @@ const postProfile = async (req: Request, res: Response) => {
 		console.log(saved, stackArray); // test
 		res.status(200).json({
 			...saved,
+			career: JSON.parse(saved.career),
 			stacks: stackArray.map(el => el.name),
 		});
 	} else {
