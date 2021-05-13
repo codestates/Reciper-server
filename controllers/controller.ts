@@ -14,6 +14,8 @@ import editRecruitBoard from './recruit/editRecruitBoard';
 import deleteRecruitBoard from './recruit/deleteRecruitBoard';
 import registerComment from './recruit/registerComment';
 import deleteComment from './recruit/deleteComment';
+// 4. Stacks
+import getStacks from './stacks/getStacks';
 
 export {
 	// login
@@ -32,4 +34,6 @@ export {
 	deleteRecruitBoard,
 	registerComment,
 	deleteComment,
+	//stack
+	getStacks,
 };

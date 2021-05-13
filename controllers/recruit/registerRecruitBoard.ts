@@ -20,7 +20,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 		const created = await Recruits.create({
 			name,
 			simple_desc,
-			recruit_members,
+			recruit_members: JSON.stringify(recruit_members),
 			service_step,
 			period,
 			detail_title,
