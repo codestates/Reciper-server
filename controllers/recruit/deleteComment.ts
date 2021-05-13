@@ -46,7 +46,7 @@ const deleteComment = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		// 지운 이후의 댓글 데이터 보내주기
-		let commentsAll: any[] = [];
+		let commentsList: any[] = [];
 		try {
 			let findComments = await getRepository(Recruit_comments).findAndCount({
 				relations: ['recruits'],
@@ -58,7 +58,7 @@ const deleteComment = async (req: Request, res: Response) => {
 			});
 			findComments.forEach(el => {
 				if (typeof el !== 'number') {
-					commentsAll.push(el);
+					commentsList.push(el);
 				}
 			});
 		} catch (err) {
@@ -66,7 +66,7 @@ const deleteComment = async (req: Request, res: Response) => {
 		}
 		res.status(200).json({
 			...boardInfo,
-			commentsAll,
+			commentsList: [...commentsList[0]],
 		});
 	}
 };

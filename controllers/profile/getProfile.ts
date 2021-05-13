@@ -17,6 +17,7 @@ const getProfile = async (req: Request, res: Response) => {
 		if (userInfo.career !== '') {
 			userInfo.career = JSON.parse(userInfo.career);
 		}
+		console.log(userInfo);
 		res.status(200).json({
 			...userInfo,
 		});

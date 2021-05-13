@@ -13,6 +13,7 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		boardInfo = await Recruits.findOne({
 			id: boardId,
 		});
+		console.log(boardInfo);
 	} catch (err) {
 		console.log('💜showRecruitBoard- err: ', err.message);
 	}
@@ -23,12 +24,12 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		});
 	} else {
 		// 형태 변환
-		if (boardInfo.recruit_members !== '') {
-			boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
-		}
-		if (boardInfo.require_stack !== '') {
-			boardInfo.require_stack = JSON.parse(boardInfo.require_stack);
-		}
+		// if (boardInfo.recruit_members !== '') {
+		// 	boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
+		// }
+		// if (boardInfo.require_stack !== '') {
+		// 	boardInfo.require_stack = JSON.parse(boardInfo.require_stack);
+		// }
 		// view 1 증가
 		boardInfo.view += 1;
 		try {
@@ -37,8 +38,8 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		// 댓글 개수 세기 + 댓글 전체 데이터 가져오기
-		let countComments = 0;
-		let commentsAll: any[] = [];
+		let commentsCount = 0;
+		let commentsList: any[] = [];
 		try {
 			let findComments = await getRepository(Recruit_comments).findAndCount({
 				relations: ['recruits'],
@@ -50,9 +51,9 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 			});
 			findComments.forEach(el => {
 				if (typeof el === 'number') {
-					countComments = Number(el);
+					commentsCount = Number(el);
 				} else {
-					commentsAll.push(el);
+					commentsList.push(el);
 				}
 			});
 		} catch (err) {
@@ -61,8 +62,8 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		// 데이터 보내기
 		res.status(200).json({
 			...boardInfo,
-			countComments,
-			commentsAll,
+			commentsCount,
+			commentsList: [...commentsList[0]],
 		});
 	}
 };

@@ -48,10 +48,13 @@ const postProfile = async (req: Request, res: Response) => {
 		foundUser.profile_image = req.profileImageName ? req.profileImageName : '/image/basic.png';
 		foundUser.profile_color = randomColorGenerator();
 		const saved = await foundUser.save();
-
-		res.status(200).json({ message: 'success', body: saved });
+		res.status(200).json({
+			...saved,
+		});
 	} else {
-		res.status(400).json({ message: 'err no user plz login' });
+		res.status(400).json({
+			message: 'err no user plz login',
+		});
 	}
 };
 
