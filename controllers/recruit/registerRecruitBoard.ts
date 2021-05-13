@@ -38,7 +38,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 		}
 
 		created.join = stackArray;
-		created.remove();
+		// created.remove();
 		created.save();
 		console.log(created);
 		res.status(200).json({
