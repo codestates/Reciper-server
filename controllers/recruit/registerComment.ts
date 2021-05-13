@@ -19,7 +19,7 @@ const registerComment = async (req: Request, res: Response) => {
 		console.log(foundBoard);
 		if (foundBoard) {
 			const created = await Recruit_comments.create({ writer: name, writer_id: userId, body, recruits: foundBoard });
-			created.save();
+			await created.save();
 			const allComments = await Recruit_comments.find({ where: { recruits: foundBoard }, order: { createdAt: 'ASC' } });
 			res.status(200).json({ message: 'done', allComments });
 		} else {
