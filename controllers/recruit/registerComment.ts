@@ -41,6 +41,7 @@ const registerComment = async (req: Request, res: Response) => {
 				},
 			});
 			res.status(200).json({
+				...foundBoard,
 				commentsList,
 			});
 		} else {
