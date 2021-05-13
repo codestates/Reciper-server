@@ -15,7 +15,7 @@ const recruitList = async (req: Request, res: Response) => {
 
 		const found = await Recruits.find({
 			order: {
-				createdAt: 'ASC',
+				createdAt: 'DESC',
 			},
 		});
 
