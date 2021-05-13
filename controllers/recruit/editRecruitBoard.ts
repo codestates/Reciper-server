@@ -28,11 +28,17 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			});
 			stackArray.push(foundStack!);
 		}
+
 		if (found) {
 			found.name = name;
 			found.simple_desc = simple_desc;
 			found.recruit_members = JSON.stringify(recruit_members);
 			found.service_step = service_step;
+			found.require_stack = JSON.stringify(
+				stackArray.map(el => {
+					return el.name;
+				}),
+			);
 			found.period = period;
 			found.detail_title = detail_title;
 			found.detail_desc = detail_desc;

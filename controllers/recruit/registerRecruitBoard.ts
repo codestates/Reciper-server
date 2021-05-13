@@ -39,7 +39,13 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 
 		created.join = stackArray;
 		// created.remove();
+		created.require_stack = JSON.stringify(
+			stackArray.map(el => {
+				return el.name;
+			}),
+		);
 		created.save();
+
 		console.log(created);
 		res.status(200).json({
 			...created,
