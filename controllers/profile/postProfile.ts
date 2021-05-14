@@ -45,7 +45,7 @@ const postProfile = async (req: Request, res: Response) => {
 		if (gitId) {
 			foundUser.gitId = gitId;
 		}
-		if (career) {
+		if (career !== undefined && career !== '') {
 			foundUser.career = JSON.stringify(career);
 		}
 		if (foundUser) {
@@ -72,7 +72,7 @@ const postProfile = async (req: Request, res: Response) => {
 		console.log(saved, stackArray); // test
 		res.status(200).json({
 			...saved,
-			career: JSON.parse(saved.career),
+			career: career !== undefined && career !== '' ? JSON.parse(saved.career) : '{}',
 			stacks: stackArray.map(el => el.name),
 		});
 	} else {
