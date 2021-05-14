@@ -25,6 +25,7 @@ const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
 	console.log('🧡postProfile- ', req.body);
 	const userId = req.userId;
+	console.log(req.profileImageName);
 	const { name, mobile, about_me, git_id, career, stacks, isOpen, profile_image } = req.body;
 	const foundUser = await Users.findOne({
 		where: {
@@ -32,13 +33,27 @@ const postProfile = async (req: Request, res: Response) => {
 		},
 	});
 	if (foundUser) {
-		foundUser.name = name;
-		foundUser.mobile = mobile;
-		foundUser.about_me = about_me;
-		foundUser.git_id = git_id;
-		foundUser.career = JSON.stringify(career);
-		foundUser.isOpen = isOpen;
-		foundUser.profile_image = req.profileImageName ? req.profileImageName : '/image/basic.png';
+		if (name) {
+			foundUser.name = name;
+		}
+		if (mobile) {
+			foundUser.mobile = mobile;
+		}
+		if (about_me) {
+			foundUser.about_me = about_me;
+		}
+		if (git_id) {
+			foundUser.git_id = git_id;
+		}
+		if (career) {
+			foundUser.career = JSON.stringify(career);
+		}
+		if (foundUser) {
+			foundUser.isOpen = isOpen;
+		}
+		if (req.profileImageName) {
+			foundUser.profile_image = req.profileImageName;
+		}
 		foundUser.profile_color = randomColorGenerator();
 		const stackArray = [];
 		if (stacks) {
