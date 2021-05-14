@@ -4,13 +4,20 @@ import { career_job, career_office, last_name, name } from './d_profile';
 import { Recruits } from '../src/entity/Recruits';
 import axios from 'axios';
 import { detail_desc } from './d_recruit';
-import { Recruit_comments } from 'src/entity/Recruit_comments';
-import { match } from 'assert/strict';
-
+import { Recruit_comments } from '../src/entity/Recruit_comments';
+import { Stacks } from 'src/entity/Stacks';
+//=============================
+// 사용전 주의사항
+// 중요 !! : npm run update_stacks
+// 먼저할것
+// 이후 , npm run dummy
+//=============================
 createConnections()
 	.then(async connection => {
 		console.log('DB 연결 완료! ');
-		dummyCreate();
+		for (let i = 0; i < 10; i++) {
+			dummyCreate();
+		}
 	})
 	.catch(error => console.log(error));
 
@@ -33,6 +40,7 @@ const dummyCreate = async () => {
 			name[Math.floor(Math.random() * name.length)];
 		user.isOpen = Boolean(Math.round(Math.random()));
 		user.mobile = createMobile();
+		// user.stacks = await pickedStack();
 		user.save();
 	}
 	console.log(`랜덤 유저 프로필 편집 ================
@@ -55,20 +63,19 @@ const dummyCreate = async () => {
 		},
 	);
 	const picked = data.data.recruitList[Math.floor(Math.random() * data.data.recruitList.length)];
+	const recruitStacks = await pickedStack();
+
 	const created = await Recruits.create({
 		name: picked.teamName,
 		simple_desc: picked.teamSimpleDesc,
-		recruit_members: JSON.stringify([
-			picked.recruitField,
-			`${Math.floor(Math.random() * 10 + 1)}년`,
-			`${Math.floor(Math.random() * 5 + 1)}명`,
-			`${Math.floor(Math.random() * 14 + 1)}일`,
-		]),
+		recruit_members: JSON.stringify(createRecruitMembers()),
 		service_step: picked.serviceStep,
 		period: `${Math.floor(Math.random() * 12 + 1)}개월`,
 		detail_title: picked.teamName,
 		detail_desc: makeDesc(),
 		writer: user,
+		require_stack: JSON.stringify(recruitStacks.map(el => el.name)),
+		// stacks:recruitStacks
 	});
 	created.save();
 	console.log(`recruits데이터 생성 ==================
@@ -87,7 +94,11 @@ const dummyCreate = async () => {
 		// 댓글은 10번 반복
 		// 랜덤 리크루트 찾기
 		const foundRecruits = await Recruits.find();
-		const pickedId = foundRecruits[Math.floor(Math.random() * foundRecruits.length)].id;
+
+		const randomIndex = Math.floor(Math.random() * foundRecruits.length);
+		console.log('dddd', foundRecruits.length, randomIndex);
+		const pickedId = await foundRecruits[randomIndex].id;
+		console.log(pickedId);
 		const pickedRecruits = await Recruits.findOne({ where: { id: pickedId } });
 		// 랜덤 리크루트에 댓글 달기
 		const createdComment = await Recruit_comments.create({
@@ -184,4 +195,26 @@ const createMobile = () => {
 		foot += Math.floor(Math.random() * 10);
 	}
 	return mobile + mid + foot;
+};
+
+const pickedStack = async (): Promise<Stacks[]> => {
+	const found = await Stacks.find();
+	const result: Stacks[] = [];
+	for (let i = 0; i < 3; i++) {
+		const randNum = Math.floor(Math.random() * found.length);
+		result.push(found[randNum]);
+	}
+	return result;
+};
+
+const createRecruitMembers = () => {
+	const obj = {
+		position: career_job[Math.floor(Math.random() * career_job.length)], // 프론트,백,풀 셋중하나
+		career: `${Math.floor(Math.random() * 10 + 1)}년`, // 1년~10년
+		personner: `${Math.floor(Math.random() * 5 + 1)}`, // 1명~5명
+		deadline: `2021-${Math.floor(Math.random() * 6 + 6)}-${Math.floor(Math.random() * 31 + 1)}`,
+	};
+	const result = [];
+	result.push(Object.assign({}, obj));
+	return result;
 };

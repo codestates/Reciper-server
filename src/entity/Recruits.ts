@@ -50,6 +50,11 @@ export class Recruits extends BaseEntity {
 	})
 	view!: number;
 
+	@Column({
+		default: 0,
+	})
+	comment_count!: number;
+
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
 

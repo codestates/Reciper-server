@@ -27,25 +27,7 @@ export const career_office = [
 	'소셜클럽',
 ];
 
-export const career_job = [
-	'React 개발자',
-	'백엔드 개발자',
-	'서비스 서버 개발자',
-	'프론트엔드 개발자',
-	'백엔드 개발자 (Backend Engineer/Python, Django)',
-	'주니어 프론트엔드 웹 개발자',
-	'서버 개발자(Backend Engineer)',
-	'PHP 웹 개발자',
-	'Front-end 엔지니어',
-	'백엔드 개발자 (Python, Django)',
-	'프론트엔드 엔지니어',
-	'신규 플랫폼 개발(웹 프론트엔드)',
-	'코딩 콘텐츠 프로듀서',
-	'서버 백엔드 개발자',
-	'Frontend Engineer (프론트엔드 개발자)',
-	'Backend Software Engineer',
-	'개발팀 Software Engineer',
-];
+export const career_job = ['프론트엔드', '백엔드', '풀스택'];
 
 export const last_name = [
 	'김',
