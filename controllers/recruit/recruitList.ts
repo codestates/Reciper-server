@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 import { Recruits } from '../../src/entity/Recruits';
 
 const recruitList = async (req: Request, res: Response) => {
@@ -21,8 +22,20 @@ const recruitList = async (req: Request, res: Response) => {
 		// 24,48,
 		// 48,72
 		console.log(slicedFound); // test
+		const objArr = [];
+		for (let i = 0; i < slicedFound.length; i++) {
+			let findStacks = await getRepository(Recruits).findAndCount({
+				relations: ['stacks'],
+				where: {
+					id: slicedFound[i].id,
+				},
+			});
+			const object = { ...slicedFound[i], requireStack: findStacks[0][0].stacks.map(el => el.name) };
+			objArr.push(object);
+		}
+
 		res.status(200).json({
-			boardList: slicedFound,
+			boardList: objArr,
 		});
 	} catch (err) {
 		console.log('💜recruitList- err: ', err.message);

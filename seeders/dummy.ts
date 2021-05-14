@@ -5,7 +5,7 @@ import { Recruits } from '../src/entity/Recruits';
 import axios from 'axios';
 import { detail_desc } from './d_recruit';
 import { Recruit_comments } from '../src/entity/Recruit_comments';
-import { Stacks } from 'src/entity/Stacks';
+import { Stacks } from '../src/entity/Stacks';
 //=============================
 // 사용전 주의사항
 // 중요 !! : npm run update_stacks
