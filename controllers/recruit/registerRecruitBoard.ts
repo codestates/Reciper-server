@@ -5,7 +5,8 @@ import { Users } from '../../src/entity/Users';
 
 const registerRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 등록
-	console.log('💜registerRecruitBoard- ', req.body);
+	console.log('💜registerRecruitBoard- ');
+	console.log(req.body, req.uploadImageName);
 	try {
 		const userId = req.userId;
 		const { name, simpleDesc, recruitMembers, requireStack, serviceStep, period, detailTitle, detailDesc } = req.body;
@@ -17,30 +18,41 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 			const created = await Recruits.create({
 				name,
 				simpleDesc,
-				recruitMembers: JSON.stringify(recruitMembers),
+				recruitMembers: recruitMembers ? JSON.stringify(recruitMembers) : '{}',
 				serviceStep,
 				period,
 				detailTitle,
 				detailDesc,
+				recruitImage: req.uploadImageName ? req.uploadImageName : 'basic.png',
 				writer: userInfo,
 			});
 			const stackArray = [];
-			for (let i = 0; i < requireStack.length; i++) {
-				const foundStack = await Stacks.findOne({
-					where: {
+			if (requireStack) {
+				for (let i = 0; i < requireStack.length; i++) {
+					const foundStack = await Stacks.findOne({
 						name: requireStack[i],
-					},
-				});
-				stackArray.push(foundStack!);
+					});
+					stackArray.push(foundStack!);
+				}
 			}
 			created.stacks = stackArray;
+
 			created.save();
-			if (userInfo.recruitBoards === undefined) {
-				userInfo.recruitBoards = [];
+			try {
+				console.log(userInfo.recruitBoards);
+				if (userInfo.recruitBoards === undefined) {
+					userInfo.recruitBoards = [];
+				} else {
+					userInfo.recruitBoards.push(created);
+				}
+				userInfo.save();
+			} catch (err) {
+				console.log('💜registerRecruitBoard- err: ', err.message);
+				res.status(400).json({
+					message: err.message,
+				});
 			}
-			userInfo.recruitBoards.push(created);
-			userInfo.save();
-			console.log(created); // test
+			console.log(created, stackArray); // test
 			res.status(200).json({
 				...created,
 				recruitMembers: JSON.parse(created.recruitMembers),

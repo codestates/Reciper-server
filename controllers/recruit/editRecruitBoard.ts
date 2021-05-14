@@ -7,7 +7,17 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 	console.log('💜editRecruitBoard- ');
 	console.log(req.body, req.params);
 	try {
-		const { name, simpleDesc, recruitMembers, requireStack, serviceStep, period, detailTitle, detailDesc } = req.body;
+		const {
+			name,
+			simpleDesc,
+			recruitMembers,
+			requireStack,
+			serviceStep,
+			period,
+			detailTitle,
+			detailDesc,
+			recruitImage,
+		} = req.body;
 		const found = await Recruits.findOne({ where: { id: req.params.board_id } });
 		const stackArray = [];
 		for (let i = 0; i < requireStack.length; i++) {
@@ -26,6 +36,7 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			found.period = period;
 			found.detailTitle = detailTitle;
 			found.detailDesc = detailDesc;
+			found.recruitImage = req.uploadImageName ? req.uploadImageName : recruitImage;
 			found.stacks = stackArray;
 			found.save();
 			console.log(found); // test

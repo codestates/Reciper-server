@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Users } from '../../src/entity/Users';
 import { Stacks } from '../../src/entity/Stacks';
+import * as fs from 'fs';
 
 const randomColorGenerator = (): string => {
 	const initialColorList: string[] = [
@@ -24,7 +25,7 @@ const randomColorGenerator = (): string => {
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
 	console.log('🧡postProfile- ');
-	console.log(req.body, req.profileImageName);
+	console.log(req.body, req.uploadImageName);
 	const userId = req.userId;
 	const { name, mobile, aboutMe, gitId, career, stacks, isOpen } = req.body;
 	const foundUser = await Users.findOne({
@@ -51,8 +52,19 @@ const postProfile = async (req: Request, res: Response) => {
 		if (foundUser) {
 			foundUser.isOpen = isOpen;
 		}
-		if (req.profileImageName) {
-			foundUser.profileImage = req.profileImageName;
+		if (req.uploadImageName) {
+			const imageRoute = foundUser.profileImage;
+			fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
+				if (err) {
+					return console.log('삭제할 수 없는 파일입니다', err.message);
+				}
+				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
+					err
+						? console.log(err.message)
+						: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
+				);
+			});
+			foundUser.profileImage = req.uploadImageName;
 		}
 		foundUser.profileColor = randomColorGenerator();
 		const stackArray = [];
