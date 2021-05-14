@@ -5,7 +5,8 @@ import { Recruit_comments } from './../../src/entity/Recruit_comments';
 
 const showRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 상세내용 조회
-	console.log('💜showRecruitBoard- ', req.body, req.params);
+	console.log('💜showRecruitBoard- ');
+	console.log(req.body, req.params);
 	// 저장된 게시글 정보 불러오기
 	const boardId = Number(req.params.board_id);
 	let boardInfo;
@@ -13,34 +14,27 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		boardInfo = await Recruits.findOne({
 			id: boardId,
 		});
-		console.log(boardInfo);
 	} catch (err) {
 		console.log('💜showRecruitBoard- err: ', err.message);
 	}
-
 	if (boardInfo === undefined) {
 		res.status(400).json({
 			message: 'no data about board ' + boardId,
 		});
 	} else {
-		// 형태 변환
-		// if (boardInfo.recruit_members !== '') {
-		// 	boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
-		// }
 		// stack 데이터 가져오기
 		const stackArray: any = [];
 		const stackData = await getRepository(Recruits).find({
-			relations: ['join'],
+			relations: ['stacks'],
 			where: {
 				id: boardInfo.id,
 			},
 		});
 		stackData.map(el => {
-			el.join.map(e => {
-				stackArray.push(e.name);
+			el.stacks.map(stack => {
+				stackArray.push(stack.name);
 			});
 		});
-		boardInfo.require_stack = JSON.stringify(stackArray);
 		// view 1 증가
 		boardInfo.view += 1;
 		try {
@@ -74,8 +68,8 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 		console.log(boardInfo, commentsCount, [...commentsList[0]]); // test
 		res.status(200).json({
 			...boardInfo,
-			recruit_members: JSON.parse(boardInfo.recruit_members),
-			require_stack: stackArray,
+			recruitMembers: JSON.parse(boardInfo.recruitMembers),
+			requireStack: stackArray,
 			commentsCount,
 			commentsList: [...commentsList[0]],
 		});

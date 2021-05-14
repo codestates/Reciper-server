@@ -23,10 +23,10 @@ const randomColorGenerator = (): string => {
 
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
-	console.log('🧡postProfile- ', req.body);
+	console.log('🧡postProfile- ');
+	console.log(req.body, req.profileImageName);
 	const userId = req.userId;
-	console.log(req.profileImageName);
-	const { name, mobile, about_me, git_id, career, stacks, isOpen, profile_image } = req.body;
+	const { name, mobile, aboutMe, gitId, career, stacks, isOpen } = req.body;
 	const foundUser = await Users.findOne({
 		where: {
 			id: userId,
@@ -39,11 +39,11 @@ const postProfile = async (req: Request, res: Response) => {
 		if (mobile) {
 			foundUser.mobile = mobile;
 		}
-		if (about_me) {
-			foundUser.about_me = about_me;
+		if (aboutMe) {
+			foundUser.aboutMe = aboutMe;
 		}
-		if (git_id) {
-			foundUser.git_id = git_id;
+		if (gitId) {
+			foundUser.gitId = gitId;
 		}
 		if (career) {
 			foundUser.career = JSON.stringify(career);
@@ -52,9 +52,9 @@ const postProfile = async (req: Request, res: Response) => {
 			foundUser.isOpen = isOpen;
 		}
 		if (req.profileImageName) {
-			foundUser.profile_image = req.profileImageName;
+			foundUser.profileImage = req.profileImageName;
 		}
-		foundUser.profile_color = randomColorGenerator();
+		foundUser.profileColor = randomColorGenerator();
 		const stackArray = [];
 		if (stacks) {
 			for (let i = 0; i < stacks.length; i++) {
@@ -67,7 +67,7 @@ const postProfile = async (req: Request, res: Response) => {
 			}
 		}
 
-		foundUser.join = stackArray;
+		foundUser.stacks = stackArray;
 		const saved = await foundUser.save();
 		console.log(saved, stackArray); // test
 		res.status(200).json({

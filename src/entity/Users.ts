@@ -28,7 +28,7 @@ export class Users extends BaseEntity {
 	mobile!: string;
 
 	@Column()
-	git_id!: string;
+	gitId!: string;
 
 	@Column()
 	career!: string;
@@ -37,23 +37,23 @@ export class Users extends BaseEntity {
 	isOpen!: boolean;
 
 	@Column()
-	about_me!: string;
+	aboutMe!: string;
 
 	@Column()
-	profile_image!: string;
+	profileImage!: string;
 
 	@Column()
-	profile_color!: string;
+	profileColor!: string;
 
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
 
 	@UpdateDateColumn({ name: 'updatedAt' })
-	UpdatedAt!: Date;
+	updatedAt!: Date;
 
 	@ManyToMany(() => Stacks)
 	@JoinTable()
-	join!: Stacks[];
+	stacks!: Stacks[];
 
 	@OneToMany(type => Recruits, recruits => recruits.id)
 	recruitBoards!: Recruits[];

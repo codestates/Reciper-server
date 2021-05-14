@@ -23,7 +23,7 @@ const deleteComment = async (req: Request, res: Response) => {
 		});
 	} else {
 		// 게시글에서 해당 댓글 지우기
-		const commentData = boardInfo.recruit_commentId;
+		const commentData = boardInfo.commentsList;
 		if (commentData !== undefined) {
 			for (let idx = 0; idx < commentData.length; idx++) {
 				if (commentData[idx].id === commentId) {
@@ -49,9 +49,9 @@ const deleteComment = async (req: Request, res: Response) => {
 		let commentsList: any[] = [];
 		try {
 			let findComments = await getRepository(Recruit_comments).findAndCount({
-				relations: ['recruits'],
+				relations: ['recruitBoard'],
 				where: {
-					recruits: {
+					recruitBoard: {
 						id: boardId,
 					},
 				},
@@ -65,16 +65,13 @@ const deleteComment = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		console.log(boardInfo, [...commentsList[0]]); // test
-		if (boardInfo.recruit_members) {
-			boardInfo.recruit_members = JSON.parse(boardInfo.recruit_members);
-		}
-		if (boardInfo.require_stack.length !== 0) {
-			boardInfo.require_stack = JSON.parse(boardInfo.require_stack);
+		if (boardInfo.recruitMembers) {
+			boardInfo.recruitMembers = JSON.parse(boardInfo.recruitMembers);
 		}
 		res.status(200).json({
 			...boardInfo,
-			recruit_members: boardInfo.recruit_members,
-			require_stack: boardInfo.require_stack,
+			recruitMembers: boardInfo.recruitMembers,
+			requireStack: boardInfo.stacks,
 			commentsList: [...commentsList[0]],
 		});
 	}
