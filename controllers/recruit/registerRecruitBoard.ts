@@ -44,7 +44,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 			res.status(200).json({
 				...created,
 				recruitMembers: JSON.parse(created.recruitMembers),
-				requireStack: stackArray,
+				requireStack: stackArray.map(el => el.name),
 			});
 		} else {
 			res.status(400).json({

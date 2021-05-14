@@ -50,7 +50,7 @@ export class Recruits extends BaseEntity {
 	@Column({
 		default: 0,
 	})
-	comment_count!: number;
+	commentCount!: number;
 
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;

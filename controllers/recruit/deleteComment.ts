@@ -28,6 +28,7 @@ const deleteComment = async (req: Request, res: Response) => {
 			for (let idx = 0; idx < commentData.length; idx++) {
 				if (commentData[idx].id === commentId) {
 					commentData.splice(idx, 1);
+					boardInfo.commentCount--;
 					break;
 				}
 			}
@@ -71,7 +72,7 @@ const deleteComment = async (req: Request, res: Response) => {
 		res.status(200).json({
 			...boardInfo,
 			recruitMembers: boardInfo.recruitMembers,
-			requireStack: boardInfo.stacks,
+			requireStack: boardInfo.stacks.map(el => el.name),
 			commentsList: [...commentsList[0]],
 		});
 	}

@@ -32,7 +32,7 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			res.status(200).json({
 				...found,
 				recruitMembers: JSON.parse(found.recruitMembers),
-				requireStack: found.stacks,
+				requireStack: found.stacks.map(el => el.name),
 			});
 		} else {
 			res.status(400).json({

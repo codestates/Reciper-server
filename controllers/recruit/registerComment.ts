@@ -31,6 +31,8 @@ const registerComment = async (req: Request, res: Response) => {
 				body,
 				recruitBoard: foundBoard,
 			});
+			foundBoard.commentCount++;
+			foundBoard.save();
 			await created.save();
 			const commentsList = await Recruit_comments.find({
 				where: {
@@ -44,7 +46,7 @@ const registerComment = async (req: Request, res: Response) => {
 			res.status(200).json({
 				...foundBoard,
 				recruitMembers: JSON.parse(foundBoard.recruitMembers),
-				requireStack: foundBoard.stacks,
+				requireStack: foundBoard.stacks.map(el => el.name),
 				commentsList,
 			});
 		} else {
