@@ -4,7 +4,7 @@ export declare global {
 			newAccessToken?: string | undefined;
 			userId?: number | undefined;
 			userEmail?: string | undefined;
-			profileImageName?: string | undefined;
+			uploadImageName?: string | undefined;
 		}
 	}
 }
