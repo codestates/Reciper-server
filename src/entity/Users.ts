@@ -7,8 +7,10 @@ import {
 	ManyToMany,
 	JoinTable,
 	BaseEntity,
+	OneToMany,
 } from 'typeorm';
 import { Stacks } from './Stacks';
+import { Recruits } from './Recruits';
 
 @Entity()
 export class Users extends BaseEntity {
@@ -52,4 +54,7 @@ export class Users extends BaseEntity {
 	@ManyToMany(() => Stacks)
 	@JoinTable()
 	join!: Stacks[];
+
+	@OneToMany(type => Recruits, recruits => recruits.id)
+	recruitBoards!: Recruits[];
 }

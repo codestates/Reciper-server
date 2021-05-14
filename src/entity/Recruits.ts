@@ -8,9 +8,12 @@ import {
 	ManyToMany,
 	JoinTable,
 	BaseEntity,
+	ManyToOne,
 } from 'typeorm';
 import { Recruit_comments } from './Recruit_comments';
 import { Stacks } from './Stacks';
+import { Users } from './Users';
+
 @Entity()
 export class Recruits extends BaseEntity {
 	@PrimaryGeneratedColumn()
@@ -59,4 +62,7 @@ export class Recruits extends BaseEntity {
 	@ManyToMany(() => Stacks)
 	@JoinTable()
 	join!: Stacks[];
+
+	@ManyToOne(type => Users, users => users.id)
+	writer!: Users;
 }
