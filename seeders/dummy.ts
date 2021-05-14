@@ -40,7 +40,7 @@ const dummyCreate = async () => {
 			name[Math.floor(Math.random() * name.length)];
 		user.isOpen = Boolean(Math.round(Math.random()));
 		user.mobile = createMobile();
-		// user.stacks = await pickedStack();
+		user.stacks = await pickedStack();
 		user.save();
 	}
 	console.log(`랜덤 유저 프로필 편집 ================
@@ -67,25 +67,24 @@ const dummyCreate = async () => {
 
 	const created = await Recruits.create({
 		name: picked.teamName,
-		simple_desc: picked.teamSimpleDesc,
-		recruit_members: JSON.stringify(createRecruitMembers()),
-		service_step: picked.serviceStep,
+		simpleDesc: picked.teamSimpleDesc,
+		recruitMembers: JSON.stringify(createRecruitMembers()),
+		serviceStep: picked.serviceStep,
 		period: `${Math.floor(Math.random() * 12 + 1)}개월`,
-		detail_title: picked.teamName,
-		detail_desc: makeDesc(),
+		detailTitle: picked.teamName,
+		detailDesc: makeDesc(),
 		writer: user,
-		require_stack: JSON.stringify(recruitStacks.map(el => el.name)),
-		// stacks:recruitStacks
+		stacks: recruitStacks,
 	});
 	created.save();
 	console.log(`recruits데이터 생성 ==================
 	${created.name}
-	${created.simple_desc}
-	${created.recruit_members}
-	${created.service_step}
+	${created.simpleDesc}
+	${created.recruitMembers}
+	${created.serviceStep}
 	${created.period}
-	${created.detail_title}
-	${created.detail_desc}
+	${created.detailTitle}
+	${created.detailDesc}
 	${created.writer.name}
 	======================================`);
 
@@ -103,16 +102,16 @@ const dummyCreate = async () => {
 		// 랜덤 리크루트에 댓글 달기
 		const createdComment = await Recruit_comments.create({
 			writer: user!.name,
-			writer_id: user!.id,
+			writerId: user!.id,
 			body: makeComment(),
-			recruits: pickedRecruits,
+			recruitBoard: pickedRecruits,
 		});
 		createdComment.save();
 		console.log(`생성된 댓글==============
 		${createdComment.writer}
-		${createdComment.writer_id}
+		${createdComment.writerId}
 		${createdComment.body}
-		${createdComment.recruits.name}
+		${createdComment.recruitBoard.name}
 		`);
 	}
 
