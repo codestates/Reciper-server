@@ -1,6 +1,6 @@
 import * as controller from '../controllers/controller';
 import express from 'express';
-import { upload } from '../controllers/profile/imageUploader';
+import { upload } from '../middlewares/imageUploader';
 const recruitRouter = express.Router();
 
 // 팀원모집 게시글 리스트 조회

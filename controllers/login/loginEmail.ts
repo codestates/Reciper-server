@@ -5,7 +5,7 @@ import { accessTokenGenerator } from '../../jwt/GenerateAccessToken';
 import { refreshTokenGenerator } from '../../jwt/GenerateRefreshToken';
 import { Users } from '../../src/entity/Users';
 dotenv.config();
-//------------------------------------------------------------------
+
 const loginEmail = {
 	authorizationCode: async (req: Request, res: Response) => {
 		const authorizationCode: string = req.body.authorizationCode as string;
@@ -24,15 +24,14 @@ const loginEmail = {
 				//not found userData
 				const newUser = await Users.create({
 					email,
+					name: email.split('@')[0],
 				});
 				const saved = await newUser.save();
 				accessToken = await accessTokenGenerator(saved.id, email);
 				refreshToken = await refreshTokenGenerator(saved.id, email);
-				//리프레시는 어떻게 ?
 			} else {
 				accessToken = await accessTokenGenerator(user.id, email);
 				refreshToken = await refreshTokenGenerator(user.id, email);
-				//리프레시는 어떻게 ?
 			}
 			res.cookie('refreshToken', refreshToken, {
 				maxAge: 1000 * 60 * 60 * 24 * 7,

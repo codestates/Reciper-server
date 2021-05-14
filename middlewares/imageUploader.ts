@@ -8,8 +8,8 @@ export const upload = multer({
 		},
 		filename(req, file, cb) {
 			const ext = path.extname(file.originalname);
-			req.profileImageName = path.basename(file.originalname, ext) + Date.now() + ext;
-			cb(null, req.profileImageName);
+			req.uploadImageName = path.basename(file.originalname, ext) + Date.now() + ext;
+			cb(null, req.uploadImageName);
 		},
 	}),
 	limits: { fileSize: 5 * 1024 * 1024 },

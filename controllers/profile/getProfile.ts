@@ -33,7 +33,7 @@ const getProfile = async (req: Request, res: Response) => {
 		console.log(userInfo, stackArray); // test
 		res.status(200).json({
 			...userInfo,
-			career: JSON.parse(userInfo.career),
+			career: userInfo.career !== undefined && userInfo.career !== '' ? JSON.parse(userInfo.career) : '{}',
 			stacks: stackArray,
 		});
 	}
