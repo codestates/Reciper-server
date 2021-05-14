@@ -41,6 +41,9 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 				}),
 			);
 			created.save();
+			if (userInfo.recruitBoards === undefined) {
+				userInfo.recruitBoards = [];
+			}
 			userInfo.recruitBoards.push(created);
 			userInfo.save();
 			console.log(created); // test
