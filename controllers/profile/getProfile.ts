@@ -18,15 +18,15 @@ const getProfile = async (req: Request, res: Response) => {
 		// stack 데이터 가져오기
 		const stackArray: any = [];
 		const stackData = await getRepository(Users).find({
-			relations: ['join'],
+			relations: ['stacks'],
 			where: {
 				id: userInfo.id,
 			},
 		});
 		console.log(stackData); // test
-		stackData.map(el => {
-			el.join.map(e => {
-				stackArray.push(e.name);
+		stackData.map(stack => {
+			stack.stacks.map(stack => {
+				stackArray.push(stack.name);
 			});
 		});
 		// 형태 변환
