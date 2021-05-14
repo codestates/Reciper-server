@@ -1,5 +1,6 @@
 import * as controller from '../controllers/controller';
 import express from 'express';
+import { upload } from '../controllers/profile/imageUploader';
 const recruitRouter = express.Router();
 
 // 팀원모집 게시글 리스트 조회
@@ -7,9 +8,9 @@ recruitRouter.get('/recruitList/:order', controller.recruitList);
 // 팀원모집 게시글 상세내용 조회
 recruitRouter.get('/recruitBoard/:board_id', controller.showRecruitBoard);
 // 팀원모집 게시글 등록
-recruitRouter.post('/recruitBoard', controller.registerRecruitBoard);
+recruitRouter.post('/recruitBoard', upload.single('file'), controller.registerRecruitBoard);
 // 팀원모집 게시글 수정
-recruitRouter.post('/recruitBoard/:board_id', controller.editRecruitBoard);
+recruitRouter.post('/recruitBoard/:board_id', upload.single('file'), controller.editRecruitBoard);
 // 팀원모집 게시글 삭제
 recruitRouter.delete('/recruitBoard/:board_id', controller.deleteRecruitBoard);
 

@@ -52,6 +52,9 @@ export class Recruits extends BaseEntity {
 	})
 	commentCount!: number;
 
+	@Column()
+	image!: string;
+
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
 
