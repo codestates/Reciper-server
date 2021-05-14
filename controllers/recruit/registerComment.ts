@@ -27,14 +27,14 @@ const registerComment = async (req: Request, res: Response) => {
 		if (foundBoard) {
 			const created = await Recruit_comments.create({
 				writer: name,
-				writer_id: userId,
+				writerId: userId,
 				body,
-				recruits: foundBoard,
+				recruitBoard: foundBoard,
 			});
 			await created.save();
 			const commentsList = await Recruit_comments.find({
 				where: {
-					recruits: foundBoard,
+					recruitBoard: foundBoard,
 				},
 				order: {
 					createdAt: 'ASC',

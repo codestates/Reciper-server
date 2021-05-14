@@ -49,9 +49,9 @@ const deleteComment = async (req: Request, res: Response) => {
 		let commentsList: any[] = [];
 		try {
 			let findComments = await getRepository(Recruit_comments).findAndCount({
-				relations: ['recruits'],
+				relations: ['recruitBoard'],
 				where: {
-					recruits: {
+					recruitBoard: {
 						id: boardId,
 					},
 				},
