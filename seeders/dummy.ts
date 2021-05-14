@@ -15,10 +15,11 @@ createConnections()
 	.catch(error => console.log(error));
 
 const dummyCreate = async () => {
+	console.log('------------------Dummy generator ------------------');
 	// 랜덤 유저 생성
 	const users = await Users.find();
-	console.log(users);
 	const user = await Users.findOne({ where: { id: Math.floor(Math.random() * users.length + 1) } });
+	console.log('랜덤 유저선택 : ', user?.email);
 	// 랜덤유저로 프로필 편집
 	if (user) {
 		user.career = JSON.stringify([
@@ -31,9 +32,17 @@ const dummyCreate = async () => {
 			name[Math.floor(Math.random() * name.length)] +
 			name[Math.floor(Math.random() * name.length)];
 		user.isOpen = Boolean(Math.round(Math.random()));
+		user.mobile = createMobile();
 		user.save();
 	}
+	console.log(`랜덤 유저 프로필 편집 ================
+	${user?.career}
+	${user?.name}
+	${user?.isOpen}
+	${user?.mobile}
+	==================================`);
 	// 랜덤유저로 리크루트 쓰기
+	console.log('beginMate 크롤링시도===');
 	const data = await axios.get(
 		`https://www.beginmate.com/api/recruit/list?page=${Math.floor(Math.random() * 20 + 1)}`,
 		{
@@ -59,23 +68,41 @@ const dummyCreate = async () => {
 		period: `${Math.floor(Math.random() * 12 + 1)}개월`,
 		detail_title: picked.teamName,
 		detail_desc: makeDesc(),
-		// writer:user
+		writer: user,
 	});
 	created.save();
+	console.log(`recruits데이터 생성 ==================
+	${created.name}
+	${created.simple_desc}
+	${created.recruit_members}
+	${created.service_step}
+	${created.period}
+	${created.detail_title}
+	${created.detail_desc}
+	${created.writer.name}
+	======================================`);
 
 	for (let i = 0; i < 10; i++) {
+		console.log(`댓글생성 ${i + 1}회 -------------------`);
 		// 댓글은 10번 반복
 		// 랜덤 리크루트 찾기
 		const foundRecruits = await Recruits.find();
 		const pickedId = foundRecruits[Math.floor(Math.random() * foundRecruits.length)].id;
 		const pickedRecruits = await Recruits.findOne({ where: { id: pickedId } });
 		// 랜덤 리크루트에 댓글 달기
-		Recruit_comments.create({
+		const createdComment = await Recruit_comments.create({
 			writer: user!.name,
 			writer_id: user!.id,
 			body: makeComment(),
 			recruits: pickedRecruits,
 		});
+		createdComment.save();
+		console.log(`생성된 댓글==============
+		${createdComment.writer}
+		${createdComment.writer_id}
+		${createdComment.body}
+		${createdComment.recruits.name}
+		`);
 	}
 
 	// 결과정리
@@ -144,4 +171,17 @@ const makeComment = () => {
 	comment += mid[Math.floor(Math.random() * mid.length)] + ' ';
 	comment += foot[Math.floor(Math.random() * foot.length)];
 	return comment;
+};
+
+const createMobile = () => {
+	let mobile = '010';
+	let mid = '-';
+	let foot = '-';
+	for (let i = 0; i < 4; i++) {
+		mid += Math.floor(Math.random() * 10);
+	}
+	for (let i = 0; i < 4; i++) {
+		foot += Math.floor(Math.random() * 10);
+	}
+	return mobile + mid + foot;
 };
