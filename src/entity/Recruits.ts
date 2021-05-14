@@ -61,13 +61,13 @@ export class Recruits extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Recruit_comments, commentsList => commentsList.id)
+	@OneToMany(type => Recruit_comments, commentsList => commentsList.recruitBoard)
 	commentsList!: Recruit_comments[];
 
 	@ManyToMany(() => Stacks)
 	@JoinTable()
 	stacks!: Stacks[];
 
-	@ManyToOne(type => Users, users => users.id)
+	@ManyToOne(type => Users, users => users.recruitBoards)
 	writer!: Users;
 }

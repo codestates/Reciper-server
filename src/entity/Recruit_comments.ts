@@ -29,6 +29,6 @@ export class Recruit_comments extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@ManyToOne(type => Recruits, recruitBoard => recruitBoard.id)
+	@ManyToOne(type => Recruits, recruitBoard => recruitBoard.commentCount)
 	recruitBoard!: Recruits;
 }
