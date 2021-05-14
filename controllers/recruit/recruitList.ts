@@ -9,7 +9,6 @@ const recruitList = async (req: Request, res: Response) => {
 	// 예를들면 req.params에 몇번째 요청인지가 알수있다면 꺼낼때 최신순으로 24개씩 꺼내면 된다.
 	// view카운트가 필요하다. 설령 새로고침으로 올라가더라도 필요하다. 즉 조회가 올때마다, 추가해야한다. (디테일페이지에서 구현해야하며)
 	// 리스트를 내려줄때 데이터에 필요하다. 사실상
-
 	try {
 		const { order } = req.params;
 		const found = await Recruits.find({

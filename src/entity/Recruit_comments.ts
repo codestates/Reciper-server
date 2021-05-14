@@ -18,7 +18,7 @@ export class Recruit_comments extends BaseEntity {
 	writer!: string;
 
 	@Column()
-	writer_id!: number;
+	writerId!: number;
 
 	@Column()
 	body!: string;
@@ -27,8 +27,8 @@ export class Recruit_comments extends BaseEntity {
 	createdAt!: Date;
 
 	@UpdateDateColumn({ name: 'updatedAt' })
-	UpdatedAt!: Date;
+	updatedAt!: Date;
 
-	@ManyToOne(type => Recruits, recruits => recruits.id)
-	recruits!: Recruits;
+	@ManyToOne(type => Recruits, recruitBoard => recruitBoard.id)
+	recruitBoard!: Recruits;
 }

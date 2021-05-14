@@ -23,27 +23,24 @@ export class Recruits extends BaseEntity {
 	name!: string;
 
 	@Column()
-	simple_desc!: string;
+	simpleDesc!: string;
 
 	@Column()
-	recruit_members!: string; // 배열 형태 - JSON.stringify()
+	recruitMembers!: string; // 배열 형태 - JSON.stringify()
 
 	@Column()
-	require_stack!: string; // 배열 형태 - JSON.stringify()
-
-	@Column()
-	service_step!: string;
+	serviceStep!: string;
 
 	@Column()
 	period!: string;
 
 	@Column()
-	detail_title!: string;
+	detailTitle!: string;
 
 	@Column({
 		length: 10000,
 	})
-	detail_desc!: string;
+	detailDesc!: string;
 
 	@Column({
 		default: 0,
@@ -59,14 +56,14 @@ export class Recruits extends BaseEntity {
 	createdAt!: Date;
 
 	@UpdateDateColumn({ name: 'updatedAt' })
-	UpdatedAt!: Date;
+	updatedAt!: Date;
 
-	@OneToMany(type => Recruit_comments, recruit_comments => recruit_comments.id)
-	recruit_commentId!: Recruit_comments[];
+	@OneToMany(type => Recruit_comments, commentsList => commentsList.id)
+	commentsList!: Recruit_comments[];
 
 	@ManyToMany(() => Stacks)
 	@JoinTable()
-	join!: Stacks[];
+	stacks!: Stacks[];
 
 	@ManyToOne(type => Users, users => users.id)
 	writer!: Users;

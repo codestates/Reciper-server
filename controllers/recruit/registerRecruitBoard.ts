@@ -8,8 +8,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 	console.log('💜registerRecruitBoard- ', req.body);
 	try {
 		const userId = req.userId;
-		const { name, simple_desc, recruit_members, require_stack, service_step, period, detail_title, detail_desc } =
-			req.body;
+		const { name, simpleDesc, recruitMembers, requireStack, serviceStep, period, detailTitle, detailDesc } = req.body;
 		// 작성자 정보 가져오기
 		const userInfo = await Users.findOne({
 			id: userId,
@@ -17,29 +16,24 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 		if (userInfo) {
 			const created = await Recruits.create({
 				name,
-				simple_desc,
-				recruit_members: JSON.stringify(recruit_members),
-				service_step,
+				simpleDesc,
+				recruitMembers: JSON.stringify(recruitMembers),
+				serviceStep,
 				period,
-				detail_title,
-				detail_desc,
+				detailTitle,
+				detailDesc,
 				writer: userInfo,
 			});
 			const stackArray = [];
-			for (let i = 0; i < require_stack.length; i++) {
+			for (let i = 0; i < requireStack.length; i++) {
 				const foundStack = await Stacks.findOne({
 					where: {
-						name: require_stack[i],
+						name: requireStack[i],
 					},
 				});
 				stackArray.push(foundStack!);
 			}
-			created.join = stackArray;
-			created.require_stack = JSON.stringify(
-				stackArray.map(el => {
-					return el.name;
-				}),
-			);
+			created.stacks = stackArray;
 			created.save();
 			if (userInfo.recruitBoards === undefined) {
 				userInfo.recruitBoards = [];
@@ -49,8 +43,8 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 			console.log(created); // test
 			res.status(200).json({
 				...created,
-				recruit_members: JSON.parse(created.recruit_members),
-				require_stack: JSON.parse(created.require_stack),
+				recruitMembers: JSON.parse(created.recruitMembers),
+				requireStack: stackArray,
 			});
 		} else {
 			res.status(400).json({
