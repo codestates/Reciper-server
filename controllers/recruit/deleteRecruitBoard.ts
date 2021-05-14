@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { Recruits } from './../../src/entity/Recruits';
-import { Stacks } from '../../src/entity/Stacks';
+import { Users } from '../../src/entity/Users';
 import { getRepository } from 'typeorm';
 import { Recruit_comments } from './../../src/entity/Recruit_comments';
 
@@ -8,8 +8,31 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 삭제
 	console.log('💜deleteRecruitBoard- ', req.body, req.params);
 	const boardId = Number(req.params.board_id);
-	// join 테이블에서 해당 게시글과 관련된 데이터(stack) 지우기
-
+	// users 테이블에서 해당 게시글 데이터 지우기
+	const userId = req.userId;
+	const userInfo = await Users.findOne({
+		id: userId,
+	});
+	if (userInfo) {
+		const boardData = userInfo.recruitBoards;
+		if (boardData !== undefined) {
+			for (let idx = 0; idx < boardData.length; idx++) {
+				if (boardData[idx].id === boardId) {
+					boardData.splice(idx, 1);
+					break;
+				}
+			}
+			try {
+				userInfo.save();
+			} catch (err) {
+				console.log('💜deleteRecruitBoard- err: ', err.message);
+			}
+		}
+	} else {
+		res.status(400).json({
+			message: 'user is not found',
+		});
+	}
 	// 해당 게시글과 관련된 댓글 삭제하기
 	try {
 		const deleteComments = await getRepository(Recruit_comments).find({
