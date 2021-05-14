@@ -5,9 +5,10 @@ import { Users } from '../../src/entity/Users';
 
 const registerComment = async (req: Request, res: Response) => {
 	// 댓글 등록
-	console.log('💜registerComment- ', req.body, req.params);
-	const { board_id } = req.params;
-	const { userEmail, userId } = req;
+	console.log('💜registerComment- ');
+	console.log(req.body, req.params);
+	const boardId = req.params.board_id;
+	const userId = req.userId;
 	const { body } = req.body;
 	//유저이름 탐색
 	const foundUser = await Users.findOne({
@@ -17,10 +18,9 @@ const registerComment = async (req: Request, res: Response) => {
 	});
 	if (foundUser) {
 		const name = foundUser.name;
-		console.log(1);
 		const foundBoard = await Recruits.findOne({
 			where: {
-				id: Number(board_id),
+				id: Number(boardId),
 			},
 		});
 		console.log(foundBoard);
@@ -41,13 +41,10 @@ const registerComment = async (req: Request, res: Response) => {
 				},
 			});
 			console.log(commentsList); // test
-			if (foundBoard.require_stack.length !== 0) {
-				foundBoard.require_stack = JSON.parse(foundBoard.require_stack);
-			}
 			res.status(200).json({
 				...foundBoard,
-				recruit_members: JSON.parse(foundBoard.recruit_members),
-				require_stack: foundBoard.require_stack,
+				recruitMembers: JSON.parse(foundBoard.recruitMembers),
+				requireStack: foundBoard.stacks,
 				commentsList,
 			});
 		} else {
