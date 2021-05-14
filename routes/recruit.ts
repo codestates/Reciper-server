@@ -13,7 +13,6 @@ recruitRouter.post('/recruitBoard', upload.single('file'), controller.registerRe
 recruitRouter.post('/recruitBoard/:board_id', upload.single('file'), controller.editRecruitBoard);
 // 팀원모집 게시글 삭제
 recruitRouter.delete('/recruitBoard/:board_id', controller.deleteRecruitBoard);
-
 // 댓글 등록
 recruitRouter.post('/recruitBoardComment/:board_id', controller.registerComment);
 // 댓글 삭제

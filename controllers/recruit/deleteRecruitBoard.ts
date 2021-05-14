@@ -3,6 +3,8 @@ import { Recruits } from './../../src/entity/Recruits';
 import { Users } from '../../src/entity/Users';
 import { getRepository } from 'typeorm';
 import { Recruit_comments } from './../../src/entity/Recruit_comments';
+import * as fs from 'fs';
+import * as path from 'path';
 
 const deleteRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 삭제
@@ -54,6 +56,16 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 	}
 	// 해당 게시글 삭제하기
 	try {
+		const found = await Recruits.findOne({ where: { id: boardId } });
+		const imageRoute = found!.recruitImage;
+		fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
+			// A
+			if (err) return console.log('삭제할 수 없는 파일입니다', err.message);
+
+			fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
+				err ? console.log(err) : console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
+			);
+		});
 		const deleteBoard = await Recruits.delete({
 			id: boardId,
 		});
