@@ -1,7 +1,7 @@
 import * as controller from '../controllers/controller';
 import express from 'express';
+import { upload } from '../middlewares/imageUploader';
 const profileRouter = express.Router();
-import { upload } from '../controllers/profile/imageUploader';
 
 // 프로필 정보 조회
 profileRouter.get('/profile', controller.getProfile);
