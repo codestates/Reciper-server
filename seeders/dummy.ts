@@ -96,8 +96,7 @@ const dummyCreate = async () => {
 		// 댓글은 10번 반복
 		// 랜덤 리크루트 찾기
 		const foundRecruits = await Recruits.find();
-
-		const randomIndex = Math.floor(Math.random() * foundRecruits.length + 1);
+		const randomIndex = Math.floor(Math.random() * foundRecruits.length);
 		console.log('dddd', foundRecruits.length, randomIndex);
 		const pickedId = await foundRecruits[randomIndex].id;
 		console.log(pickedId);
