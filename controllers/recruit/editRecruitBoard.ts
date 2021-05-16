@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { Stacks } from '../../src/entity/Stacks';
 import { Recruits } from '../../src/entity/Recruits';
+import { getRepository } from 'typeorm';
 
 const editRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 수정
 	console.log('💜editRecruitBoard- ');
 	console.log(req.body, req.params);
+	const boardId = Number(req.params.board_id);
 	try {
 		const {
 			name,
@@ -18,8 +20,11 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			detailDesc,
 			uploadImage,
 		} = req.body;
-		const found = await Recruits.findOne({
-			id: Number(req.params.board_id),
+		const found = await getRepository(Recruits).findOne({
+			relations: ['writer'],
+			where: {
+				id: boardId,
+			},
 		});
 		const stackArray = [];
 		for (let i = 0; i < requireStack.length; i++) {
