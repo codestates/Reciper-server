@@ -102,8 +102,7 @@ const dummyCreate = async () => {
 		const pickedRecruits = await Recruits.findOne({ where: { id: pickedId } });
 		// 랜덤 리크루트에 댓글 달기
 		const createdComment = await Recruit_comments.create({
-			writer: user!.name,
-			writerId: user!.id,
+			writer: user,
 			body: makeComment(),
 			recruitBoard: pickedRecruits,
 		});
@@ -112,8 +111,8 @@ const dummyCreate = async () => {
 		pickedRecruits?.save();
 		createdComment.save();
 		console.log(`생성된 댓글==============
-		${createdComment.writer}
-		${createdComment.writerId}
+		${createdComment.writer.name}
+		${createdComment.writer.id}
 		${createdComment.body}
 		${createdComment.recruitBoard.name}
 		`);
