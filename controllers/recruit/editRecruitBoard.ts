@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Stacks } from '../../src/entity/Stacks';
 import { Recruits } from '../../src/entity/Recruits';
 import { getRepository } from 'typeorm';
+import { Recruit_comments } from '../../src/entity/Recruit_comments';
 
 const editRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 수정
@@ -45,12 +46,20 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			foundBoard.detailDesc = detailDesc;
 			foundBoard.uploadImage = req.uploadImageName ? req.uploadImageName : uploadImage;
 			foundBoard.stacks = stackArray;
-			foundBoard.save();
+			await foundBoard.save();
+			//  해당 게시글의 댓글 데이터
+			const commentsList = await getRepository(Recruit_comments).find({
+				relations: ['writer'],
+				where: {
+					recruitBoard: foundBoard,
+				},
+			});
 			console.log(foundBoard); // test
 			res.status(200).json({
 				...foundBoard,
 				recruitMembers: JSON.parse(foundBoard.recruitMembers),
 				requireStack: stackArray.map(el => el.name),
+				commentsList,
 			});
 		} else {
 			res.status(400).json({
