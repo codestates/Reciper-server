@@ -34,7 +34,7 @@ const updateStacks = async () => {
 			if (found) {
 				continue;
 			} else {
-				if (item.length <= 15) {
+				if (item.text.length <= 15) {
 					const created = await Stacks.create({ name: item.text });
 					created.save();
 					console.log(`Add ${item.text}`);
