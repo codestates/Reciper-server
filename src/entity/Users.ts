@@ -40,7 +40,7 @@ export class Users extends BaseEntity {
 	aboutMe!: string;
 
 	@Column()
-	profileImage!: string;
+	uploadImage!: string;
 
 	@Column()
 	profileColor!: string;

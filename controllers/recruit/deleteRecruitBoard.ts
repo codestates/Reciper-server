@@ -58,7 +58,7 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 		const found = await Recruits.findOne({
 			id: boardId,
 		});
-		const imageRoute = found!.recruitImage;
+		const imageRoute = found!.uploadImage;
 		fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
 			if (err) {
 				return console.log('삭제할 수 없는 파일입니다', err.message);

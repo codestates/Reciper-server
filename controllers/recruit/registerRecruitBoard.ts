@@ -23,7 +23,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 				period,
 				detailTitle,
 				detailDesc,
-				recruitImage: req.uploadImageName ? req.uploadImageName : 'basic.png',
+				uploadImage: req.uploadImageName ? req.uploadImageName : 'basic.png',
 				writer: userInfo,
 			});
 			const stackArray = [];

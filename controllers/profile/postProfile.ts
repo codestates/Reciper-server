@@ -53,7 +53,7 @@ const postProfile = async (req: Request, res: Response) => {
 			foundUser.isOpen = isOpen;
 		}
 		if (req.uploadImageName) {
-			const imageRoute = foundUser.profileImage;
+			const imageRoute = foundUser.uploadImage;
 			fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
 				if (err) {
 					return console.log('삭제할 수 없는 파일입니다', err.message);
@@ -64,7 +64,7 @@ const postProfile = async (req: Request, res: Response) => {
 						: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
 				);
 			});
-			foundUser.profileImage = req.uploadImageName;
+			foundUser.uploadImage = req.uploadImageName;
 		}
 		foundUser.profileColor = randomColorGenerator();
 		const stackArray = [];

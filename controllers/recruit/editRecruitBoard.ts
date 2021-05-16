@@ -36,7 +36,7 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			found.period = period;
 			found.detailTitle = detailTitle;
 			found.detailDesc = detailDesc;
-			found.recruitImage = req.uploadImageName ? req.uploadImageName : recruitImage;
+			found.uploadImage = req.uploadImageName ? req.uploadImageName : recruitImage;
 			found.stacks = stackArray;
 			found.save();
 			console.log(found); // test
