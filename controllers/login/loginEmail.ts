@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import { accessTokenGenerator } from '../../jwt/GenerateAccessToken';
 import { refreshTokenGenerator } from '../../jwt/GenerateRefreshToken';
 import { Users } from '../../src/entity/Users';
+import randomColorGenerator from '../login/randomColorGenerator';
 dotenv.config();
 
 const loginEmail = {
@@ -25,6 +26,7 @@ const loginEmail = {
 				const newUser = await Users.create({
 					email,
 					name: email.split('@')[0],
+					profileColor: randomColorGenerator(),
 				});
 				const saved = await newUser.save();
 				accessToken = await accessTokenGenerator(saved.id, email);

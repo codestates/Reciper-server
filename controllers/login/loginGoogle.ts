@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as dotenv from 'dotenv';
 dotenv.config();
 import { Users } from '../../src/entity/Users';
+import randomColorGenerator from '../login/randomColorGenerator';
 
 const googleLoginURL = 'https://accounts.google.com/o/oauth2/token';
 const googleInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo';
@@ -42,6 +43,7 @@ const loginGoogle = async (req: Request, res: Response) => {
 				let newUser: Users = new Users();
 				newUser.email = resInfo;
 				newUser.name = resInfo.split('@')[0];
+				newUser.profileColor = randomColorGenerator();
 				try {
 					newUser.save();
 				} catch (err) {

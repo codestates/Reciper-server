@@ -2,25 +2,7 @@ import { Request, Response } from 'express';
 import { Users } from '../../src/entity/Users';
 import { Stacks } from '../../src/entity/Stacks';
 import * as fs from 'fs';
-
-const randomColorGenerator = (): string => {
-	const initialColorList: string[] = [
-		'#F44336',
-		'#E92763',
-		'#9C27B0',
-		'#673AB7',
-		'#3F51B5',
-		'#2196F3',
-		'#019688',
-		'#4CAF50',
-		'#60A068',
-		'#484A25',
-		'#FF981A',
-		'#795648',
-		'#FF5722',
-	];
-	return initialColorList[Math.floor(Math.random() * initialColorList.length)]; //0~12
-};
+import randomColorGenerator from '../login/randomColorGenerator';
 
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정

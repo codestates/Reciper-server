@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
-dotenv.config();
 import { Users } from '../../src/entity/Users';
+import randomColorGenerator from '../login/randomColorGenerator';
+dotenv.config();
 
 const githubLoginURL = 'https://github.com/login/oauth/access_token';
 const githubInfoURL = 'https://api.github.com/user';
@@ -48,6 +49,7 @@ const loginGithub = async (req: Request, res: Response) => {
 				let newUser: Users = new Users();
 				newUser.email = `${resInfo}@github.com`;
 				newUser.name = resInfo;
+				newUser.profileColor = randomColorGenerator();
 				try {
 					newUser.save();
 				} catch (err) {
