@@ -11,8 +11,11 @@ const deleteComment = async (req: Request, res: Response) => {
 	// 해당 게시글 찾기
 	let boardInfo;
 	try {
-		boardInfo = await Recruits.findOne({
-			id: boardId,
+		boardInfo = await getRepository(Recruits).findOne({
+			relations: ['writer'],
+			where: {
+				id: boardId,
+			},
 		});
 	} catch (err) {
 		console.log('💜showRecruitBoard- err: ', err.message);

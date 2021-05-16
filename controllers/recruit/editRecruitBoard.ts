@@ -20,7 +20,7 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			detailDesc,
 			uploadImage,
 		} = req.body;
-		const found = await getRepository(Recruits).findOne({
+		const foundBoard = await getRepository(Recruits).findOne({
 			relations: ['writer'],
 			where: {
 				id: boardId,
@@ -35,22 +35,22 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			});
 			stackArray.push(foundStack!);
 		}
-		if (found) {
-			found.name = name;
-			found.simpleDesc = simpleDesc;
-			found.recruitMembers = JSON.stringify(recruitMembers);
-			found.serviceStep = serviceStep;
-			found.period = period;
-			found.detailTitle = detailTitle;
-			found.detailDesc = detailDesc;
-			found.uploadImage = req.uploadImageName ? req.uploadImageName : uploadImage;
-			found.stacks = stackArray;
-			found.save();
-			console.log(found); // test
+		if (foundBoard) {
+			foundBoard.name = name;
+			foundBoard.simpleDesc = simpleDesc;
+			foundBoard.recruitMembers = JSON.stringify(recruitMembers);
+			foundBoard.serviceStep = serviceStep;
+			foundBoard.period = period;
+			foundBoard.detailTitle = detailTitle;
+			foundBoard.detailDesc = detailDesc;
+			foundBoard.uploadImage = req.uploadImageName ? req.uploadImageName : uploadImage;
+			foundBoard.stacks = stackArray;
+			foundBoard.save();
+			console.log(foundBoard); // test
 			res.status(200).json({
-				...found,
-				recruitMembers: JSON.parse(found.recruitMembers),
-				requireStack: found.stacks.map(el => el.name),
+				...foundBoard,
+				recruitMembers: JSON.parse(foundBoard.recruitMembers),
+				requireStack: stackArray.map(el => el.name),
 			});
 		} else {
 			res.status(400).json({

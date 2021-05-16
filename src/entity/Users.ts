@@ -56,7 +56,7 @@ export class Users extends BaseEntity {
 	@JoinTable()
 	stacks!: Stacks[];
 
-	@OneToMany(type => Recruits, recruits => recruits.writer)
+	@OneToMany(type => Recruits, recruitBoards => recruitBoards.writer)
 	recruitBoards!: Recruits[];
 
 	@OneToMany(type => Recruit_comments, commentsList => commentsList.writer)

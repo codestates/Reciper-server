@@ -8,7 +8,7 @@ const registerComment = async (req: Request, res: Response) => {
 	// 댓글 등록
 	console.log('💜registerComment- ');
 	console.log(req.body, req.params);
-	const boardId = req.params.board_id;
+	const boardId = Number(req.params.board_id);
 	const userId = req.userId;
 	const { body } = req.body;
 	//유저이름 탐색
@@ -18,9 +18,10 @@ const registerComment = async (req: Request, res: Response) => {
 		},
 	});
 	if (foundUser) {
-		const foundBoard = await Recruits.findOne({
+		const foundBoard = await getRepository(Recruits).findOne({
+			relations: ['writer'],
 			where: {
-				id: Number(boardId),
+				id: boardId,
 			},
 		});
 		if (foundBoard) {
