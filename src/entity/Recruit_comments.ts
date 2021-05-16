@@ -8,17 +8,12 @@ import {
 	BaseEntity,
 } from 'typeorm';
 import { Recruits } from './Recruits';
+import { Users } from './Users';
 
 @Entity()
 export class Recruit_comments extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
-
-	@Column()
-	writer!: string;
-
-	@Column()
-	writerId!: number;
 
 	@Column()
 	body!: string;
@@ -29,6 +24,9 @@ export class Recruit_comments extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@ManyToOne(type => Recruits, recruitBoard => recruitBoard.commentCount)
+	@ManyToOne(type => Recruits, recruitBoard => recruitBoard.commentsList)
 	recruitBoard!: Recruits;
+
+	@ManyToOne(type => Users, writer => writer.commentsList)
+	writer!: Users;
 }

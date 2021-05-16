@@ -34,6 +34,9 @@ const deleteComment = async (req: Request, res: Response) => {
 			}
 		}
 		try {
+			if (boardInfo.stacks === undefined) {
+				boardInfo.stacks = [];
+			}
 			boardInfo.save();
 		} catch (err) {
 			console.log('💜showRecruitBoard- err: ', err.message);
@@ -47,25 +50,16 @@ const deleteComment = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		// 지운 이후의 댓글 데이터 보내주기
-		let commentsList: any[] = [];
-		try {
-			let findComments = await getRepository(Recruit_comments).findAndCount({
-				relations: ['recruitBoard'],
-				where: {
-					recruitBoard: {
-						id: boardId,
-					},
+		//let commentsList: any[] = [];
+		const commentsList = await getRepository(Recruit_comments).find({
+			relations: ['writer'],
+			where: {
+				recruitBoard: {
+					id: boardId,
 				},
-			});
-			findComments.forEach(el => {
-				if (typeof el !== 'number') {
-					commentsList.push(el);
-				}
-			});
-		} catch (err) {
-			console.log('💜showRecruitBoard- err: ', err.message);
-		}
-		console.log(boardInfo, [...commentsList[0]]); // test
+			},
+		});
+		console.log(boardInfo, commentsList); // test
 		if (boardInfo.recruitMembers) {
 			boardInfo.recruitMembers = JSON.parse(boardInfo.recruitMembers);
 		}
@@ -73,7 +67,7 @@ const deleteComment = async (req: Request, res: Response) => {
 			...boardInfo,
 			recruitMembers: boardInfo.recruitMembers,
 			requireStack: boardInfo.stacks.map(el => el.name),
-			commentsList: [...commentsList[0]],
+			commentsList,
 		});
 	}
 };
