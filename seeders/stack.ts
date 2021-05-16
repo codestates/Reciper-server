@@ -34,10 +34,13 @@ const updateStacks = async () => {
 			if (found) {
 				continue;
 			} else {
-				const created = await Stacks.create({ name: item.text });
-				created.save();
+				if (item.length <= 15) {
+					const created = await Stacks.create({ name: item.text });
+					created.save();
+					console.log(`Add ${item.text}`);
+				}
+				console.log('15 character over');
 			}
-			console.log(`Add ${item.text}`);
 		}
 	}
 	console.log('db update  done');

@@ -17,7 +17,7 @@ createConnections()
 	.then(async connection => {
 		console.log('DB 연결 완료! ');
 		for (let i = 0; i < 10; i++) {
-			dummyCreate();
+			await dummyCreate();
 		}
 	})
 	.catch(error => console.log(error));
