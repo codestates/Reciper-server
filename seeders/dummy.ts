@@ -6,6 +6,7 @@ import axios from 'axios';
 import { detail_desc } from './d_recruit';
 import { Recruit_comments } from '../src/entity/Recruit_comments';
 import { Stacks } from '../src/entity/Stacks';
+import randomColorGenerator from '../controllers/login/randomColorGenerator';
 //=============================
 // 사용전 주의사항
 // 중요 !! : npm run update_stacks
@@ -41,6 +42,7 @@ const dummyCreate = async () => {
 		user.isOpen = Boolean(Math.round(Math.random()));
 		user.mobile = createMobile();
 		user.stacks = await pickedStack();
+		user.profileColor = randomColorGenerator();
 		user.save();
 	}
 	console.log(`랜덤 유저 프로필 편집 ================
