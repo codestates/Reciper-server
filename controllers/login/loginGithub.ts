@@ -28,7 +28,6 @@ const loginGithub = async (req: Request, res: Response) => {
 			},
 		)
 		.then(async result => {
-			console.log(result.data);
 			let accessToken = result.data.access_token;
 			// accessToken을 통해 로그인한 유저 정보 가져오기
 			const resInfo = await axios

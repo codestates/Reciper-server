@@ -5,7 +5,8 @@ import { Recruit_comments } from './../../src/entity/Recruit_comments';
 
 const deleteComment = async (req: Request, res: Response) => {
 	// 댓글 삭제
-	console.log('💜deleteComment- ', req.body, req.params);
+	console.log('💜deleteComment- ');
+	console.log(req.body, req.params);
 	const boardId = Number(req.params.board_id);
 	const commentId = Number(req.params.comment_id);
 	// 해당 게시글 찾기
@@ -31,7 +32,7 @@ const deleteComment = async (req: Request, res: Response) => {
 			for (let idx = 0; idx < commentData.length; idx++) {
 				if (commentData[idx].id === commentId) {
 					commentData.splice(idx, 1);
-					boardInfo.commentCount--;
+					boardInfo.commentCount -= 1;
 					break;
 				}
 			}
@@ -53,7 +54,6 @@ const deleteComment = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		// 지운 이후의 댓글 데이터 보내주기
-		//let commentsList: any[] = [];
 		const commentsList = await getRepository(Recruit_comments).find({
 			relations: ['writer'],
 			where: {

@@ -13,8 +13,11 @@ const randomColorGenerator = (): string => {
 		'#FF981A',
 		'#795648',
 		'#FF5722',
+		'#8CA3CB',
+		'#F1D236',
+		'#F49EB3',
 	];
-	return initialColorList[Math.floor(Math.random() * initialColorList.length)]; //0~12
+	return initialColorList[Math.floor(Math.random() * initialColorList.length)];
 };
 
 export default randomColorGenerator;

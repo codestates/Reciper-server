@@ -46,22 +46,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 				}
 			}
 			created.stacks = stackArray;
-
 			created.save();
-			// try {
-			// 	console.log(userInfo.recruitBoards);
-			// 	// if (userInfo.recruitBoards === undefined) {
-			// 	// 	userInfo.recruitBoards = [];
-			// 	// } else {
-			// 	// 	userInfo.recruitBoards.push(created);
-			// 	// }
-			// 	// userInfo.save();
-			// } catch (err) {
-			// 	console.log('💜registerRecruitBoard- err: ', err.message);
-			// 	res.status(400).json({
-			// 		message: err.message,
-			// 	});
-			// }
 			console.log(created, stackArray); // test
 			res.status(200).json({
 				...created,

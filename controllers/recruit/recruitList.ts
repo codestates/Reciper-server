@@ -12,16 +12,16 @@ const recruitList = async (req: Request, res: Response) => {
 	// 리스트를 내려줄때 데이터에 필요하다. 사실상
 	try {
 		const { order } = req.params;
-		const found = await Recruits.find({
+		const foundAllBoards = await getRepository(Recruits).find({
+			relations: ['writer'],
 			order: {
 				createdAt: 'DESC',
 			},
 		});
-		const slicedFound = found.slice((Number(order) - 1) * 24, Number(order) * 24);
+		const slicedFound = foundAllBoards.slice((Number(order) - 1) * 24, Number(order) * 24);
 		// 0,24
 		// 24,48,
 		// 48,72
-		console.log(slicedFound); // test
 		const objArr = [];
 		for (let i = 0; i < slicedFound.length; i++) {
 			let findStacks = await getRepository(Recruits).findAndCount({
@@ -33,7 +33,6 @@ const recruitList = async (req: Request, res: Response) => {
 			const object = { ...slicedFound[i], requireStack: findStacks[0][0].stacks.map(el => el.name) };
 			objArr.push(object);
 		}
-
 		res.status(200).json({
 			boardList: objArr,
 		});

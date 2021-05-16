@@ -12,11 +12,12 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 	let boardInfo;
 	try {
 		boardInfo = await getRepository(Recruits).findOne({
-			relations: ['writer'],
+			relations: ['writer', 'stacks'],
 			where: {
 				id: boardId,
 			},
 		});
+		console.log(boardInfo);
 	} catch (err) {
 		console.log('💜showRecruitBoard- err: ', err.message);
 	}
@@ -27,16 +28,8 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 	} else {
 		// stack 데이터 가져오기
 		const stackArray: any = [];
-		const stackData = await getRepository(Recruits).find({
-			relations: ['stacks'],
-			where: {
-				id: boardInfo.id,
-			},
-		});
-		stackData.map(el => {
-			el.stacks.map(stack => {
-				stackArray.push(stack.name);
-			});
+		boardInfo.stacks.map(stack => {
+			stackArray.push(stack.name);
 		});
 		// view 1 증가
 		boardInfo.view += 1;

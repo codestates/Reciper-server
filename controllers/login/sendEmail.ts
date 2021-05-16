@@ -32,6 +32,7 @@ const EmailValidationCheck = (email: string) => {
 };
 
 const sendEmail = async (req: Request, res: Response) => {
+	console.log('💙send: email- ', req.body);
 	const { email } = req.body;
 	if (EmailValidationCheck(email)) {
 		const username = email.split('@')[0];

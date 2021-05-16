@@ -30,13 +30,7 @@ const registerComment = async (req: Request, res: Response) => {
 				recruitBoard: foundBoard,
 				writer: foundUser,
 			});
-			// if (foundUser.commentsList === undefined) {
-			// 	foundUser.commentsList = [];
-			// }
-			// foundUser.commentsList = [...foundUser.commentsList, created];
-			// console.log(foundUser.commentsList);
-			// await foundUser.save();
-			foundBoard.commentCount++;
+			foundBoard.commentCount += 1;
 			if (foundBoard.stacks === undefined) {
 				foundBoard.stacks = [];
 			}
