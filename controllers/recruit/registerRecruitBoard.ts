@@ -9,7 +9,17 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 	console.log(req.body, req.uploadImageName);
 	try {
 		const userId = req.userId;
-		const { name, simpleDesc, recruitMembers, requireStack, serviceStep, period, detailTitle, detailDesc } = req.body;
+		const {
+			name,
+			simpleDesc,
+			recruitMembers,
+			requireStack,
+			serviceStep,
+			period,
+			detailTitle,
+			detailDesc,
+			uploadImage,
+		} = req.body;
 		// 작성자 정보 가져오기
 		const userInfo = await Users.findOne({
 			id: userId,
@@ -23,7 +33,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 				period,
 				detailTitle,
 				detailDesc,
-				uploadImage: req.uploadImageName ? req.uploadImageName : '',
+				uploadImage: req.uploadImageName ? req.uploadImageName : uploadImage,
 				writer: userInfo,
 			});
 			const stackArray = [];
