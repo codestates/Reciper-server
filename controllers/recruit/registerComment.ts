@@ -32,6 +32,9 @@ const registerComment = async (req: Request, res: Response) => {
 				recruitBoard: foundBoard,
 			});
 			foundBoard.commentCount++;
+			if (foundBoard.stacks === undefined) {
+				foundBoard.stacks = [];
+			}
 			foundBoard.save();
 			await created.save();
 			const commentsList = await Recruit_comments.find({
