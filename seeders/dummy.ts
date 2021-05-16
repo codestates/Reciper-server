@@ -75,6 +75,7 @@ const dummyCreate = async () => {
 		detailDesc: makeDesc(),
 		writer: user,
 		stacks: recruitStacks,
+		uploadImage: `basic_img_${Math.floor(Math.random() * 13 + 1)}`,
 	});
 	created.save();
 	console.log(`recruits데이터 생성 ==================
@@ -106,6 +107,9 @@ const dummyCreate = async () => {
 			body: makeComment(),
 			recruitBoard: pickedRecruits,
 		});
+		pickedRecruits!.view++;
+		pickedRecruits!.commentCount++;
+		pickedRecruits?.save();
 		createdComment.save();
 		console.log(`생성된 댓글==============
 		${createdComment.writer}
@@ -128,8 +132,17 @@ const makeDesc = () => {
 	for (let i = 0; i < 100; i++) {
 		added += splited[Math.floor(Math.random() * splited.length)];
 		added += ' ';
+		if (i === 10) {
+			added = `<h1>${added}</h1>`;
+		}
+		if (i % 50 === 0) {
+			added = `<h2>${added}</h2>`;
+		}
+		if (i % 22 === 0) {
+			added = `<h3>${added}</h3>`;
+		}
 	}
-	return added;
+	return '<p>' + added + '</p>';
 };
 
 const makeComment = () => {
@@ -210,7 +223,7 @@ const createRecruitMembers = () => {
 	const obj = {
 		position: career_job[Math.floor(Math.random() * career_job.length)], // 프론트,백,풀 셋중하나
 		career: `${Math.floor(Math.random() * 10 + 1)}년`, // 1년~10년
-		personner: `${Math.floor(Math.random() * 5 + 1)}`, // 1명~5명
+		personnel: `${Math.floor(Math.random() * 5 + 1)}`, // 1명~5명
 		deadline: `2021-${Math.floor(Math.random() * 6 + 6)}-${Math.floor(Math.random() * 31 + 1)}`,
 	};
 	const result = [];
