@@ -11,8 +11,11 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 	const boardId = Number(req.params.board_id);
 	let boardInfo;
 	try {
-		boardInfo = await Recruits.findOne({
-			id: boardId,
+		boardInfo = await getRepository(Recruits).findOne({
+			relations: ['writer'],
+			where: {
+				id: boardId,
+			},
 		});
 	} catch (err) {
 		console.log('💜showRecruitBoard- err: ', err.message);

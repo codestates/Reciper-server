@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import createConnection from './src/index';
 import loginRouter from './routes/login';
 import authChecker from './middlewares/authChecker';
+import notLoginRouter from './routes/notLoginRouter';
 import profileRouter from './routes/profile';
 import recruitRouter from './routes/recruit';
 import stacksRouter from './routes/stacks';
@@ -27,6 +28,7 @@ app.use(express.json());
 // routes
 app.use('/images', express.static('uploads'));
 app.use('/', loginRouter);
+app.use('/', notLoginRouter);
 app.use('/', stacksRouter);
 app.use('/', authChecker, profileRouter);
 app.use('/', authChecker, recruitRouter);

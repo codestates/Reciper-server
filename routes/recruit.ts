@@ -3,10 +3,6 @@ import express from 'express';
 import { upload } from '../middlewares/imageUploader';
 const recruitRouter = express.Router();
 
-// 팀원모집 게시글 리스트 조회
-recruitRouter.get('/recruitList/:order', controller.recruitList);
-// 팀원모집 게시글 상세내용 조회
-recruitRouter.get('/recruitBoard/:board_id', controller.showRecruitBoard);
 // 팀원모집 게시글 등록
 recruitRouter.post('/recruitBoard', upload.single('file'), controller.registerRecruitBoard);
 // 팀원모집 게시글 수정
