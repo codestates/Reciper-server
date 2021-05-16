@@ -8,7 +8,9 @@ const getProfile = async (req: Request, res: Response) => {
 	const userId = req.userId;
 	// 저장된 유저 정보 불러오기
 	const userInfo = await Users.findOne({
-		id: userId,
+		where: {
+			id: userId,
+		},
 	});
 	if (userInfo === undefined) {
 		res.status(400).json({
@@ -23,7 +25,6 @@ const getProfile = async (req: Request, res: Response) => {
 				id: userInfo.id,
 			},
 		});
-		console.log(stackData); // test
 		stackData.map(stack => {
 			stack.stacks.map(stack => {
 				stackArray.push(stack.name);

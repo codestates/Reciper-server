@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
-dotenv.config();
 import { Users } from '../../src/entity/Users';
 import randomColorGenerator from '../login/randomColorGenerator';
+dotenv.config();
 
 const googleLoginURL = 'https://accounts.google.com/o/oauth2/token';
 const googleInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo';

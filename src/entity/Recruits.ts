@@ -68,6 +68,6 @@ export class Recruits extends BaseEntity {
 	@JoinTable()
 	stacks!: Stacks[];
 
-	@ManyToOne(type => Users, users => users.recruitBoards)
+	@ManyToOne(type => Users, writer => writer.recruitBoards)
 	writer!: Users;
 }

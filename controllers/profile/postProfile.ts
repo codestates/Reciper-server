@@ -35,6 +35,7 @@ const postProfile = async (req: Request, res: Response) => {
 			foundUser.isOpen = isOpen;
 		}
 		if (req.uploadImageName) {
+			// 기존 이미지 파일 삭제하기
 			const imageRoute = foundUser.uploadImage;
 			fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
 				if (err) {

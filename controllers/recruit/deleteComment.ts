@@ -5,14 +5,18 @@ import { Recruit_comments } from './../../src/entity/Recruit_comments';
 
 const deleteComment = async (req: Request, res: Response) => {
 	// 댓글 삭제
-	console.log('💜deleteComment- ', req.body, req.params);
+	console.log('💜deleteComment- ');
+	console.log(req.body, req.params);
 	const boardId = Number(req.params.board_id);
 	const commentId = Number(req.params.comment_id);
 	// 해당 게시글 찾기
 	let boardInfo;
 	try {
-		boardInfo = await Recruits.findOne({
-			id: boardId,
+		boardInfo = await getRepository(Recruits).findOne({
+			relations: ['writer'],
+			where: {
+				id: boardId,
+			},
 		});
 	} catch (err) {
 		console.log('💜showRecruitBoard- err: ', err.message);
@@ -28,12 +32,15 @@ const deleteComment = async (req: Request, res: Response) => {
 			for (let idx = 0; idx < commentData.length; idx++) {
 				if (commentData[idx].id === commentId) {
 					commentData.splice(idx, 1);
-					boardInfo.commentCount--;
+					boardInfo.commentCount -= 1;
 					break;
 				}
 			}
 		}
 		try {
+			if (boardInfo.stacks === undefined) {
+				boardInfo.stacks = [];
+			}
 			boardInfo.save();
 		} catch (err) {
 			console.log('💜showRecruitBoard- err: ', err.message);
@@ -47,25 +54,15 @@ const deleteComment = async (req: Request, res: Response) => {
 			console.log('💜showRecruitBoard- err: ', err.message);
 		}
 		// 지운 이후의 댓글 데이터 보내주기
-		let commentsList: any[] = [];
-		try {
-			let findComments = await getRepository(Recruit_comments).findAndCount({
-				relations: ['recruitBoard'],
-				where: {
-					recruitBoard: {
-						id: boardId,
-					},
+		const commentsList = await getRepository(Recruit_comments).find({
+			relations: ['writer'],
+			where: {
+				recruitBoard: {
+					id: boardId,
 				},
-			});
-			findComments.forEach(el => {
-				if (typeof el !== 'number') {
-					commentsList.push(el);
-				}
-			});
-		} catch (err) {
-			console.log('💜showRecruitBoard- err: ', err.message);
-		}
-		console.log(boardInfo, [...commentsList[0]]); // test
+			},
+		});
+		console.log(boardInfo, commentsList); // test
 		if (boardInfo.recruitMembers) {
 			boardInfo.recruitMembers = JSON.parse(boardInfo.recruitMembers);
 		}
@@ -73,7 +70,7 @@ const deleteComment = async (req: Request, res: Response) => {
 			...boardInfo,
 			recruitMembers: boardInfo.recruitMembers,
 			requireStack: boardInfo.stacks.map(el => el.name),
-			commentsList: [...commentsList[0]],
+			commentsList,
 		});
 	}
 };

@@ -11,10 +11,11 @@ import {
 } from 'typeorm';
 import { Stacks } from './Stacks';
 import { Recruits } from './Recruits';
+import { Recruit_comments } from './Recruit_comments';
 
 @Entity()
 export class Users extends BaseEntity {
-	// 해당 엔티티(Users) 에서 save, remove 등의 메소드를 사용하기 위해 aseEntity 를 상속
+	// 해당 엔티티(Users) 에서 save, remove 등의 메소드를 사용하기 위해 BaseEntity 를 상속
 	@PrimaryGeneratedColumn()
 	id!: number;
 
@@ -55,6 +56,9 @@ export class Users extends BaseEntity {
 	@JoinTable()
 	stacks!: Stacks[];
 
-	@OneToMany(type => Recruits, recruits => recruits.writer)
+	@OneToMany(type => Recruits, recruitBoards => recruitBoards.writer)
 	recruitBoards!: Recruits[];
+
+	@OneToMany(type => Recruit_comments, commentsList => commentsList.writer)
+	commentsList!: Recruit_comments[];
 }

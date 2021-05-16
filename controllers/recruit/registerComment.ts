@@ -2,12 +2,13 @@ import { Request, Response } from 'express';
 import { Recruits } from '../../src/entity/Recruits';
 import { Recruit_comments } from '../../src/entity/Recruit_comments';
 import { Users } from '../../src/entity/Users';
+import { getRepository } from 'typeorm';
 
 const registerComment = async (req: Request, res: Response) => {
 	// 댓글 등록
 	console.log('💜registerComment- ');
 	console.log(req.body, req.params);
-	const boardId = req.params.board_id;
+	const boardId = Number(req.params.board_id);
 	const userId = req.userId;
 	const { body } = req.body;
 	//유저이름 탐색
@@ -17,32 +18,28 @@ const registerComment = async (req: Request, res: Response) => {
 		},
 	});
 	if (foundUser) {
-		const name = foundUser.name;
-		const foundBoard = await Recruits.findOne({
+		const foundBoard = await getRepository(Recruits).findOne({
+			relations: ['writer'],
 			where: {
-				id: Number(boardId),
+				id: boardId,
 			},
 		});
-		console.log(foundBoard);
 		if (foundBoard) {
 			const created = await Recruit_comments.create({
-				writer: name,
-				writerId: userId,
 				body,
 				recruitBoard: foundBoard,
+				writer: foundUser,
 			});
-			foundBoard.commentCount++;
+			foundBoard.commentCount += 1;
 			if (foundBoard.stacks === undefined) {
 				foundBoard.stacks = [];
 			}
-			foundBoard.save();
+			await foundBoard.save();
 			await created.save();
-			const commentsList = await Recruit_comments.find({
+			const commentsList = await getRepository(Recruit_comments).find({
+				relations: ['writer'],
 				where: {
 					recruitBoard: foundBoard,
-				},
-				order: {
-					createdAt: 'ASC',
 				},
 			});
 			console.log(commentsList); // test

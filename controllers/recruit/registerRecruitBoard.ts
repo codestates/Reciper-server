@@ -9,7 +9,17 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 	console.log(req.body, req.uploadImageName);
 	try {
 		const userId = req.userId;
-		const { name, simpleDesc, recruitMembers, requireStack, serviceStep, period, detailTitle, detailDesc } = req.body;
+		const {
+			name,
+			simpleDesc,
+			recruitMembers,
+			requireStack,
+			serviceStep,
+			period,
+			detailTitle,
+			detailDesc,
+			uploadImage,
+		} = req.body;
 		// 작성자 정보 가져오기
 		const userInfo = await Users.findOne({
 			id: userId,
@@ -23,7 +33,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 				period,
 				detailTitle,
 				detailDesc,
-				uploadImage: req.uploadImageName ? req.uploadImageName : '',
+				uploadImage: req.uploadImageName ? req.uploadImageName : uploadImage,
 				writer: userInfo,
 			});
 			const stackArray = [];
@@ -36,22 +46,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 				}
 			}
 			created.stacks = stackArray;
-
 			created.save();
-			try {
-				console.log(userInfo.recruitBoards);
-				if (userInfo.recruitBoards === undefined) {
-					userInfo.recruitBoards = [];
-				} else {
-					userInfo.recruitBoards.push(created);
-				}
-				userInfo.save();
-			} catch (err) {
-				console.log('💜registerRecruitBoard- err: ', err.message);
-				res.status(400).json({
-					message: err.message,
-				});
-			}
 			console.log(created, stackArray); // test
 			res.status(200).json({
 				...created,
