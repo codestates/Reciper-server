@@ -29,11 +29,11 @@ const dummyCreate = async () => {
 	console.log('랜덤 유저선택 : ', user?.email);
 	// 랜덤유저로 프로필 편집
 	if (user) {
-		user.career = JSON.stringify([
-			career_office[Math.floor(Math.random() * career_office.length)],
-			career_job[Math.floor(Math.random() * career_job.length)],
-			Math.floor(Math.random() * 10 + 1),
-		]);
+		user.career = JSON.stringify({
+			office: career_office[Math.floor(Math.random() * career_office.length)],
+			job: career_job[Math.floor(Math.random() * career_job.length)],
+			period: Math.floor(Math.random() * 10 + 1),
+		});
 		user.name =
 			last_name[Math.floor(Math.random() * last_name.length)] +
 			name[Math.floor(Math.random() * name.length)] +
@@ -75,7 +75,7 @@ const dummyCreate = async () => {
 		detailDesc: makeDesc(),
 		writer: user,
 		stacks: recruitStacks,
-		uploadImage: `basic_img_${Math.floor(Math.random() * 13 + 1)}`,
+		uploadImage: `basic_img_${Math.floor(Math.random() * 13 + 1)}.png`,
 	});
 	created.save();
 	console.log(`recruits데이터 생성 ==================
@@ -133,7 +133,8 @@ const makeDesc = () => {
 		added += splited[Math.floor(Math.random() * splited.length)];
 		added += ' ';
 		if (i === 10) {
-			added = `<h1>${added}</h1>`;	
+			added = `<h1>${added}</h1>`;
+		}
 	}
 	return '<p>' + added + '</p>';
 };
