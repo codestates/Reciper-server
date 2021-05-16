@@ -133,14 +133,7 @@ const makeDesc = () => {
 		added += splited[Math.floor(Math.random() * splited.length)];
 		added += ' ';
 		if (i === 10) {
-			added = `<h1>${added}</h1>`;
-		}
-		if (i % 50 === 0) {
-			added = `<h2>${added}</h2>`;
-		}
-		if (i % 22 === 0) {
-			added = `<h3>${added}</h3>`;
-		}
+			added = `<h1>${added}</h1>`;	
 	}
 	return '<p>' + added + '</p>';
 };
