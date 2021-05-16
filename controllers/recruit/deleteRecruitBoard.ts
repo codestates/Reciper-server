@@ -7,12 +7,15 @@ import * as fs from 'fs';
 
 const deleteRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 삭제
-	console.log('💜deleteRecruitBoard- ', req.body, req.params);
+	console.log('💜deleteRecruitBoard- ');
+	console.log(req.body, req.params);
 	const boardId = Number(req.params.board_id);
 	// users 테이블에서 해당 게시글 데이터 지우기
 	const userId = req.userId;
 	const userInfo = await Users.findOne({
-		id: userId,
+		where: {
+			id: userId,
+		},
 	});
 	if (userInfo) {
 		const boardData = userInfo.recruitBoards;
@@ -58,17 +61,24 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 		const found = await Recruits.findOne({
 			id: boardId,
 		});
+		// 이미지 파일 삭제하기
 		const imageRoute = found!.uploadImage;
-		fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
-			if (err) {
-				return console.log('삭제할 수 없는 파일입니다', err.message);
-			}
-			fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
-				err
-					? console.log(err.message)
-					: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
-			);
-		});
+		const chkBasicNum = [];
+		for (let idx = 1; idx <= 13; idx++) {
+			chkBasicNum.push(String(idx) + '.png');
+		}
+		if (!chkBasicNum.includes(imageRoute.split('_')[2])) {
+			fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
+				if (err) {
+					return console.log('삭제할 수 없는 파일입니다', err.message);
+				}
+				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
+					err
+						? console.log(err.message)
+						: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
+				);
+			});
+		}
 		const deleteBoard = await Recruits.delete({
 			id: boardId,
 		});
