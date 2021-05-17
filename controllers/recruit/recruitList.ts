@@ -11,30 +11,23 @@ const recruitList = async (req: Request, res: Response) => {
 	// view카운트가 필요하다. 설령 새로고침으로 올라가더라도 필요하다. 즉 조회가 올때마다, 추가해야한다. (디테일페이지에서 구현해야하며)
 	// 리스트를 내려줄때 데이터에 필요하다. 사실상
 	try {
-		const { order } = req.params;
-		const foundAllBoards = await getRepository(Recruits).find({
-			relations: ['writer'],
+		const order = Number(req.params.order);
+		const sort = req.params.sort === 'ASC' ? 1 : -1;
+		const allBoards = await getRepository(Recruits).find({
+			relations: ['writer', 'stacks'],
 			order: {
-				createdAt: 'DESC',
+				createdAt: sort,
 			},
 		});
-		const slicedFound = foundAllBoards.slice((Number(order) - 1) * 24, Number(order) * 24);
-		// 0,24
-		// 24,48,
-		// 48,72
-		const objArr = [];
-		for (let i = 0; i < slicedFound.length; i++) {
-			let findStacks = await getRepository(Recruits).findAndCount({
-				relations: ['stacks'],
-				where: {
-					id: slicedFound[i].id,
-				},
-			});
-			const object = { ...slicedFound[i], requireStack: findStacks[0][0].stacks.map(el => el.name) };
-			objArr.push(object);
+		const sliceBoards = allBoards.slice((order - 1) * 24, order * 24);
+		const boardList = [];
+		for (let idx = 0; idx < sliceBoards.length; idx++) {
+			let requireStack = sliceBoards[idx].stacks.map(el => el.name);
+			const obj = { ...sliceBoards[idx], requireStack };
+			boardList.push(obj);
 		}
 		res.status(200).json({
-			boardList: objArr,
+			boardList,
 		});
 	} catch (err) {
 		console.log('💜recruitList- err: ', err.message);
