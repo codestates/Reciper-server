@@ -29,7 +29,7 @@ export class Projects extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Parts, parts => parts.recruitBoard)
+	@OneToMany(type => Parts, parts => parts.parts)
 	parts!: Parts[];
 
 	// @OneToMany(type => Chat, chats => chats.project)
