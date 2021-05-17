@@ -3,8 +3,8 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
 import loginRouter from './routes/login';
-import authChecker from './middlewares/authChecker';
 import notLoginRouter from './routes/notLoginRouter';
+import imageRouter from './routes/image';
 import profileRouter from './routes/profile';
 import recruitRouter from './routes/recruit';
 dotenv.config();
@@ -25,9 +25,10 @@ app.use(cors(corsOption));
 app.use(express.json());
 
 // routes
-app.use('/images', express.static('uploads'));
 app.use('/', loginRouter);
 app.use('/', notLoginRouter);
+app.use('/', imageRouter);
+app.use('/images', express.static('uploads'));
 app.use('/', profileRouter);
 app.use('/', recruitRouter);
 
