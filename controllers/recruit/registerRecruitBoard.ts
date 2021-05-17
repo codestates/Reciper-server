@@ -6,7 +6,7 @@ import { Users } from '../../src/entity/Users';
 const registerRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 등록
 	console.log('💜registerRecruitBoard- ');
-	console.log(req.body, req.uploadImageName);
+	console.log(req.body);
 	try {
 		const userId = req.userId;
 		const {
@@ -33,7 +33,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 				period,
 				detailTitle,
 				detailDesc,
-				uploadImage: req.uploadImageName ? req.uploadImageName : uploadImage,
+				uploadImage: uploadImage,
 				writer: userInfo,
 			});
 			const stackArray = [];

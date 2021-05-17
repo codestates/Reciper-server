@@ -17,6 +17,8 @@ import registerComment from './recruit/registerComment';
 import deleteComment from './recruit/deleteComment';
 // 4. stack
 import getStacks from './stacks/getStacks';
+// 5. image
+import postImage from './image/image';
 
 export {
 	// login
@@ -38,4 +40,6 @@ export {
 	deleteComment,
 	//stack
 	getStacks,
+	//image
+	postImage,
 };
