@@ -12,6 +12,7 @@ import {
 import { Stacks } from './Stacks';
 import { Recruits } from './Recruits';
 import { Recruit_comments } from './Recruit_comments';
+import { Task_comments } from './Task_comments';
 
 @Entity()
 export class Users extends BaseEntity {
@@ -61,4 +62,7 @@ export class Users extends BaseEntity {
 
 	@OneToMany(type => Recruit_comments, commentsList => commentsList.writer)
 	commentsList!: Recruit_comments[];
+
+	@OneToMany(type => Task_comments, commentsListTask => commentsListTask.writer)
+	commentsListTask!: Task_comments[];
 }
