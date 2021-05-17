@@ -40,9 +40,9 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 	// 해당 게시글과 관련된 댓글 삭제하기
 	try {
 		const deleteComments = await getRepository(Recruit_comments).find({
-			relations: ['recruits'],
+			relations: ['recruitBoard'],
 			where: {
-				recruits: {
+				recruitBoard: {
 					id: boardId,
 				},
 			},
