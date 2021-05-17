@@ -33,6 +33,15 @@ const filterRecruitList = async (req: Request, res: Response) => {
 			}
 		}
 		const countTotal = filterResult.length;
+		console.log(
+			filterResult.slice((order - 1) * 24, order * 24).map(el => {
+				return {
+					id: el.id,
+					requireStack: el.requireStack,
+				};
+			}),
+			countTotal <= order * 24 ? true : false,
+		); // test
 		res.status(200).json({
 			boardList: filterResult.slice((order - 1) * 24, order * 24),
 			isEnd: countTotal <= order * 24 ? true : false,
