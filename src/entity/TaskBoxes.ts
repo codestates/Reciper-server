@@ -10,11 +10,11 @@ import {
 	BaseEntity,
 	ManyToOne,
 } from 'typeorm';
-import { Projects } from './Projects';
-import { TaskBoxes } from './TaskBoxes';
+import { Tasks } from './Tasks';
+import { Parts } from './Parts';
 
 @Entity()
-export class Parts extends BaseEntity {
+export class TaskBoxes extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
@@ -22,7 +22,7 @@ export class Parts extends BaseEntity {
 	title!: string;
 
 	@Column()
-	index!: number;
+	index!: string;
 
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
@@ -30,9 +30,9 @@ export class Parts extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => TaskBoxes, taskBoxes => taskBoxes.parts)
-	taskBoxes!: TaskBoxes[];
+	@OneToMany(type => Tasks, tasks => tasks.tasksBoxes)
+	tasks!: Tasks[];
 
-	@ManyToOne(type => Projects, projects => projects.parts)
+	@ManyToOne(type => Parts, parts => parts.taskBoxes)
 	parts!: Parts;
 }
