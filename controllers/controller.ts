@@ -8,13 +8,14 @@ import getProfile from './profile/getProfile';
 import postProfile from './profile/postProfile';
 // 3. recruit(팀원모집)
 import recruitList from './recruit/recruitList';
+import filterRecruitList from './recruit/filterRecruitList';
 import showRecruitBoard from './recruit/showRecruitBoard';
 import registerRecruitBoard from './recruit/registerRecruitBoard';
 import editRecruitBoard from './recruit/editRecruitBoard';
 import deleteRecruitBoard from './recruit/deleteRecruitBoard';
 import registerComment from './recruit/registerComment';
 import deleteComment from './recruit/deleteComment';
-// 4. Stacks
+// 4. stack
 import getStacks from './stacks/getStacks';
 
 export {
@@ -28,6 +29,7 @@ export {
 	postProfile,
 	// recruit
 	recruitList,
+	filterRecruitList,
 	showRecruitBoard,
 	registerRecruitBoard,
 	editRecruitBoard,
