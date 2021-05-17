@@ -30,7 +30,7 @@ export class TaskBoxes extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Tasks, tasks => tasks.tasksBoxes)
+	@OneToMany(type => Tasks, tasks => tasks.taskBoxes)
 	tasks!: Tasks[];
 
 	@ManyToOne(type => Parts, parts => parts.taskBoxes)

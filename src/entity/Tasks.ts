@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { Checklists } from './Checklists';
 import { Task_comments } from './Task_comments';
-
+import { TaskBoxes } from './TaskBoxes';
 @Entity()
 export class Tasks extends BaseEntity {
 	@PrimaryGeneratedColumn()
@@ -45,8 +45,8 @@ export class Tasks extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	//@ManyToOne(type => Taskboxes, taskbox => taskbox.tasks)
-	//taskbox!: Taskboxes;
+	@ManyToOne(type => TaskBoxes, taskBoxes => taskBoxes.tasks)
+	taskBoxes!: TaskBoxes;
 
 	@OneToMany(type => Checklists, checklists => checklists.task)
 	checklists!: Checklists[];
