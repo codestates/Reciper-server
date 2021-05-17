@@ -28,8 +28,8 @@ app.use(express.json());
 app.use('/images', express.static('uploads'));
 app.use('/', loginRouter);
 app.use('/', notLoginRouter);
-app.use('/', authChecker, profileRouter);
-app.use('/', authChecker, recruitRouter);
+app.use('/', profileRouter);
+app.use('/', recruitRouter);
 
 app.listen(PORT, () => {
 	console.log(PORT, '포트 열림');

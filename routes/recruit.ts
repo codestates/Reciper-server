@@ -1,7 +1,15 @@
 import * as controller from '../controllers/controller';
 import express from 'express';
+import authChecker from '../middlewares/authChecker';
 import { upload } from '../middlewares/imageUploader';
 const recruitRouter = express.Router();
+
+recruitRouter.use('/recruitBoard', (req, res, next) => {
+	authChecker(req, res, next);
+});
+recruitRouter.use('/recruitBoardComment', (req, res, next) => {
+	authChecker(req, res, next);
+});
 
 // 팀원모집 게시글 등록
 recruitRouter.post('/recruitBoard', upload.single('file'), controller.registerRecruitBoard);
