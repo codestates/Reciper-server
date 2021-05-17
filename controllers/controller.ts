@@ -19,6 +19,11 @@ import deleteComment from './recruit/deleteComment';
 import getStacks from './stacks/getStacks';
 // 5. image
 import postImage from './image/image';
+// 6. project
+import showProjectList from './project/showProjectList';
+import createProject from './project/createProject';
+import editProject from './project/editProject';
+import inviteMembers from './project/inviteMembers';
 
 export {
 	// login
@@ -40,6 +45,11 @@ export {
 	deleteComment,
 	//stack
 	getStacks,
-	//image
+	// image
 	postImage,
+	// project
+	showProjectList,
+	createProject,
+	editProject,
+	inviteMembers,
 };
