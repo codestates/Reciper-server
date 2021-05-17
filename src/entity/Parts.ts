@@ -34,5 +34,5 @@ export class Parts extends BaseEntity {
 	taskBoxes!: TaskBoxes[];
 
 	@ManyToOne(type => Projects, projects => projects.parts)
-	parts!: Parts;
+	projects!: Parts;
 }
