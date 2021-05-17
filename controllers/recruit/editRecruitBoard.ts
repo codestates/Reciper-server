@@ -3,6 +3,7 @@ import { Stacks } from '../../src/entity/Stacks';
 import { Recruits } from '../../src/entity/Recruits';
 import { getRepository } from 'typeorm';
 import { Recruit_comments } from '../../src/entity/Recruit_comments';
+import * as fs from 'fs';
 
 const editRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 수정
@@ -44,7 +45,20 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			foundBoard.period = period;
 			foundBoard.detailTitle = detailTitle;
 			foundBoard.detailDesc = detailDesc;
-			foundBoard.uploadImage = req.uploadImageName ? req.uploadImageName : uploadImage;
+			if (uploadImage) {
+				const imageRoute = foundBoard.uploadImage;
+				fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
+					if (err) {
+						return console.log('삭제할 수 없는 파일입니다', err.message);
+					}
+					fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
+						err
+							? console.log(err.message)
+							: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
+					);
+				});
+			}
+			foundBoard.uploadImage = uploadImage;
 			foundBoard.stacks = stackArray;
 			await foundBoard.save();
 			//  해당 게시글의 댓글 데이터

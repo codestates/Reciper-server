@@ -7,9 +7,9 @@ import randomColorGenerator from '../login/randomColorGenerator';
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
 	console.log('🧡postProfile- ');
-	console.log(req.body, req.uploadImageName);
+	console.log(req.body);
 	const userId = req.userId;
-	const { name, mobile, aboutMe, gitId, career, stacks, isOpen } = req.body;
+	const { name, mobile, aboutMe, gitId, career, stacks, isOpen, uploadImage } = req.body;
 	const foundUser = await Users.findOne({
 		where: {
 			id: userId,
@@ -34,7 +34,7 @@ const postProfile = async (req: Request, res: Response) => {
 		if (foundUser) {
 			foundUser.isOpen = isOpen;
 		}
-		if (req.uploadImageName) {
+		if (uploadImage) {
 			// 기존 이미지 파일 삭제하기
 			const imageRoute = foundUser.uploadImage;
 			fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
@@ -47,7 +47,7 @@ const postProfile = async (req: Request, res: Response) => {
 						: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
 				);
 			});
-			foundUser.uploadImage = req.uploadImageName;
+			foundUser.uploadImage = uploadImage;
 		}
 		foundUser.profileColor = randomColorGenerator();
 		const stackArray = [];
