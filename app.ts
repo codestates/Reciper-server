@@ -3,11 +3,10 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
 import loginRouter from './routes/login';
-import authChecker from './middlewares/authChecker';
 import notLoginRouter from './routes/notLoginRouter';
+import imageRouter from './routes/image';
 import profileRouter from './routes/profile';
 import recruitRouter from './routes/recruit';
-import stacksRouter from './routes/stacks';
 dotenv.config();
 
 const PORT = process.env.PORT;
@@ -26,12 +25,13 @@ app.use(cors(corsOption));
 app.use(express.json());
 
 // routes
-app.use('/images', express.static('uploads'));
 app.use('/', loginRouter);
 app.use('/', notLoginRouter);
-app.use('/', stacksRouter);
-app.use('/', authChecker, profileRouter);
-app.use('/', authChecker, recruitRouter);
+app.use('/', imageRouter);
+app.use('/images', express.static('uploads'));
+app.use('/', profileRouter);
+app.use('/', recruitRouter);
+
 app.listen(PORT, () => {
 	console.log(PORT, '포트 열림');
 });
