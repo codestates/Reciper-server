@@ -3,7 +3,7 @@ import express from 'express';
 const projectRouter = express.Router();
 
 // 프로젝트 리스트 조회
-projectRouter.get('./projectList', controller.showProjectList);
+projectRouter.get('./project', controller.showProjectList);
 // 프로젝트 생성
 projectRouter.post('./project', controller.createProject);
 // 프로젝트 수정
