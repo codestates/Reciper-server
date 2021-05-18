@@ -20,6 +20,11 @@ export class Projects extends BaseEntity {
 	@Column()
 	name!: string;
 
+	@Column({
+		unique: true,
+	})
+	projectURL!: string;
+
 	@Column()
 	inviteList!: string;
 
