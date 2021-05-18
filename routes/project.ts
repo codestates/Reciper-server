@@ -7,8 +7,8 @@ projectRouter.get('./projectList', controller.showProjectList);
 // 프로젝트 생성
 projectRouter.post('./project', controller.createProject);
 // 프로젝트 수정
-projectRouter.post('./project/:project_path', controller.editProject);
+projectRouter.post('./project/:projectURL', controller.editProject);
 // 프로젝트 팀원 초대
-projectRouter.post('./projectInvite/:project_path', controller.inviteMembers);
+projectRouter.post('./projectInvite/:projectURL', controller.inviteMembers);
 
 export default projectRouter;

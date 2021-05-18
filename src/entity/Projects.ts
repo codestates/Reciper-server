@@ -20,6 +20,11 @@ export class Projects extends BaseEntity {
 	@Column()
 	name!: string;
 
+	@Column({
+		unique: true,
+	})
+	projectURL!: string;
+
 	@Column()
 	inviteList!: string;
 
@@ -29,8 +34,8 @@ export class Projects extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Parts, parts => parts.projects)
-	parts!: Parts[];
+	@OneToMany(type => Parts, partsList => partsList.doingProject)
+	partsList!: Parts[];
 
 	// @OneToMany(type => Chat, chats => chats.project)
 	// chats!: Chat[];

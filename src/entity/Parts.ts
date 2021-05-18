@@ -11,7 +11,7 @@ import {
 	ManyToOne,
 } from 'typeorm';
 import { Projects } from './Projects';
-import { TaskBoxes } from './TaskBoxes';
+import { Task_boxes } from './Task_boxes';
 
 @Entity()
 export class Parts extends BaseEntity {
@@ -30,9 +30,9 @@ export class Parts extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => TaskBoxes, taskBoxes => taskBoxes.parts)
-	taskBoxes!: TaskBoxes[];
+	@OneToMany(type => Task_boxes, taskBoxes => taskBoxes.groupingPart)
+	taskBoxesList!: Task_boxes[];
 
-	@ManyToOne(type => Projects, projects => projects.parts)
-	projects!: Parts;
+	@ManyToOne(type => Projects, doingProject => doingProject.partsList)
+	doingProject!: Parts;
 }

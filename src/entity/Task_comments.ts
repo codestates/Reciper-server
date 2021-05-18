@@ -24,8 +24,8 @@ export class Task_comments extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@ManyToOne(type => Tasks, task => task.commentsList)
-	task!: Tasks;
+	@ManyToOne(type => Tasks, nowTask => nowTask.commentsList)
+	nowTask!: Tasks;
 
 	@ManyToOne(type => Users, writer => writer.commentsList)
 	writer!: Users;

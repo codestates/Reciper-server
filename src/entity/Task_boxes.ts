@@ -14,7 +14,7 @@ import { Tasks } from './Tasks';
 import { Parts } from './Parts';
 
 @Entity()
-export class TaskBoxes extends BaseEntity {
+export class Task_boxes extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
@@ -30,9 +30,9 @@ export class TaskBoxes extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Tasks, tasks => tasks.taskBoxes)
-	tasks!: Tasks[];
+	@OneToMany(type => Tasks, tasks => tasks.groupingBox)
+	tasksList!: Tasks[];
 
-	@ManyToOne(type => Parts, parts => parts.taskBoxes)
-	parts!: Parts;
+	@ManyToOne(type => Parts, parts => parts.taskBoxesList)
+	groupingPart!: Parts;
 }

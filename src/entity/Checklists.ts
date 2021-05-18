@@ -26,6 +26,6 @@ export class Checklists extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@ManyToOne(type => Tasks, task => task.checklists)
-	task!: Tasks;
+	@ManyToOne(type => Tasks, nowTask => nowTask.checklistsList)
+	nowTask!: Tasks;
 }
