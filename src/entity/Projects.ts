@@ -26,6 +26,9 @@ export class Projects extends BaseEntity {
 	projectURL!: string;
 
 	@Column()
+	projectColor!: string;
+
+	@Column()
 	inviteList!: string;
 
 	@CreateDateColumn({ name: 'createdAt' })
