@@ -13,6 +13,8 @@ projectRouter.get('/project', controller.showProjectList);
 projectRouter.post('/project', controller.createProject);
 // 프로젝트 수정
 projectRouter.post('/project/:projectURL', controller.editProject);
+// 프로젝트 삭제
+projectRouter.delete('/project/:projectURL', controller.deleteProject);
 // 프로젝트 팀원 초대
 projectRouter.post('/projectInvite/:projectURL', controller.inviteMembers);
 
