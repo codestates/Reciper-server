@@ -25,6 +25,7 @@ import createProject from './project/createProject';
 import editProject from './project/editProject';
 import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
+import addMembers from './project/addMembers';
 export {
 	// login
 	sendEmail,
@@ -53,4 +54,5 @@ export {
 	editProject,
 	deleteProject,
 	inviteMembers,
+	addMembers,
 };
