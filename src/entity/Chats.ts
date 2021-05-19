@@ -11,18 +11,14 @@ import {
 	ManyToOne,
 } from 'typeorm';
 import { Projects } from './Projects';
-import { Task_boxes } from './Task_boxes';
-
+import { Users } from './Users';
 @Entity()
-export class Parts extends BaseEntity {
+export class Chats extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
 	@Column()
-	title!: string;
-
-	@Column()
-	index!: number;
+	text!: string;
 
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
@@ -30,9 +26,9 @@ export class Parts extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Task_boxes, taskBoxes => taskBoxes.groupingPart)
-	taskBoxesList!: Task_boxes[];
+	@ManyToOne(type => Users, writer => writer.chat)
+	writer!: Users;
 
-	@ManyToOne(type => Projects, doingProject => doingProject.partsList)
-	doingProject!: Projects;
+	@ManyToOne(type => Projects, doingProject => doingProject.chats)
+	project!: Projects;
 }
