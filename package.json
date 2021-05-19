@@ -24,6 +24,7 @@
     "@types/multer": "^1.4.5",
     "@types/nodemailer": "^6.4.1",
     "@types/socket.io": "^3.0.2",
+    "@types/socket.io-redis": "^3.0.0",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
     "dotenv": "^8.6.0",
