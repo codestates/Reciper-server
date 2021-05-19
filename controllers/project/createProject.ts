@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 import { Users } from '../../src/entity/Users';
 import { Projects } from '../../src/entity/Projects';
+import randomColorGenerator from '../login/randomColorGenerator';
 
 const createProject = async (req: Request, res: Response) => {
 	// 프로젝트 생성
@@ -18,6 +18,7 @@ const createProject = async (req: Request, res: Response) => {
 		const created = await Projects.create({
 			name,
 			projectURL,
+			projectColor: randomColorGenerator(),
 		});
 		const membersArray = [userInfo];
 		created.members = membersArray;

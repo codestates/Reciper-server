@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Projects } from '../../src/entity/Projects';
+import randomColorGenerator from '../login/randomColorGenerator';
 
 const editProject = async (req: Request, res: Response) => {
 	// 프로젝트 수정
@@ -16,6 +17,7 @@ const editProject = async (req: Request, res: Response) => {
 		if (foundProject) {
 			foundProject.name = name;
 			foundProject.projectURL = projectURL;
+			foundProject.projectColor = randomColorGenerator();
 			await foundProject.save();
 			console.log(foundProject); // test
 			res.status(200).json({
