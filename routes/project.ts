@@ -17,5 +17,6 @@ projectRouter.post('/project/:projectURL', controller.editProject);
 projectRouter.delete('/project/:projectURL', controller.deleteProject);
 // 프로젝트 팀원 초대
 projectRouter.post('/projectInvite/:projectURL', controller.inviteMembers);
-
+// 프로젝트 채팅
+projectRouter.get('/projectChatting/:projectURL', controller.chatting);
 export default projectRouter;
