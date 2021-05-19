@@ -25,7 +25,6 @@ import createProject from './project/createProject';
 import editProject from './project/editProject';
 import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
-
 export {
 	// login
 	sendEmail,
