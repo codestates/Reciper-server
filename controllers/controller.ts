@@ -19,10 +19,11 @@ import deleteComment from './recruit/deleteComment';
 import getStacks from './stacks/getStacks';
 // 5. image
 import postImage from './image/image';
-// 6. project
+// 6. project(프로젝트)
 import showProjectList from './project/showProjectList';
 import createProject from './project/createProject';
 import editProject from './project/editProject';
+import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
 
 export {
@@ -51,5 +52,6 @@ export {
 	showProjectList,
 	createProject,
 	editProject,
+	deleteProject,
 	inviteMembers,
 };
