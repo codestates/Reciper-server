@@ -10,6 +10,7 @@ const editProject = async (req: Request, res: Response) => {
 	const nowProjectURL = req.params.projectURL;
 	try {
 		const foundProject = await Projects.findOne({
+			relations: ['members'],
 			where: {
 				projectURL: nowProjectURL,
 			},
