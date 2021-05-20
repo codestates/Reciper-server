@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm';
 
 createConnection()
 	.then(async connection => {
-		console.log('DB 연결 완료! ');
+		console.log('📚 DB connect! you can start to work with your entities');
 	})
 	.catch(error => console.log(error));
 
