@@ -27,6 +27,7 @@ const inviteMembers = async (req: Request, res: Response) => {
 			if (Array.isArray(inviteList)) {
 				foundProject.inviteList = JSON.stringify(inviteList);
 				await foundProject.save();
+				console.log(foundProject); // test
 				inviteList.forEach(email => {
 					sendInvitingEmail(email, userInfo.name, projectName, projectURL);
 				});
@@ -39,6 +40,7 @@ const inviteMembers = async (req: Request, res: Response) => {
 				});
 			}
 		} else {
+			console.log(userInfo, foundProject); // test
 			res.status(400).json({
 				message: projectURL + ' project is not found',
 			});
@@ -64,12 +66,12 @@ const sendInvitingEmail = async (email: string, inviterName: string, projectName
 		},
 	});
 	const AuthorizationCode = await authorizationCodeGenerator();
-	console.log('💛inviteMembers- ', AuthorizationCode);
-	const logoImage =
+	console.log(AuthorizationCode);
+	// 로고 이미지 완료되면 추후 html 디자인 보완하기
+	const logoNameImage =
 		'https://user-images.githubusercontent.com/77570843/118812832-813bc200-b8e9-11eb-808d-61eefd168cfa.png';
-	// 프로필 이미지 적용 작업 추후 진행 예정
-	const inviterImage = '../uploads/냥1621270912290.jpg';
-	const inviteeImage = '../uploads/냥1621270912290.jpg';
+	const logoImage =
+		'https://user-images.githubusercontent.com/77570843/118908926-38bdec00-b95d-11eb-90a8-b088c323b0c1.png';
 	const inviteeName = email.split('@')[0];
 	const redirectURL = `${process.env.CLIENT_URL}/loginloading/?code=${AuthorizationCode}&email=${email}&projectURL=${projectURL}`;
 	let info = await transporter.sendMail({
@@ -113,7 +115,7 @@ const sendInvitingEmail = async (email: string, inviterName: string, projectName
 																	<td style="word-break:break-word;border-collapse:collapse!important;vertical-align:top;text-align:center;color:#333333;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;line-height:20px;font-size:14px;margin:0;padding:0px 0px 10px" align="center" valign="top">
 																		<div style="text-align:center" align="center">
 																			<a href=${process.env.CLIENT_URL} style="color:#4183c4;text-decoration:none" target="_blank">
-																				<img alt="Reciper" src=${logoImage} width="300" height="118" style="outline:none;text-decoration:none;width:auto;max-width:100%;float:none;text-align:center;margin:0 auto;padding:25px 0 17px;border:none" align="none">
+																				<img alt="Reciper" src=${logoNameImage} width="300" height="118" style="outline:none;text-decoration:none;width:auto;max-width:100%;float:none;text-align:center;margin:0 auto;padding:25px 0 17px;border:none" align="none">
 																			</a>
 																		</div>
 																	</td>
@@ -139,9 +141,7 @@ const sendInvitingEmail = async (email: string, inviterName: string, projectName
 																<tbody><tr style="vertical-align:top;text-align:center;padding:0" align="center">
 																	<td style="word-break:break-word;border-collapse:collapse!important;vertical-align:top;text-align:center;color:#333333;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;line-height:20px;font-size:14px;margin:0;padding:0px 0px 0" align="center" valign="top">
 																		<div>
-																			<img src=${inviterImage} width="60" height="60" alt="${inviterName}" style="outline:none;text-decoration:none;width:auto;max-width:100%;overflow:hidden;border-radius:3px">
-																			<img alt="plus" src="https://ci6.googleusercontent.com/proxy/-tKAGmF9-ohHeVBS6rNinQ--dIHnAnVQnUcoL4GE7QpVzi5I5TOIe_EKI-RP1gR2YG4V1zYDnT4SySpPf341F4EwayezYUV-J2JH9I_6A6mh_YMD7u_suzq2kZQH=s0-d-e1-ft#https://github.githubassets.com/images/email/organization/octicon-plus.png" height="60" style="outline:none;text-decoration:none;width:auto;max-width:100%">
-																			<img src=${inviteeImage} width="60" height="60" alt="${inviteeName}" style="outline:none;text-decoration:none;width:auto;max-width:100%;overflow:hidden;border-radius:3px">
+																			<img src=${logoImage} width="60" height="60" alt="Reciper Logo" style="outline:none;text-decoration:none;width:auto;max-width:100%;overflow:hidden;border-radius:3px">
 																			<h1 style="color:#333;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;text-align:center;line-height:1.2;word-break:normal;font-size:24px;margin:10px 0 25px;padding:0" align="center">
 																				${inviterName} has invited you to collaborate on the <br><strong>${projectName}</strong> project
 																			</h1>
@@ -151,7 +151,7 @@ const sendInvitingEmail = async (email: string, inviterName: string, projectName
 																				This invitation will expire in 7 days.
 																			</p>
 																			<div style="text-align:center;color:#ffffff;padding:20px 0 25px" align="center">
-																				<a href=${redirectURL} class="btn-grad" style="display:inline-block;color:#fff;font-size:14px;font-weight:600;text-decoration:none;width:auto!important;text-align:center;border-radius:5px;letter-spacing:normal;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0 auto;padding:6px 12px"  target="_blank"">Accept invitation</a>
+																				<a href=${redirectURL} class="btn-grad" style="background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5  51%, #00d2ff  100%);display:inline-block;color:#fff;font-size:14px;font-weight:600;text-decoration:none;width:auto!important;text-align:center;border-radius:5px;letter-spacing:normal;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:0 auto;padding:6px 12px"  target="_blank"">Accept invitation</a>
 																			</div>
 																			<p style="word-wrap:normal;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:normal;color:#333;line-height:20px;text-align:left;margin:15px 0 5px;padding:0" align="left">
 																				<strong>Note:</strong> This invitation was intended for <strong><a href=${email} target="_blank">${email}</a></strong>.<br>If you were not expecting this invitation, you can ignore this email.
