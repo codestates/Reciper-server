@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 import { Users } from '../../src/entity/Users';
 import { Projects } from '../../src/entity/Projects';
+import randomColorGenerator from '../login/randomColorGenerator';
 
 const createProject = async (req: Request, res: Response) => {
 	// 프로젝트 생성
@@ -18,17 +18,21 @@ const createProject = async (req: Request, res: Response) => {
 		const created = await Projects.create({
 			name,
 			projectURL,
+			projectColor: randomColorGenerator(),
+			inviteList: '[]',
 		});
 		const membersArray = [userInfo];
 		created.members = membersArray;
 		try {
 			await created.save();
+			console.log('💛createProject- result: ');
 			console.log(created); // test
 			res.status(200).json({
 				...created,
+				members: created.members.map(el => el.id),
 			});
 		} catch (err) {
-			// 만약 projectURL에 중복되는 value를 저장하려고 하면 에러 발생(QueryFailedError: Duplicate entry)
+			// 만약 projectURL에 중복되는 value를 저장하면 에러 발생(QueryFailedError: Duplicate entry)
 			console.log('💛createProject- err: ', err.message);
 			res.status(400).json({
 				message: err.message,
