@@ -28,9 +28,9 @@ const inviteMembers = async (req: Request, res: Response) => {
 				foundProject.inviteList = JSON.stringify(inviteList);
 				await foundProject.save();
 				console.log(foundProject); // test
-				inviteList.forEach(email => {
-					sendInvitingEmail(email, userInfo.name, projectName, projectURL);
-				});
+				for (let idx = 0; idx < inviteList.length; idx++) {
+					await sendInvitationEmail(inviteList[idx], userInfo.name, projectName, projectURL);
+				}
 				res.status(200).json({
 					message: 'send email success to invite project',
 				});
@@ -53,7 +53,7 @@ const inviteMembers = async (req: Request, res: Response) => {
 	}
 };
 
-const sendInvitingEmail = async (email: string, inviterName: string, projectName: string, projectURL: string) => {
+const sendInvitationEmail = async (email: string, inviterName: string, projectName: string, projectURL: string) => {
 	// 초대목록에 있는 이메일로 초대메일 보내기
 	let transporter = nodemailer.createTransport({
 		service: 'Naver',
@@ -69,16 +69,21 @@ const sendInvitingEmail = async (email: string, inviterName: string, projectName
 	console.log(AuthorizationCode);
 	// 로고 이미지 완료되면 추후 html 디자인 보완하기
 	const logoNameImage =
-		'https://user-images.githubusercontent.com/77570843/118812832-813bc200-b8e9-11eb-808d-61eefd168cfa.png';
+		'https://user-images.githubusercontent.com/77570843/118992471-a3a00f00-b9bf-11eb-86b3-bdb1f0fa5a36.png';
 	const logoImage =
-		'https://user-images.githubusercontent.com/77570843/118908926-38bdec00-b95d-11eb-90a8-b088c323b0c1.png';
+		'https://user-images.githubusercontent.com/77570843/118990896-3cce2600-b9be-11eb-8bbe-e36979a1041b.png';
 	const inviteeName = email.split('@')[0];
-	const redirectURL = `${process.env.CLIENT_URL}/loginloading/?code=${AuthorizationCode}&email=${email}&projectURL=${projectURL}`;
+	const AuthorizationCodeTest =
+		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MjE0OTk1ODIsImV4cCI6MTYyMTUwMTM4Mn0.IFVaJ4KmuQt3vQ4pYlHccCwwbTw7ikeOjQKGf4t4ZX8';
+	const redirectURL = await String(
+		`${process.env.CLIENT_URL}/joinproject/?code=${AuthorizationCodeTest}&email=${email}&projectURL=${projectURL}`,
+	);
 	let info = await transporter.sendMail({
 		from: `"no-reply@Reciper Admin" <${process.env.NODEMAILER_USER}>`,
 		to: email,
 		subject: `${inviterName} invited you to ${projectName}`,
-		html: `<style>
+		html: `
+		<style>
 			.btn-grad {
 				background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5  51%, #00d2ff  100%);
 				margin: 10px;
