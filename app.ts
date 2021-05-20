@@ -30,5 +30,6 @@ app.use('/', imageRouter);
 app.use('/images', express.static('uploads'));
 app.use('/', profileRouter);
 app.use('/', recruitRouter);
+app.use('/', projectRouter);
 
 export default app;
