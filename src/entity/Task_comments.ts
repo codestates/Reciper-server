@@ -1,17 +1,17 @@
 import {
 	Entity,
+	BaseEntity,
 	PrimaryGeneratedColumn,
 	Column,
 	CreateDateColumn,
 	UpdateDateColumn,
 	ManyToOne,
-	BaseEntity,
 } from 'typeorm';
-import { Recruits } from './Recruits';
+import { Tasks } from './Tasks';
 import { Users } from './Users';
 
 @Entity()
-export class Recruit_comments extends BaseEntity {
+export class Task_comments extends BaseEntity {
 	@PrimaryGeneratedColumn()
 	id!: number;
 
@@ -24,8 +24,8 @@ export class Recruit_comments extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@ManyToOne(type => Recruits, recruitBoard => recruitBoard.commentsList)
-	recruitBoard!: Recruits;
+	@ManyToOne(type => Tasks, nowTask => nowTask.commentsList)
+	nowTask!: Tasks;
 
 	@ManyToOne(type => Users, writer => writer.commentsList)
 	writer!: Users;
