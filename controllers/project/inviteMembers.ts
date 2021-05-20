@@ -69,9 +69,9 @@ const sendInvitationEmail = async (email: string, inviterName: string, projectNa
 	console.log(AuthorizationCode);
 	// 로고 이미지 완료되면 추후 html 디자인 보완하기
 	const logoNameImage =
-		'https://user-images.githubusercontent.com/77570843/118812832-813bc200-b8e9-11eb-808d-61eefd168cfa.png';
+		'https://user-images.githubusercontent.com/77570843/118992471-a3a00f00-b9bf-11eb-86b3-bdb1f0fa5a36.png';
 	const logoImage =
-		'https://user-images.githubusercontent.com/77570843/118908926-38bdec00-b95d-11eb-90a8-b088c323b0c1.png';
+		'https://user-images.githubusercontent.com/77570843/118990896-3cce2600-b9be-11eb-8bbe-e36979a1041b.png';
 	const inviteeName = email.split('@')[0];
 	const AuthorizationCodeTest =
 		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MjE0OTk1ODIsImV4cCI6MTYyMTUwMTM4Mn0.IFVaJ4KmuQt3vQ4pYlHccCwwbTw7ikeOjQKGf4t4ZX8';
