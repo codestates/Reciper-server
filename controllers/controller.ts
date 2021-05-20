@@ -22,6 +22,7 @@ import postImage from './image/image';
 // 6. project(프로젝트)
 import showProjectList from './project/showProjectList';
 import createProject from './project/createProject';
+import showProject from './project/showProject';
 import editProject from './project/editProject';
 import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
@@ -51,6 +52,7 @@ export {
 	// project
 	showProjectList,
 	createProject,
+	showProject,
 	editProject,
 	deleteProject,
 	inviteMembers,
