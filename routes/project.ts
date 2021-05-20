@@ -14,6 +14,8 @@ projectRouter.use('/projectInvite', (req, res, next) => {
 projectRouter.get('/project', controller.showProjectList);
 // 프로젝트 생성
 projectRouter.post('/project', controller.createProject);
+// 프로젝트 조회
+projectRouter.get('/project/:projectURL', controller.showProject);
 // 프로젝트 수정
 projectRouter.post('/project/:projectURL', controller.editProject);
 // 프로젝트 삭제

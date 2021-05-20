@@ -15,17 +15,21 @@ import editRecruitBoard from './recruit/editRecruitBoard';
 import deleteRecruitBoard from './recruit/deleteRecruitBoard';
 import registerComment from './recruit/registerComment';
 import deleteComment from './recruit/deleteComment';
-// 4. stack
-import getStacks from './stacks/getStacks';
-// 5. image
-import postImage from './image/image';
-// 6. project(프로젝트)
+// 4. project(프로젝트)
 import showProjectList from './project/showProjectList';
 import createProject from './project/createProject';
+import showProject from './project/showProject';
 import editProject from './project/editProject';
 import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
 import addMembers from './project/addMembers';
+// 5. task(칸반보드, 캘린더)
+// 6. chat(채팅)
+// 7. stack(스택)
+import getStacks from './stacks/getStacks';
+// 8. image(이미지)
+import postImage from './image/image';
+
 export {
 	// login
 	sendEmail,
@@ -44,15 +48,18 @@ export {
 	deleteRecruitBoard,
 	registerComment,
 	deleteComment,
-	//stack
-	getStacks,
-	// image
-	postImage,
 	// project
 	showProjectList,
 	createProject,
+	showProject,
 	editProject,
 	deleteProject,
 	inviteMembers,
 	addMembers,
+	// task
+	// chat
+	//stack
+	getStacks,
+	// image
+	postImage,
 };
