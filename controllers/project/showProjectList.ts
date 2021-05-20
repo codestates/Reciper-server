@@ -11,25 +11,38 @@ const showProjectList = async (req: Request, res: Response) => {
 	// 유저 정보로 프로젝트 리스트 찾기
 	try {
 		const userInfo = await Users.findOne({
+			select: ['id', 'name', 'email', 'uploadImage', 'profileColor'],
 			where: {
 				id: userId,
 			},
 		});
-		const projectList = await getRepository(Projects).find({
-			where: {
-				members: {
-					id: userId,
+		if (userInfo) {
+			const allProjects = await getRepository(Projects).find({
+				relations: ['members'],
+				order: {
+					createdAt: 'DESC', // 순서: 최신순
 				},
-			},
-			order: {
-				createdAt: 'DESC', // 순서 고민해보기
-			},
-		});
-		console.log(userInfo, projectList); //test
-		res.status(200).json({
-			...userInfo,
-			projectList,
-		});
+			});
+			let projectList = [];
+			for (let idx = 0; idx < allProjects.length; idx++) {
+				let members: number[] = allProjects[idx].members.map(el => el.id);
+				if (members.includes(userInfo.id)) {
+					let obj = { ...allProjects[idx], members };
+					projectList.push(obj);
+				}
+			}
+			console.log('💛showProjectList- result: ');
+			console.log(userInfo, projectList); //test
+			res.status(200).json({
+				...userInfo,
+				projectList,
+			});
+		} else {
+			console.log('💛showProjectList- err: user is not found');
+			res.status(400).json({
+				message: 'user is not found',
+			});
+		}
 	} catch (err) {
 		console.log('💛showProjectList- err: ', err.message);
 		res.status(400).json({
