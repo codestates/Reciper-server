@@ -11,14 +11,19 @@ const deleteProject = async (req: Request, res: Response) => {
 			projectURL,
 		});
 		if (foundProject) {
+			// parts, task_boxes, tasks, task_comments 정보 삭제
+			// chats 정보 삭제
+			// 프로젝트 삭제
 			const delProject = await Projects.delete({
 				projectURL,
 			});
+			console.log('💛deleteProject- result: ');
 			console.log(delProject); // test
 			res.status(200).json({
 				message: 'delete success project ' + projectURL,
 			});
 		} else {
+			console.log('💛deleteProject- err: ', projectURL, ' project is not found');
 			res.status(400).json({
 				message: projectURL + ' project is not found',
 			});
