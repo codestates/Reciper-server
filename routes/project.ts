@@ -4,6 +4,7 @@ import authChecker from '../middlewares/authChecker';
 import memberChecker from '../middlewares/memberChecker';
 const projectRouter = express.Router();
 
+// middleware
 projectRouter.use('/project', (req, res, next) => {
 	authChecker(req, res, next);
 });

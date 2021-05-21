@@ -6,12 +6,14 @@ import { Users } from './src/entity/Users';
 import { Socket } from './node_modules/socket.io/dist/socket';
 import { getRepository } from 'typeorm';
 dotenv.config();
+
 const http = require('http');
 const server = http.createServer(app);
 const io_s = require('socket.io');
 const io = io_s(server);
 const { createClient } = require('redis');
 const redisAdapter = require('@socket.io/redis-adapter');
+
 try {
 	const pubClient = createClient({
 		host: process.env.REDIS_HOST,
@@ -19,7 +21,7 @@ try {
 		password: process.env.REDIS_PASSWORD,
 	});
 	const subClient = pubClient.duplicate();
-	console.log('redis pub/sub setting done');
+	console.log('💌 redis pub/sub setting done');
 
 	io.adapter(redisAdapter(pubClient, subClient));
 	const project = io.of(`/project`);

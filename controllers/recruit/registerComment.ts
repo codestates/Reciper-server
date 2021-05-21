@@ -42,7 +42,14 @@ const registerComment = async (req: Request, res: Response) => {
 					recruitBoard: foundBoard,
 				},
 			});
-			console.log(commentsList); // test
+			console.log(
+				{
+					id: foundBoard.id,
+					name: foundBoard.name,
+				},
+				'\n',
+				commentsList.map(el => el.id),
+			); // test
 			res.status(200).json({
 				...foundBoard,
 				recruitMembers: JSON.parse(foundBoard.recruitMembers),

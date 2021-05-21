@@ -3,6 +3,7 @@ import express from 'express';
 import authChecker from '../middlewares/authChecker';
 const recruitRouter = express.Router();
 
+// middleware
 recruitRouter.use('/recruitBoard', (req, res, next) => {
 	authChecker(req, res, next);
 });

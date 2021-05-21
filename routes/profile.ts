@@ -3,6 +3,7 @@ import express from 'express';
 import authChecker from '../middlewares/authChecker';
 const profileRouter = express.Router();
 
+// middleware
 profileRouter.use('/profile', (req, res, next) => {
 	authChecker(req, res, next);
 });
