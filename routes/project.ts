@@ -1,13 +1,19 @@
 import * as controller from '../controllers/controller';
 import express from 'express';
 import authChecker from '../middlewares/authChecker';
+import memberChecker from '../middlewares/memberChecker';
 const projectRouter = express.Router();
 
 projectRouter.use('/project', (req, res, next) => {
 	authChecker(req, res, next);
 });
+projectRouter.use('/project/:projectURL', (req, res, next) => {
+	authChecker(req, res, next);
+	memberChecker(req, res, next);
+});
 projectRouter.use('/projectInvite', (req, res, next) => {
 	authChecker(req, res, next);
+	memberChecker(req, res, next);
 });
 
 // 프로젝트 리스트 조회
