@@ -8,12 +8,12 @@ projectRouter.use('/project', (req, res, next) => {
 	authChecker(req, res, next);
 });
 projectRouter.use('/project/:projectURL', (req, res, next) => {
-	authChecker(req, res, next);
 	memberChecker(req, res, next);
 });
 projectRouter.use('/projectInvite', (req, res, next) => {
-	authChecker(req, res, next);
-	memberChecker(req, res, next);
+	authChecker(req, res, () => {
+		memberChecker(req, res, next);
+	});
 });
 
 // 프로젝트 리스트 조회
