@@ -40,7 +40,7 @@ const inviteMembers = async (req: Request, res: Response) => {
 				});
 			}
 		} else {
-			console.log(userInfo, foundProject); // test
+			console.log('💛inviteMembers- err: ', userInfo, foundProject); // test
 			res.status(400).json({
 				message: projectURL + ' project is not found',
 			});

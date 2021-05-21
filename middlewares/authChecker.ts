@@ -13,7 +13,7 @@ interface Itoken {
 }
 
 const authChecker = async (req: Request, res: Response, next: NextFunction) => {
-	console.log('🔒authChecker 실행합니다- headers:\n', req.headers, '\n-------------\n');
+	console.log('🔒authChecker 실행합니다- headers:\n', req.headers);
 	if (req.headers.authorization) {
 		const accessToken = req.headers.authorization.split('Bearer ')[1];
 		const loginType = req.headers.logintype;
@@ -21,8 +21,6 @@ const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 			// 로그인 방식 - email
 			try {
 				const decoded = (await jwt.verify(accessToken, process.env.ACCESS_SECRET as string)) as Itoken;
-				console.log(decoded);
-
 				if (typeof decoded !== 'string') {
 					req.userEmail = decoded.email;
 					req.userId = decoded.userId;
@@ -96,10 +94,10 @@ const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 			}
 		}
 		// access token을 확인한 결과를 토대로 결정
-		console.log('🔒authChecker 결과- ', loginType, req.userId, req.userEmail, '\n');
+		console.log('🔒authChecker 결과- ', loginType, req.userId, req.userEmail);
 		if (req.userId !== undefined && req.userEmail !== undefined) {
 			// 실제 요청으로 넘어감
-			console.log('🔒go next function!!\n\n');
+			console.log('🔒go next function!!\n');
 			next();
 		} else {
 			// 에러 발생

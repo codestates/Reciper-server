@@ -11,7 +11,6 @@ const githubInfoURL = 'https://api.github.com/user';
 const loginGithub = async (req: Request, res: Response) => {
 	// 로그인 - OAuth 방식: github
 	console.log('💙login: github- ', req.body);
-
 	// authorization code를 이용해 access token을 발급받음
 	await axios
 		.post(

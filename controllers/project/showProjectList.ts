@@ -11,7 +11,6 @@ const showProjectList = async (req: Request, res: Response) => {
 	// 유저 정보로 프로젝트 리스트 찾기
 	try {
 		const userInfo = await Users.findOne({
-			select: ['id', 'name', 'email', 'uploadImage', 'profileColor'],
 			where: {
 				id: userId,
 			},
@@ -34,7 +33,6 @@ const showProjectList = async (req: Request, res: Response) => {
 			console.log('💛showProjectList- result: ');
 			console.log(userInfo, projectList); //test
 			res.status(200).json({
-				...userInfo,
 				projectList,
 			});
 		} else {

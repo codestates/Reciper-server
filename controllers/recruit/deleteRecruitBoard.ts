@@ -89,6 +89,7 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 		});
 	}
 	// 삭제 성공 응답 보내기
+	console.log('💜deleteRecruitBoard- result: delete success board ', boardId);
 	res.status(200).json({
 		message: 'delete success board ' + boardId,
 	});
