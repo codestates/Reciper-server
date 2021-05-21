@@ -16,7 +16,7 @@ const memberChecker = async (req: Request, res: Response, next: NextFunction) =>
 		if (userId && foundProject) {
 			// 프로젝트 멤버인지 확인
 			const chkMembers = foundProject.members.map(el => el.id);
-			//console.log(projectURL, ' member: ', chkMembers); // test
+			console.log(projectURL, ' member: ', chkMembers); // test
 			if (chkMembers.includes(userId)) {
 				console.log('🔐memberChecker 결과- ', userId, 'is member in', projectURL);
 				// 실제 요청으로 넘어감
