@@ -5,7 +5,7 @@ import { Users } from '../../src/entity/Users';
 
 const registerRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 등록
-	console.log('💜registerRecruitBoard- ');
+	console.log('💜registerRecruitBoard-');
 	console.log(req.body);
 	try {
 		const userId = req.userId;
@@ -47,7 +47,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 			}
 			created.stacks = stackArray;
 			created.save();
-			console.log(created, stackArray); // test
+			console.log('💜registerRecruitBoard-result:', created, stackArray); // test
 			res.status(200).json({
 				...created,
 				recruitMembers: JSON.parse(created.recruitMembers),
@@ -59,7 +59,7 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 			});
 		}
 	} catch (err) {
-		console.log('💜registerRecruitBoard- err: ', err.message);
+		console.log('💜registerRecruitBoard-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});

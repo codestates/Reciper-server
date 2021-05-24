@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 
 const getProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 조회
-	console.log('🧡getProfile- ', req.body);
+	console.log('🧡getProfile-', req.body);
 	const userId = req.userId;
 	// 저장된 유저 정보 불러오기
 	const userInfo = await Users.findOne({
@@ -13,6 +13,7 @@ const getProfile = async (req: Request, res: Response) => {
 		},
 	});
 	if (userInfo === undefined) {
+		console.log('🧡getProfile-err: no data about profile');
 		res.status(400).json({
 			message: 'no data about profile',
 		});
@@ -30,8 +31,14 @@ const getProfile = async (req: Request, res: Response) => {
 				stackArray.push(stack.name);
 			});
 		});
-		// 형태 변환
-		console.log(userInfo.id, stackArray); // test
+		console.log(
+			'🧡getProfile-result:',
+			{
+				id: userInfo.id,
+				name: userInfo.name,
+			},
+			stackArray,
+		); // test
 		res.status(200).json({
 			...userInfo,
 			career: userInfo.career !== undefined && userInfo.career !== '' ? JSON.parse(userInfo.career) : '{}',

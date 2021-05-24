@@ -4,7 +4,7 @@ import { Projects } from '../../src/entity/Projects';
 
 const addMembers = async (req: Request, res: Response) => {
 	// 프로젝트 참가(팀원 초대 응답)
-	console.log('💛addMembers- ');
+	console.log('💛addMembers-');
 	console.log(req.body, req.params);
 	const { email, authorizationCode, projectURL } = req.body;
 	try {
@@ -28,7 +28,7 @@ const addMembers = async (req: Request, res: Response) => {
 						// 이미 member인지 확인
 						const membersArray = [...foundProject.members];
 						const chkMembers = membersArray.map(el => el.id);
-						console.log(foundProject.projectURL, chkMembers); // test
+						console.log('💛addMembers-chk:', foundProject.projectURL, 'member:', chkMembers); // test
 						if (!chkMembers.includes(userInfo.id)) {
 							membersArray.push(userInfo);
 							foundProject.members = membersArray;
@@ -37,7 +37,7 @@ const addMembers = async (req: Request, res: Response) => {
 							await foundProject.save();
 							isInvited = true;
 						} else {
-							console.log('💛addMembers- err: ', email, ' already member of the project');
+							console.log('💛addMembers-err:', email, 'already member of the project');
 							res.status(400).json({
 								message: email + ' already member of the project',
 							});
@@ -48,26 +48,25 @@ const addMembers = async (req: Request, res: Response) => {
 				}
 			}
 			if (isInvited) {
-				console.log('💛addMembers- result: ');
-				console.log(foundProject); // test
+				console.log('💛addMembers-result:', foundProject); // test
 				res.status(200).json({
 					...foundProject,
 					members: foundProject.members.map(el => el.id),
 				});
 			} else {
-				console.log('💛addMembers- err: invalid invitation memeber ' + email);
+				console.log('💛addMembers-err: invalid invitation memeber' + email);
 				res.status(400).json({
 					message: 'invalid invitation memeber ' + email,
 				});
 			}
 		} else {
-			console.log('💛addMembers- err: no data about project ' + projectURL);
+			console.log('💛addMembers-err: no data about project' + projectURL);
 			res.status(400).json({
 				message: 'no data about project ' + projectURL,
 			});
 		}
 	} catch (err) {
-		console.log('💛addMembers- err: ', err.message);
+		console.log('💛addMembers-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});
