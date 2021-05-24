@@ -37,6 +37,10 @@ try {
 			console.log('💚/chat#joinRoom-', room);
 			socket.join(room);
 		});
+		socket.on('leaveRoom', room => {
+			console.log('💚/chat#leaveRoom-', room);
+			socket.leave(room);
+		});
 		// 💚/chat#sendMessage - 채팅 메시지 보내기/저장
 		socket.on('sendMessage', async ({ room, name, message }) => {
 			console.log('💚/chat#sendMessage-', room, name, message);
