@@ -40,28 +40,33 @@ try {
 	});
 	project.on('connection', (socket: Socket) => {
 		// console.log('connection');
-		socket.on('message', async ({ name, message }) => {
-			console.log(name, message);
+		socket.on('join_room', room => {
+			console.log(room);
+			socket.join(room);
+		});
+		socket.on('message', async ({ room, name, message }) => {
+			console.log(room, name, message);
 			let chat;
 			const projects = await Projects.findOne({ where: { projectURL: socket.handshake.query.projectURL } });
+			//a,b 로 하드코딩 되어있으나, 실제로 미들웨어를 이용해서 사용자정보를 조회한다.
 			if (name === 'a') {
 				const user = await Users.findOne({ where: { id: 1 } });
-				chat = await Chats.create({ text: message, writer: user, project: projects });
+				chat = await Chats.create({ text: message, writer: user, project: projects, room });
 			} else if (name === 'b') {
 				const user = await Users.findOne({ where: { id: 2 } });
-				chat = await Chats.create({ text: message, writer: user, project: projects });
+				chat = await Chats.create({ text: message, writer: user, project: projects, room });
 			}
 			chat?.save();
-			project.emit('message', { name, message });
+			project.to(room).emit('message', { name, message });
 		});
-		socket.on('totalMessageGet', async () => {
+		socket.on('totalMessageGet', async room => {
 			const projects = await Projects.findOne({ where: { projectURL: socket.handshake.query.projectURL } });
 			const chats = await getRepository(Chats).find({
-				where: { project: projects },
+				where: { project: projects, room },
 				relations: ['writer'],
 			});
 			console.log(chats);
-			project.emit('totalMessageGet', chats);
+			project.to(room).emit('totalMessageGet', chats);
 		});
 	});
 } catch (err) {
