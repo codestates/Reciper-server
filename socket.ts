@@ -59,7 +59,7 @@ try {
 					room,
 				});
 				await chat.save();
-				chatting.to(room).emit('sendMessage', { name, message });
+				chatting.to(room).emit('sendMessage', chat);
 			} catch (err) {
 				console.log('💚/chat#sendMessage- err: ', err.message);
 			}
