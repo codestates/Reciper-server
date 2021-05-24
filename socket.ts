@@ -5,6 +5,7 @@ import { Chats } from './src/entity/Chats';
 import { Users } from './src/entity/Users';
 import { Socket } from './node_modules/socket.io/dist/socket';
 import { getRepository } from 'typeorm';
+import chatChecker from './middlewares/chatChecker';
 dotenv.config();
 
 const http = require('http');
@@ -24,53 +25,66 @@ try {
 	console.log('💌 redis pub/sub setting done');
 
 	io.adapter(redisAdapter(pubClient, subClient));
-	const project = io.of(`/project`);
-	// room 개념을썻을때 ,redis의 pub/sub이 안먹어서 서로 통신이 두절되는게 확인됬다.
-	// 추후 생각해보자 ( advanced의 채팅방,DM기능 )
 
-	project.use(async (socket: Socket, next: (err?: Error) => void) => {
-		if (await Projects.findOne({ where: { projectURL: socket.handshake.query.projectURL } })) {
-			// db조회해서 존재하는지 확인 조건 ⬆️
-			console.log('정상 처리');
-			next();
-		} else {
-			console.log('비정상 처리');
-			next(new Error());
-		}
-	});
-	project.on('connection', (socket: Socket) => {
-		// console.log('connection');
-		socket.on('join_room', room => {
-			console.log(room);
+	// TODO: chat 기능 socket 통신
+	const chatting = io.of('/chat');
+	chatting.use(chatChecker);
+	chatting.on('connection', (socket: Socket) => {
+		console.log('💚/chat- connection');
+		console.log(socket.handshake.query);
+		const { projectId, userId } = socket.handshake.query;
+    // 💚/chat#joinRoom - 방 입장
+    socket.on('joinRoom', room => {
+			console.log('💚/chat#joinRoom-', room);
 			socket.join(room);
 		});
-		socket.on('message', async ({ room, name, message }) => {
-			console.log(room, name, message);
-			let chat;
-			const projects = await Projects.findOne({ where: { projectURL: socket.handshake.query.projectURL } });
-			//a,b 로 하드코딩 되어있으나, 실제로 미들웨어를 이용해서 사용자정보를 조회한다.
-			if (name === 'a') {
-				const user = await Users.findOne({ where: { id: 1 } });
-				chat = await Chats.create({ text: message, writer: user, project: projects, room });
-			} else if (name === 'b') {
-				const user = await Users.findOne({ where: { id: 2 } });
-				chat = await Chats.create({ text: message, writer: user, project: projects, room });
+		// 💚/chat#sendMessage - 채팅 메시지 보내기/저장
+		socket.on('sendMessage', async ({ room, name, message }) => {
+			console.log('💚/chat#sendMessage-', room, name, message);
+			try {
+				const nowProject = await Projects.findOne({
+					where: {
+						id: Number(projectId),
+					},
+				});
+				const nowUser = await Users.findOne({
+					where: {
+						id: Number(userId),
+					},
+				});
+				let chat = await Chats.create({
+					text: message,
+					writer: nowUser,
+					project: nowProject,
+          room
+				});
+				await chat.save();
+				chatting.to(room).emit('sendMessage', { name, message });
+			} catch (err) {
+				console.log('💚/chat#sendMessage- err: ', err.message);
 			}
-			chat?.save();
-			project.to(room).emit('message', { name, message });
 		});
-		socket.on('totalMessageGet', async room => {
-			const projects = await Projects.findOne({ where: { projectURL: socket.handshake.query.projectURL } });
-			const chats = await getRepository(Chats).find({
-				where: { project: projects, room },
-				relations: ['writer'],
+		// 💚/chat#getAllMessages - 모든 메시지 조회
+		socket.on('getAllMessages', async () => {
+			console.log('💚/chat#getAllMessages-');
+			const nowProject = await Projects.findOne({
+				where: {
+					id: Number(projectId),
+				},
 			});
-			console.log(chats);
-			project.to(room).emit('totalMessageGet', chats);
+			const chats = await getRepository(Chats).find({
+				relations: ['writer'],
+				where: {
+					project: nowProject,
+          room,
+				},
+			});
+			console.log(chats.map(el => el.text));
+			chatting.to(room).emit('getAllMessages', chats);
 		});
 	});
 } catch (err) {
-	console.log(err);
+	console.log('💚/chat#getAllMessages- err: ', err.message);
 }
 
 module.exports = server;
