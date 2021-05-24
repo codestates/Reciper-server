@@ -33,8 +33,8 @@ try {
 		console.log('💚/chat- connection');
 		console.log(socket.handshake.query);
 		const { projectId, userId } = socket.handshake.query;
-    // 💚/chat#joinRoom - 방 입장
-    socket.on('joinRoom', room => {
+		// 💚/chat#joinRoom - 방 입장
+		socket.on('joinRoom', room => {
 			console.log('💚/chat#joinRoom-', room);
 			socket.join(room);
 		});
@@ -56,7 +56,7 @@ try {
 					text: message,
 					writer: nowUser,
 					project: nowProject,
-          room
+					room,
 				});
 				await chat.save();
 				chatting.to(room).emit('sendMessage', { name, message });
@@ -65,7 +65,7 @@ try {
 			}
 		});
 		// 💚/chat#getAllMessages - 모든 메시지 조회
-		socket.on('getAllMessages', async () => {
+		socket.on('getAllMessages', async room => {
 			console.log('💚/chat#getAllMessages-');
 			const nowProject = await Projects.findOne({
 				where: {
@@ -76,7 +76,7 @@ try {
 				relations: ['writer'],
 				where: {
 					project: nowProject,
-          room,
+					room,
 				},
 			});
 			console.log(chats.map(el => el.text));
