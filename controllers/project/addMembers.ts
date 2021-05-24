@@ -14,7 +14,6 @@ const addMembers = async (req: Request, res: Response) => {
 				projectURL,
 			},
 		});
-		console.log(foundProject);
 		if (foundProject) {
 			// 초대 명단에 해당 email이 있는지 확인
 			let inviteList = JSON.parse(foundProject.inviteList);
@@ -29,7 +28,7 @@ const addMembers = async (req: Request, res: Response) => {
 						// 이미 member인지 확인
 						const membersArray = [...foundProject.members];
 						const chkMembers = membersArray.map(el => el.id);
-						console.log(chkMembers); // test
+						console.log(foundProject.projectURL, chkMembers); // test
 						if (!chkMembers.includes(userInfo.id)) {
 							membersArray.push(userInfo);
 							foundProject.members = membersArray;

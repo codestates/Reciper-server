@@ -48,7 +48,14 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 			},
 		});
 		// 데이터 보내기
-		console.log(boardInfo, commentsList); // test
+		console.log(
+			{
+				id: boardInfo.id,
+				name: boardInfo.name,
+			},
+			'\n',
+			commentsList.map(el => el.id),
+		); // test
 		res.status(200).json({
 			...boardInfo,
 			recruitMembers: JSON.parse(boardInfo.recruitMembers),

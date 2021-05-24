@@ -11,7 +11,6 @@ const googleInfoURL = 'https://www.googleapis.com/oauth2/v3/userinfo';
 const loginGoogle = async (req: Request, res: Response) => {
 	// 로그인 - OAuth 방식: google
 	console.log('💙login: google- ', req.body);
-
 	// authorization code를 이용해 access token을 발급받음
 	await axios
 		.post(googleLoginURL, {
