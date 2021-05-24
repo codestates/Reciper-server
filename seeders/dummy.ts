@@ -77,7 +77,7 @@ const dummyCreate = async () => {
 		detailDesc: makeDesc(),
 		writer: user,
 		stacks: recruitStacks,
-		uploadImage: `basic_img_${Math.floor(Math.random() * 13 + 1)}.png`,
+		uploadImage: `basic_img_${Math.floor(Math.random() * 34 + 1)}.png`,
 	});
 	created.save();
 	console.log(`recruits데이터 생성 ==================
@@ -91,9 +91,9 @@ const dummyCreate = async () => {
 	${created.writer.name}
 	======================================`);
 
-	for (let i = 0; i < 10; i++) {
+	for (let i = 0; i < 5; i++) {
 		console.log(`댓글생성 ${i + 1}회 -------------------`);
-		// 댓글은 10번 반복
+		// 댓글은 5번 반복
 		// 랜덤 리크루트 찾기
 		const foundRecruits = await Recruits.find();
 		const randomIndex = Math.floor(Math.random() * foundRecruits.length);

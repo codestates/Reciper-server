@@ -33,9 +33,14 @@ try {
 		console.log('💚/chat- connection');
 		console.log(socket.handshake.query);
 		const { projectId, userId } = socket.handshake.query;
+    // 💚/chat#joinRoom - 방 입장
+    socket.on('joinRoom', room => {
+			console.log('💚/chat#joinRoom-', room);
+			socket.join(room);
+		});
 		// 💚/chat#sendMessage - 채팅 메시지 보내기/저장
-		socket.on('sendMessage', async ({ name, message }) => {
-			console.log('💚/chat#sendMessage-', name, message);
+		socket.on('sendMessage', async ({ room, name, message }) => {
+			console.log('💚/chat#sendMessage-', room, name, message);
 			try {
 				const nowProject = await Projects.findOne({
 					where: {
@@ -51,9 +56,10 @@ try {
 					text: message,
 					writer: nowUser,
 					project: nowProject,
+          room
 				});
 				await chat.save();
-				chatting.emit('sendMessage', { name, message });
+				chatting.to(room).emit('sendMessage', { name, message });
 			} catch (err) {
 				console.log('💚/chat#sendMessage- err: ', err.message);
 			}
@@ -70,10 +76,11 @@ try {
 				relations: ['writer'],
 				where: {
 					project: nowProject,
+          room,
 				},
 			});
 			console.log(chats.map(el => el.text));
-			chatting.emit('getAllMessages', chats);
+			chatting.to(room).emit('getAllMessages', chats);
 		});
 	});
 } catch (err) {
