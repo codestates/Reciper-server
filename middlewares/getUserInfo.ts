@@ -12,7 +12,7 @@ interface Itoken {
 }
 
 const getUserInfo = async (accessToken: string, loginType: string) => {
-	console.log('🔎getUserInfo 실행합니다-\n', { accessToken, loginType });
+	console.log('🔎getUserInfo-\n', { accessToken, loginType });
 	const result = {
 		userEmail: '',
 		userId: -1,
@@ -27,7 +27,7 @@ const getUserInfo = async (accessToken: string, loginType: string) => {
 				result.userId = decoded.userId;
 			}
 		} catch (err) {
-			console.log('🔎getUserInfo: err-[email]', err.message);
+			console.log('🔎getUserInfo:err-[email]', err.message);
 			throw new Error(err);
 		}
 	} else if (loginType === 'google') {
@@ -43,7 +43,7 @@ const getUserInfo = async (accessToken: string, loginType: string) => {
 			.then(result => result.data.email)
 			.catch(err => {
 				// 에러 발생 -> 인증 불가 -> 다시 로그인해야함
-				console.log('🔎getUserInfo: err-[google]', err.message);
+				console.log('🔎getUserInfo:err-[google]', err.message);
 				throw new Error(err);
 			});
 		const userInfo = await Users.findOne({
@@ -69,7 +69,7 @@ const getUserInfo = async (accessToken: string, loginType: string) => {
 			.then(result => result.data.login)
 			.catch(err => {
 				// 에러 발생 -> 인증 불가 -> 다시 로그인해야함
-				console.log('🔎getUserInfo: err-[github]', err.message);
+				console.log('🔎getUserInfo:err-[github]', err.message);
 				throw new Error(err);
 			});
 		const email = `${resInfo}@github.com`;
@@ -84,7 +84,7 @@ const getUserInfo = async (accessToken: string, loginType: string) => {
 			throw new Error('no user data');
 		}
 	}
-	console.log('🔎getUserInfo 결과-', loginType, result.userId, result.userEmail);
+	console.log('🔎getUserInfo-result:', loginType, result.userId, result.userEmail);
 	return result;
 };
 
