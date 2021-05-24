@@ -26,6 +26,9 @@ export class Chats extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
+	@Column()
+	room!: string;
+
 	@ManyToOne(type => Users, writer => writer.chat)
 	writer!: Users;
 
