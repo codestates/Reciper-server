@@ -8,7 +8,7 @@ dotenv.config();
 
 const inviteMembers = async (req: Request, res: Response) => {
 	// 프로젝트 팀원 초대
-	console.log('💛inviteMembers- ');
+	console.log('💛inviteMembers-');
 	console.log(req.body, req.params);
 	const inviteList = req.body.inviteList;
 	const projectURL = req.params.projectURL;
@@ -40,13 +40,13 @@ const inviteMembers = async (req: Request, res: Response) => {
 				});
 			}
 		} else {
-			console.log('💛inviteMembers- err: ', userInfo, foundProject); // test
+			console.log('💛inviteMembers-err:', userInfo, foundProject); // test
 			res.status(400).json({
 				message: projectURL + ' project is not found',
 			});
 		}
 	} catch (err) {
-		console.log('💛inviteMembers- err: ', err.message);
+		console.log('💛inviteMembers-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});
@@ -187,7 +187,7 @@ const sendInvitationEmail = async (email: string, inviterName: string, projectNa
 				</table>
 			</div>`,
 	});
-	console.log('💛inviteMembers- mail sent: %s', info.messageId);
+	console.log('💛inviteMembers-mail sent: %s', info.messageId);
 };
 
 export default inviteMembers;

@@ -9,7 +9,7 @@ dotenv.config();
 
 const loginEmail = {
 	authorizationCode: async (req: Request, res: Response) => {
-		console.log('💙login: email- ', req.body);
+		console.log('💙loginEmail-', req.body);
 		const authorizationCode: string = req.body.authorizationCode as string;
 		const email: string = req.body.email as string;
 		let accessToken: string;
@@ -36,7 +36,7 @@ const loginEmail = {
 				accessToken = await accessTokenGenerator(user.id, email);
 				refreshToken = await refreshTokenGenerator(user.id, email);
 			}
-			console.log('💙email: at - ', accessToken, '\n💙email: rt - ', refreshToken);
+			console.log('💙loginEmail-at:', accessToken, '\n💙loginEmail-rt:', refreshToken);
 			res.cookie('refreshToken', refreshToken, {
 				maxAge: 1000 * 60 * 60 * 24 * 7,
 				httpOnly: true,
@@ -49,7 +49,7 @@ const loginEmail = {
 				email,
 			});
 		} catch (err) {
-			console.log('💙email: ', err.message);
+			console.log('💙loginEmail-err:', err.message);
 			res.status(400).json({
 				message: err.message,
 			});

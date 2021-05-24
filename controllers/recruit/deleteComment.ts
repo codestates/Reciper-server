@@ -5,7 +5,7 @@ import { Recruit_comments } from './../../src/entity/Recruit_comments';
 
 const deleteComment = async (req: Request, res: Response) => {
 	// 댓글 삭제
-	console.log('💜deleteComment- ');
+	console.log('💜deleteComment-');
 	console.log(req.body, req.params);
 	const boardId = Number(req.params.board_id);
 	const commentId = Number(req.params.comment_id);
@@ -19,9 +19,10 @@ const deleteComment = async (req: Request, res: Response) => {
 			},
 		});
 	} catch (err) {
-		console.log('💜showRecruitBoard- err: ', err.message);
+		console.log('💜showRecruitBoard-err:', err.message);
 	}
 	if (boardInfo === undefined) {
+		console.log('💜deleteComment-err: no data about board', boardId);
 		res.status(400).json({
 			message: 'no data about board ' + boardId,
 		});
@@ -43,7 +44,7 @@ const deleteComment = async (req: Request, res: Response) => {
 			}
 			boardInfo.save();
 		} catch (err) {
-			console.log('💜showRecruitBoard- err: ', err.message);
+			console.log('💜showRecruitBoard-err:', err.message);
 		}
 		// 데이터베이스에서 해당 댓글 지우기
 		try {
@@ -51,7 +52,7 @@ const deleteComment = async (req: Request, res: Response) => {
 				id: commentId,
 			});
 		} catch (err) {
-			console.log('💜showRecruitBoard- err: ', err.message);
+			console.log('💜showRecruitBoard-err:', err.message);
 		}
 		// 지운 이후의 댓글 데이터 보내주기
 		const commentsList = await getRepository(Recruit_comments).find({
@@ -63,11 +64,11 @@ const deleteComment = async (req: Request, res: Response) => {
 			},
 		});
 		console.log(
+			'💜deleteComment-result:',
 			{
 				id: boardInfo.id,
 				name: boardInfo.name,
 			},
-			'\n',
 			commentsList.map(el => el.id),
 		); // test
 		if (boardInfo.recruitMembers) {

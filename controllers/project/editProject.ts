@@ -4,7 +4,7 @@ import randomColorGenerator from '../login/randomColorGenerator';
 
 const editProject = async (req: Request, res: Response) => {
 	// 프로젝트 수정
-	console.log('💛editProject- ');
+	console.log('💛editProject-');
 	console.log(req.body, req.params);
 	const { name, projectURL } = req.body;
 	const nowProjectURL = req.params.projectURL;
@@ -21,8 +21,7 @@ const editProject = async (req: Request, res: Response) => {
 			foundProject.projectURL = projectURL;
 			foundProject.projectColor = randomColorGenerator();
 			await foundProject.save();
-			console.log('💛editProject- result: ');
-			console.log(foundProject); // test
+			console.log('💛editProject-result:', foundProject); // test
 			res.status(200).json({
 				...foundProject,
 				members: foundProject.members.map(el => el.id),
@@ -30,7 +29,7 @@ const editProject = async (req: Request, res: Response) => {
 		}
 	} catch (err) {
 		// projectURL에 중복된 value를 저장하면 에러 발생
-		console.log('💛editProject- err: ', err.message);
+		console.log('💛editProject-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});

@@ -6,7 +6,7 @@ import randomColorGenerator from '../login/randomColorGenerator';
 
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
-	console.log('🧡postProfile- ');
+	console.log('🧡postProfile-');
 	console.log(req.body);
 	const userId = req.userId;
 	const { name, mobile, aboutMe, gitId, career, stacks, isOpen, uploadImage } = req.body;
@@ -39,12 +39,12 @@ const postProfile = async (req: Request, res: Response) => {
 			const imageRoute = foundUser.uploadImage;
 			fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
 				if (err) {
-					return console.log('삭제할 수 없는 파일입니다', err.message);
+					return console.log('🧡postProfile-err: 삭제할 수 없는 파일입니다', err.message);
 				}
 				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
 					err
-						? console.log(err.message)
-						: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
+						? console.log('🧡postProfile-err:', err.message)
+						: console.log(`🧡postProfile-${__dirname}/../../uploads/${imageRoute}를 정상적으로 삭제했습니다`),
 				);
 			});
 			foundUser.uploadImage = uploadImage;
@@ -64,7 +64,14 @@ const postProfile = async (req: Request, res: Response) => {
 
 		foundUser.stacks = stackArray;
 		const saved = await foundUser.save();
-		console.log(saved, stackArray); // test
+		console.log(
+			'🧡postProfile-result:',
+			{
+				id: saved.id,
+				name: saved.name,
+			},
+			stackArray.map(el => el.name),
+		); // test
 		res.status(200).json({
 			...saved,
 			career: career !== undefined && career !== '' ? JSON.parse(saved.career) : '{}',

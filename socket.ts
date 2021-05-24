@@ -30,8 +30,7 @@ try {
 	const chatting = io.of('/chat');
 	chatting.use(chatChecker);
 	chatting.on('connection', (socket: Socket) => {
-		console.log('💚/chat- connection');
-		console.log(socket.handshake.query);
+		console.log('💚/chat#connection\n', socket.handshake.query);
 		const { projectId, userId } = socket.handshake.query;
 		// 💚/chat#joinRoom - 방 입장
 		socket.on('joinRoom', room => {
@@ -59,9 +58,9 @@ try {
 					room,
 				});
 				await chat.save();
-				chatting.to(room).emit('sendMessage', { name, message });
+				chatting.to(room).emit('sendMessage', { ...chat });
 			} catch (err) {
-				console.log('💚/chat#sendMessage- err: ', err.message);
+				console.log('💚/chat#sendMessage-err:', err.message);
 			}
 		});
 		// 💚/chat#getAllMessages - 모든 메시지 조회
@@ -84,7 +83,7 @@ try {
 		});
 	});
 } catch (err) {
-	console.log('💚/chat#getAllMessages- err: ', err.message);
+	console.log('💚/chat#getAllMessages-err:', err.message);
 }
 
 module.exports = server;
