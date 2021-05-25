@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Projects } from '../../src/entity/Projects';
 import { Rooms } from '../../src/entity/Rooms';
+import { getRoomsList } from './showChatRooms';
 
 const createChatRoom = async (req: Request, res: Response) => {
 	// 채팅방 생성
@@ -35,10 +36,19 @@ const createChatRoom = async (req: Request, res: Response) => {
 				project: foundProject,
 			});
 			await newRoom.save();
-			console.log('💚createChatRoom-result:', newRoom);
-			res.status(200).json({
-				...newRoom,
-			});
+			getRoomsList(projectURL)
+				.then(roomsList => {
+					console.log('💚createChatRoom-result:', roomsList); // test
+					res.status(200).json({
+						roomsList,
+					});
+				})
+				.catch(err => {
+					console.log('💚createChatRoom-err:', err.message);
+					res.status(400).json({
+						message: err.message,
+					});
+				});
 		}
 	}
 };
