@@ -23,7 +23,7 @@ const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 				console.log('🔒authChecker-result:', loginType, userEmail, userId);
 				req.userId = userId;
 				req.userEmail = userEmail;
-				if (req.userId !== undefined && req.userEmail !== undefined) {
+				if (req.userId !== -1 && req.userEmail !== '') {
 					// 실제 요청으로 넘어감
 					console.log('🔒authChecker-go next function!!\n');
 					next();
