@@ -14,13 +14,23 @@ const editChatRoom = async (req: Request, res: Response) => {
 			name: room,
 		},
 	});
+	let chkRooms = await getRoomsList(projectURL);
+	console.log(chkRooms);
 	if (foundRooms.length > 0) {
 		for (let idx = 0; idx < foundRooms.length; idx++) {
 			if (foundRooms[idx].project.projectURL === projectURL) {
-				// 새로운 이름으로 저장
-				foundRooms[idx].name = name;
-				await foundRooms[idx].save();
-				break;
+				if (!chkRooms.includes(name)) {
+					// 새로운 이름으로 저장
+					foundRooms[idx].name = name;
+					await foundRooms[idx].save();
+					break;
+				} else {
+					console.log('💚editChatRoom-err:', name, 'room is already existed');
+					res.status(400).json({
+						message: name + ' room is already existed',
+					});
+					return;
+				}
 			}
 		}
 		getRoomsList(projectURL)
