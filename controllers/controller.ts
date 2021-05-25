@@ -25,6 +25,10 @@ import inviteMembers from './project/inviteMembers';
 import addMembers from './project/addMembers';
 // 5. task(칸반보드, 캘린더)
 // 6. chat(채팅)
+import showChatRooms from './workspace/showChatRooms';
+import createChatRoom from './workspace/createChatRoom';
+import editChatRoom from './workspace/editChatRoom';
+import deleteChatRoom from './workspace/deleteChatRoom';
 // 7. stack(스택)
 import getStacks from './stacks/getStacks';
 // 8. image(이미지)
@@ -58,6 +62,10 @@ export {
 	addMembers,
 	// task
 	// chat
+	showChatRooms,
+	createChatRoom,
+	editChatRoom,
+	deleteChatRoom,
 	//stack
 	getStacks,
 	// image
