@@ -1,9 +1,9 @@
-import { Socket } from '../node_modules/socket.io/dist/socket';
+import { Socket } from 'socket.io/dist/socket';
 import getUserInfo from './getUserInfo';
 import { Projects } from '../src/entity/Projects';
 
-const chatChecker = async (socket: Socket, next: Function) => {
-	console.log('🔏chatChecker-\n', {
+const workspaceChecker = async (socket: Socket, next: Function) => {
+	console.log('🔏workspaceChecker-\n', {
 		auth: socket.handshake.auth,
 		query: socket.handshake.query,
 	});
@@ -21,31 +21,31 @@ const chatChecker = async (socket: Socket, next: Function) => {
 				});
 				if (foundProject) {
 					const chkMembers = foundProject.members.map(el => el.id);
-					console.log('🔏chatChecker-chk:', projectURL, 'member:', chkMembers); // test
+					console.log('🔏workspaceChecker-chk:', projectURL, 'member:', chkMembers); // test
 					if (chkMembers.includes(userId)) {
-						console.log('🔏chatChecker-result:', userId, 'is member in', projectURL);
+						console.log('🔏workspaceChecker-result:', userId, 'is member in', projectURL);
 						socket.handshake.query.projectId = String(foundProject.id);
 						socket.handshake.query.userId = String(userId);
 						// 실제 요청으로 넘어감
-						console.log('🔏chatChecker-go next function!!\n');
+						console.log('🔏workspaceChecker-go next function!!\n');
 						next();
 					} else {
-						console.log('🔏chatChecker-err:', userId, 'is not member in', projectURL);
+						console.log('🔏workspaceChecker-err:', userId, 'is not member in', projectURL);
 						next(new Error());
 					}
 				} else {
-					console.log('🔏chatChecker-err:', projectURL, 'project is not found');
+					console.log('🔏workspaceChecker-err:', projectURL, 'project is not found');
 					next(new Error());
 				}
 			} catch (err) {
-				console.log('🔏chatChecker-err:', err.message);
+				console.log('🔏workspaceChecker-err:', err.message);
 				next(new Error());
 			}
 		})
 		.catch(err => {
-			console.log('🔏chatChecker- err:', err.message);
+			console.log('🔏workspaceChecker- err:', err.message);
 			next(new Error());
 		});
 };
 
-export default chatChecker;
+export default workspaceChecker;
