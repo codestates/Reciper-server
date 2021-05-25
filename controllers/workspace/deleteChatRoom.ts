@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 import { Rooms } from '../../src/entity/Rooms';
 
 const deleteChatRoom = async (req: Request, res: Response) => {
 	// 채팅방 삭제
 	console.log('💚deleteChatRoom-', req.body, req.params);
 	const { projectURL, room } = req.params;
-	let foundRoom = await Rooms.findOne({
+	let foundRoom = await getRepository(Rooms).findOne({
 		relations: ['project'],
 		where: {
 			name: room,
