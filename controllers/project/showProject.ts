@@ -17,7 +17,6 @@ const showProject = async (req: Request, res: Response) => {
 			console.log('💛showProject-result: ', foundProject); // test
 			res.status(200).json({
 				...foundProject,
-				members: foundProject.members.map(el => el.id),
 			});
 		}
 	} catch (err) {
