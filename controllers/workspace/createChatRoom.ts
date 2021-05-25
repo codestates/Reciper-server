@@ -14,16 +14,30 @@ const createChatRoom = async (req: Request, res: Response) => {
 		},
 	});
 	if (foundProject) {
-		// 새로운 채팅방 생성
-		let newRoom = await Rooms.create({
-			name,
-			project: foundProject,
+		let foundRoom = await Rooms.findOne({
+			where: {
+				name,
+				project: foundProject,
+			},
 		});
-		await newRoom.save();
-		console.log('💚createChatRoom-result:', newRoom);
-		res.status(200).json({
-			...newRoom,
-		});
+		if (foundRoom) {
+			// 이미 같은 이름 있음 -> 생성 불가
+			console.log('💚createChatRoom-err:', name, 'room is already existed');
+			res.status(400).json({
+				message: name + ' room is already existed',
+			});
+		} else {
+			// 새로운 채팅방 생성
+			let newRoom = await Rooms.create({
+				name,
+				project: foundProject,
+			});
+			await newRoom.save();
+			console.log('💚createChatRoom-result:', newRoom);
+			res.status(200).json({
+				...newRoom,
+			});
+		}
 	}
 };
 
