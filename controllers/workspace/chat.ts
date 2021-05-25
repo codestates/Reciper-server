@@ -40,7 +40,7 @@ const socketChat = (socket: Socket) => {
 				room,
 			});
 			await chat.save();
-			chatIo.to(room).emit('sendMessage', { ...chat });
+			socket.broadcast.to(room).emit('sendMessage', { ...chat });
 		} catch (err) {
 			console.log('💚/chat#sendMessage-err:', err.message);
 		}
@@ -60,7 +60,10 @@ const socketChat = (socket: Socket) => {
 				room,
 			},
 		});
-		console.log(chats.map(el => el.text));
+		console.log(
+			'💚/chat#getAllMessages-result:',
+			chats.map(el => el.text),
+		); // test
 		chatIo.to(room).emit('getAllMessages', chats);
 	});
 };
