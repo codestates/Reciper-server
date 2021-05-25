@@ -11,7 +11,7 @@ projectRouter.use('/project', (req, res, next) => {
 projectRouter.use('/project/:projectURL', (req, res, next) => {
 	memberChecker(req, res, next);
 });
-projectRouter.use('/projectInvite', (req, res, next) => {
+projectRouter.use('/projectInvite/:projectURL', (req, res, next) => {
 	authChecker(req, res, () => {
 		memberChecker(req, res, next);
 	});
