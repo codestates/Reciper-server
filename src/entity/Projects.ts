@@ -8,11 +8,12 @@ import {
 	ManyToMany,
 	JoinTable,
 	BaseEntity,
-	ManyToOne,
 } from 'typeorm';
 import { Users } from './Users';
 import { Parts } from './Parts';
 import { Chats } from './Chats';
+import { Rooms } from './Rooms';
+
 @Entity()
 export class Projects extends BaseEntity {
 	@PrimaryGeneratedColumn()
@@ -43,6 +44,9 @@ export class Projects extends BaseEntity {
 
 	@OneToMany(type => Chats, chats => chats.project)
 	chats!: Chats[];
+
+	@OneToMany(type => Rooms, roomsList => roomsList.project)
+	roomsList!: Rooms[];
 
 	@ManyToMany(() => Users)
 	@JoinTable()
