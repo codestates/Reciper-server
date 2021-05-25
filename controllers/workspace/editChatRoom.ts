@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 import { Rooms } from '../../src/entity/Rooms';
 
 const editChatRoom = async (req: Request, res: Response) => {
@@ -6,9 +7,13 @@ const editChatRoom = async (req: Request, res: Response) => {
 	console.log('💚editChatRoom-', req.body, req.params);
 	const { name } = req.body;
 	const { projectURL, room } = req.params;
-	let foundRoom = await Rooms.findOne({
+	let foundRoom = await getRepository(Rooms).findOne({
+		relations: ['project'],
 		where: {
 			name: room,
+			project: {
+				projectURL,
+			},
 		},
 	});
 	if (foundRoom) {
