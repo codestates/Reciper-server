@@ -8,17 +8,17 @@ const editChatRoom = async (req: Request, res: Response) => {
 	console.log('💚editChatRoom-', req.body, req.params);
 	const { name } = req.body;
 	const { projectURL, room } = req.params;
+	// 해당 채팅방 찾기(같은 이름을 가진 모든 채팅방 데이터)
 	let foundRooms = await getRepository(Rooms).find({
 		relations: ['project'],
 		where: {
 			name: room,
 		},
 	});
-	let chkRooms = await getRoomsList(projectURL);
-	console.log(chkRooms);
 	if (foundRooms.length > 0) {
 		for (let idx = 0; idx < foundRooms.length; idx++) {
 			if (foundRooms[idx].project.projectURL === projectURL) {
+				let chkRooms = await getRoomsList(projectURL);
 				if (!chkRooms.includes(name)) {
 					// 새로운 이름으로 저장
 					foundRooms[idx].name = name;

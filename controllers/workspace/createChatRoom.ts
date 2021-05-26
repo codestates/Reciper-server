@@ -9,6 +9,7 @@ const createChatRoom = async (req: Request, res: Response) => {
 	console.log('💚createChatRoom-', req.body, req.params);
 	const { name } = req.body;
 	const { projectURL } = req.params;
+
 	// 프로젝트 정보 가져오기
 	const foundProject = await Projects.findOne({
 		where: {
@@ -16,6 +17,7 @@ const createChatRoom = async (req: Request, res: Response) => {
 		},
 	});
 	if (foundProject) {
+		// 채팅방 데이터 가져오기
 		let foundRoom = await getRepository(Rooms).findOne({
 			relations: ['project'],
 			where: {
