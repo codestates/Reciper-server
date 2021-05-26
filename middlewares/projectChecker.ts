@@ -3,7 +3,7 @@ import { Projects } from '../src/entity/Projects';
 import getMemberInfo from './getMemberInfo';
 
 const projectChecker = async (req: Request, res: Response, next: NextFunction) => {
-	console.log('🔐projectChecker-', req.userId, req.params);
+	console.log('🔐projectChecker-start');
 	const userId = req.userId as number;
 	const projectURL = req.params.projectURL;
 	getMemberInfo(userId, projectURL)

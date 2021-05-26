@@ -3,10 +3,7 @@ import getUserInfo from './getUserInfo';
 import getMemberInfo from './getMemberInfo';
 
 const workspaceChecker = async (socket: Socket, next: Function) => {
-	console.log('🔏workspaceChecker-\n', {
-		auth: socket.handshake.auth,
-		query: socket.handshake.query,
-	});
+	console.log('🔏workspaceChecker-start');
 	const projectURL = socket.handshake.query.projectURL as string;
 	const { token, loginType } = socket.handshake.auth;
 	getUserInfo(token, loginType)

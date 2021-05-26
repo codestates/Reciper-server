@@ -9,10 +9,7 @@ interface Itoken {
 }
 
 const authChecker = async (req: Request, res: Response, next: NextFunction) => {
-	console.log('🔒authChecker-\n', {
-		authorization: req.headers.authorization,
-		logintype: req.headers.logintype,
-	});
+	console.log('🔒authChecker-start');
 	if (req.headers.authorization) {
 		const accessToken = req.headers.authorization.split('Bearer ')[1];
 		const loginType = req.headers.logintype as string;
