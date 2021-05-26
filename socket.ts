@@ -1,4 +1,5 @@
 import app from './app';
+import * as socketUpload from 'socketio-file-upload';
 import { Socket } from './node_modules/socket.io/dist/socket';
 import workspaceChecker from './middlewares/workspaceChecker';
 import socketChat from './controllers/workspace/chat';
@@ -27,9 +28,13 @@ try {
 	// TODO: chat 기능 socket 통신
 	const chatIo = io.of('/chat');
 	app.set('chatIo', chatIo);
+	app.use(socketUpload.router);
 	chatIo.use(workspaceChecker);
 	chatIo.on('connection', (socket: Socket) => {
 		console.log('💚/chat#connection\n', socket.handshake.query);
+		let uploader = new socketUpload();
+		uploader.dir = '/uploads';
+		uploader.listen(socket);
 		socketChat(socket);
 	});
 
