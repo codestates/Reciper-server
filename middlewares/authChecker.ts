@@ -37,7 +37,10 @@ const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 			})
 			.catch(err => {
 				console.log('🔒authChecker-err:', err.message);
-				next(new Error());
+				res.status(400).json({
+					message: err,
+				});
+				//next(new Error());
 			});
 	} else {
 		// access token이 없을 때
