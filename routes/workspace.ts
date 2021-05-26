@@ -1,11 +1,11 @@
 import * as controller from '../controllers/controller';
 import express from 'express';
 import authChecker from '../middlewares/authChecker';
-import memberChecker from '../middlewares/memberChecker';
+import projectChecker from '../middlewares/projectChecker';
 const workspaceRouter = express.Router();
 
 // middleware
-workspaceRouter.use('/workspace/:projectURL', authChecker, memberChecker);
+workspaceRouter.use('/workspace/:projectURL', authChecker, projectChecker);
 
 // 6. chat(채팅)
 // 채팅방 목록 조회
