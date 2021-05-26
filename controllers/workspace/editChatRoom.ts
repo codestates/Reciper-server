@@ -8,6 +8,7 @@ const editChatRoom = async (req: Request, res: Response) => {
 	console.log('💚editChatRoom-', req.body, req.params);
 	const { name } = req.body;
 	const { projectURL, room } = req.params;
+	// 해당 채팅방 찾기(같은 이름을 가진 모든 채팅방 데이터)
 	let foundRooms = await getRepository(Rooms).find({
 		relations: ['project'],
 		where: {
@@ -17,10 +18,19 @@ const editChatRoom = async (req: Request, res: Response) => {
 	if (foundRooms.length > 0) {
 		for (let idx = 0; idx < foundRooms.length; idx++) {
 			if (foundRooms[idx].project.projectURL === projectURL) {
-				// 새로운 이름으로 저장
-				foundRooms[idx].name = name;
-				await foundRooms[idx].save();
-				break;
+				let chkRooms = await getRoomsList(projectURL);
+				if (!chkRooms.includes(name)) {
+					// 새로운 이름으로 저장
+					foundRooms[idx].name = name;
+					await foundRooms[idx].save();
+					break;
+				} else {
+					console.log('💚editChatRoom-err:', name, 'room is already existed');
+					res.status(400).json({
+						message: name + ' room is already existed',
+					});
+					return;
+				}
 			}
 		}
 		getRoomsList(projectURL)

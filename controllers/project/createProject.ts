@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { Users } from '../../src/entity/Users';
 import { Projects } from '../../src/entity/Projects';
+import { Rooms } from '../../src/entity/Rooms';
 import randomColorGenerator from '../login/randomColorGenerator';
 
 const createProject = async (req: Request, res: Response) => {
@@ -25,6 +26,12 @@ const createProject = async (req: Request, res: Response) => {
 		created.members = membersArray;
 		try {
 			await created.save();
+			// chat room - General 생성
+			let generalRoom = await Rooms.create({
+				name: 'General',
+				project: created,
+			});
+			await generalRoom.save();
 			console.log('💛createProject-result:', created); // test
 			res.status(200).json({
 				...created,

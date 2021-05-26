@@ -9,16 +9,19 @@ const socketChat = (socket: Socket) => {
 	// chat 기능
 	const chatIo = app.get('chatIo');
 	const { projectId, userId } = socket.handshake.query;
+
 	// 💚/chat#joinRoom - 방 입장
 	socket.on('joinRoom', room => {
 		console.log('💚/chat#joinRoom-', room);
 		socket.join(room);
 	});
+
 	// 💚/chat#leaveRoom - 방 퇴장
 	socket.on('leaveRoom', room => {
 		console.log('💚/chat#leaveRoom-', room);
 		socket.leave(room);
 	});
+
 	// 💚/chat#sendMessage - 채팅 메시지 보내기/저장
 	socket.on('sendMessage', async ({ room, name, message }) => {
 		console.log('💚/chat#sendMessage-', room, name, message);
@@ -40,14 +43,15 @@ const socketChat = (socket: Socket) => {
 				room,
 			});
 			await chat.save();
-			chatIo.to(room).emit('sendMessage', { ...chat });
+			socket.broadcast.to(room).emit('sendMessage', { ...chat });
 		} catch (err) {
 			console.log('💚/chat#sendMessage-err:', err.message);
 		}
 	});
+
 	// 💚/chat#getAllMessages - 모든 메시지 조회
 	socket.on('getAllMessages', async room => {
-		console.log('💚/chat#getAllMessages-');
+		console.log('💚/chat#getAllMessages-', room);
 		const nowProject = await Projects.findOne({
 			where: {
 				id: Number(projectId),
@@ -60,7 +64,10 @@ const socketChat = (socket: Socket) => {
 				room,
 			},
 		});
-		console.log(chats.map(el => el.text));
+		console.log(
+			'💚/chat#getAllMessages-result:',
+			chats.map(el => el.text),
+		); // test
 		chatIo.to(room).emit('getAllMessages', chats);
 	});
 };

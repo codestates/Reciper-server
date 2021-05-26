@@ -18,9 +18,9 @@ const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 				const { userEmail, userId } = result;
 				// access token을 확인한 결과를 토대로 결정
 				console.log('🔒authChecker-result:', loginType, userEmail, userId);
-				req.userId = userId;
-				req.userEmail = userEmail;
-				if (req.userId !== undefined && req.userEmail !== undefined) {
+				if (req.userId !== -1 && req.userEmail !== '') {
+					req.userId = userId;
+					req.userEmail = userEmail;
 					// 실제 요청으로 넘어감
 					console.log('🔒authChecker-go next function!!\n');
 					next();

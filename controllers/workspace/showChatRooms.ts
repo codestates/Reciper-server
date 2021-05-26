@@ -23,6 +23,7 @@ const showChatRooms = async (req: Request, res: Response) => {
 };
 
 const getRoomsList = async (projectURL: string) => {
+	// 채팅방 목록을 배열 형태로 만들기
 	console.log('💚getRoomsList-', projectURL);
 	const foundProject = await Projects.find({
 		where: {
@@ -33,7 +34,7 @@ const getRoomsList = async (projectURL: string) => {
 	const allChatRooms = await getRepository(Rooms).find({
 		relations: ['project'],
 		order: {
-			createdAt: 'ASC',
+			createdAt: 'ASC', // 채팅방 생성 순서
 		},
 	});
 	let roomsList = [];
