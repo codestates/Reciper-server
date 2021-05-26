@@ -22,7 +22,7 @@ export class Task_boxes extends BaseEntity {
 	title!: string;
 
 	@Column()
-	index!: string;
+	index!: number;
 
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
@@ -30,7 +30,7 @@ export class Task_boxes extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Tasks, tasks => tasks.groupingBox)
+	@OneToMany(type => Tasks, tasks => tasks.groupingBox, { cascade: true })
 	tasksList!: Tasks[];
 
 	@ManyToOne(type => Parts, parts => parts.taskBoxesList)
