@@ -51,7 +51,12 @@ const addMembers = async (req: Request, res: Response) => {
 				console.log('💛addMembers-result:', foundProject); // test
 				res.status(200).json({
 					...foundProject,
-					members: foundProject.members.map(el => el.id),
+					members: foundProject.members.map(el => {
+						return {
+							id: el.id,
+							name: el.name,
+						};
+					}),
 				});
 			} else {
 				console.log('💛addMembers-err: invalid invitation memeber' + email);
