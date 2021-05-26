@@ -32,6 +32,6 @@ export class Chats extends BaseEntity {
 	@ManyToOne(type => Users, writer => writer.chat)
 	writer!: Users;
 
-	@ManyToOne(type => Projects, doingProject => doingProject.chats)
+	@ManyToOne(type => Projects, project => project.chats)
 	project!: Projects;
 }

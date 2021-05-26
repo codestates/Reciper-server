@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
+import { Rooms } from '../../src/entity/Rooms';
 import { Chats } from '../../src/entity/Chats';
 import { Projects } from '../../src/entity/Projects';
 import { FindConditions } from '../../node_modules/typeorm/find-options/FindConditions';
@@ -14,6 +15,14 @@ const deleteProject = async (req: Request, res: Response) => {
 		});
 		if (foundProject) {
 			// parts, task_boxes, tasks, task_comments 정보 삭제
+			// rooms 정보 삭제
+			const delRooms = await getRepository(Rooms).find({
+				relations: ['project'],
+				where: {
+					project: foundProject,
+				},
+			});
+			delRooms.forEach(el => el.remove());
 			// chats 정보 삭제
 			const foundChats = await getRepository(Chats).find({
 				join: {
