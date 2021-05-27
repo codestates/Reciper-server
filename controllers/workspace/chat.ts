@@ -49,6 +49,25 @@ const socketChat = (socket: Socket) => {
 		}
 	});
 
+	// 💚/chat#editMessage - 채팅 메시지 수정
+	socket.on('editMessage', async ({ room, id, message }) => {
+		console.log('💚/chat#editMessage-', room, id, message);
+		try {
+			const foundChat = await Chats.findOne({
+				where: {
+					id,
+				},
+			});
+			if (foundChat) {
+				foundChat.text = message;
+				await foundChat.save();
+				socket.broadcast.to(room).emit('editMessage', { ...foundChat });
+			}
+		} catch (err) {
+			console.log('💚/chat#editMessage-err:', err.message);
+		}
+	});
+
 	// 💚/chat#getAllMessages - 모든 메시지 조회
 	socket.on('getAllMessages', async room => {
 		console.log('💚/chat#getAllMessages-', room);
