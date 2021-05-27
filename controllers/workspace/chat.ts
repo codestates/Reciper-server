@@ -48,10 +48,29 @@ const socketChat = (socket: Socket) => {
 			console.log('💚/chat#sendMessage-err:', err.message);
 		}
 	});
-
+  
 	// 💚/chat#editMessage - 채팅 메시지 수정
 	socket.on('editMessage', async ({ room, id, message }) => {
 		console.log('💚/chat#editMessage-', room, id, message);
+    try {
+			const foundChat = await Chats.findOne({
+				where: {
+					id,
+				},
+			});
+			if (foundChat) {
+        foundChat.text = message;
+				await foundChat.save();
+				socket.broadcast.to(room).emit('editMessage', { ...foundChat });
+			}
+		} catch (err) {
+			console.log('💚/chat#editMessage-err:', err.message);
+    }
+  });
+
+	// 💚/chat#deleteMessage - 채팅 메시지 삭제
+	socket.on('deleteMessage', async ({ room, id }) => {
+		console.log('💚/chat#deleteMessage-', room, id);
 		try {
 			const foundChat = await Chats.findOne({
 				where: {
@@ -59,12 +78,11 @@ const socketChat = (socket: Socket) => {
 				},
 			});
 			if (foundChat) {
-				foundChat.text = message;
-				await foundChat.save();
-				socket.broadcast.to(room).emit('editMessage', { ...foundChat });
+				await foundChat.remove();
+				socket.broadcast.to(room).emit('deleteMessage', { id });
 			}
 		} catch (err) {
-			console.log('💚/chat#editMessage-err:', err.message);
+			console.log('💚/chat#deleteMessage-err:', err.message);
 		}
 	});
 

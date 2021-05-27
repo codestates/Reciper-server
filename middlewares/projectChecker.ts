@@ -15,9 +15,8 @@ const projectChecker = async (req: Request, res: Response, next: NextFunction) =
 		.catch(err => {
 			console.log('🔐projectChecker-err:', err.message);
 			res.status(400).json({
-				message: err,
+				message: err.message,
 			});
-			//next(new Error());
 		});
 };
 
