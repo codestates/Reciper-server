@@ -1,7 +1,7 @@
 //showKanbanParts
 import { Request, Response } from 'express';
-import { Parts } from 'src/entity/Parts';
-import { Projects } from 'src/entity/Projects';
+import { Parts } from '../../src/entity/Parts';
+import { Projects } from '../../src/entity/Projects';
 import { getRepository } from 'typeorm';
 
 const showKanbanParts = async (req: Request, res: Response) => {
