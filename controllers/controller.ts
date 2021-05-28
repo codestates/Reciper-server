@@ -3,6 +3,7 @@ import sendEmail from './login/sendEmail';
 import loginEmail from './login/loginEmail';
 import loginGoogle from './login/loginGoogle';
 import loginGithub from './login/loginGithub';
+import getNewAccessToken from './login/getNewAccessToken';
 // 2, profile(프로필)
 import getProfile from './profile/getProfile';
 import postProfile from './profile/postProfile';
@@ -44,6 +45,7 @@ export {
 	loginEmail,
 	loginGoogle,
 	loginGithub,
+	getNewAccessToken,
 	// profile
 	getProfile,
 	postProfile,
