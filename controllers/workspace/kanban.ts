@@ -7,6 +7,8 @@ import { Tasks } from '../../src/entity/Tasks';
 import { Checklists } from '../../src/entity/Checklists';
 import randomColorGenerator from '../login/randomColorGenerator';
 import { Projects } from '../../src/entity/Projects';
+import { Task_comments } from '../../src/entity/Task_comments';
+import { Users } from '../../src/entity/Users';
 const structuringData = async (part: string, projectId: number) => {
 	const foundProject = await Projects.findOne({ where: { id: projectId } });
 	const projects = await getRepository(Projects)
@@ -18,6 +20,7 @@ const structuringData = async (part: string, projectId: number) => {
 		.leftJoinAndSelect('taskBoxesList.tasksList', 'tasksList')
 		.orderBy('tasksList.index', 'ASC')
 		.leftJoinAndSelect('tasksList.checklistsList', 'checklistsList')
+		.orderBy('checklistsList.createdAt', 'ASC')
 		.leftJoinAndSelect('tasksList.commentsList', 'commentsList')
 		.getMany();
 
@@ -28,7 +31,9 @@ const structuringData = async (part: string, projectId: number) => {
 	} = {};
 	partOne.taskBoxesList.map(el => {
 		let tasks: any[] = [];
+
 		el.tasksList.map(el => {
+			console.log('adfadfasdfasgasdgasfdf', el);
 			tasks.push(Object.keys(taskItems).length);
 			taskItems[Object.keys(taskItems).length] = {
 				taskTitle: el.title,
@@ -36,7 +41,7 @@ const structuringData = async (part: string, projectId: number) => {
 				taskColor: el.taskColor,
 				startDate: el.startDate,
 				endDate: el.endDate,
-				assignees: el.assignees,
+				assignees: JSON.parse(el.assignees),
 				checkList: el.checklistsList,
 				comment: el.commentsList,
 			};
@@ -111,7 +116,7 @@ const socketKanban = async (socket: Socket) => {
 			taskColor: taskColor,
 			startDate: '',
 			endDate: '',
-			assignees: '',
+			assignees: JSON.stringify([]),
 			groupingBox: foundBox,
 		});
 		await created.save();
@@ -131,18 +136,44 @@ const socketKanban = async (socket: Socket) => {
 		});
 	});
 	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part }) => {
-		const foundPart = await Parts.findOne({ where: { title: part } });
+		console.log('에딧:', task, targetIndex, targetListIndex, part);
+		const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
 		const foundBox = await Task_boxes.findOne({ where: { index: targetListIndex, groupingPart: foundPart } });
 		let found = await Tasks.findOne({ where: { groupingBox: foundBox, index: targetIndex } });
+		console.log('찾음', foundBox, found);
 		if (found) {
-			(found.title = task.title),
+			(found.title = task.taskTitle),
 				(found.desc = task.desc),
 				(found.startDate = task.startDate),
 				(found.endDate = task.endDate),
-				(found.assignees = task.assignees),
-				found.save();
+				(found.assignees = JSON.stringify(task.assignees)),
+				await found.save();
 		}
-		kanbanIo.emit('editTaskItem', structuringData(part, Number(projectId)));
+		const foundUser = await Users.findOne({ where: { id: userId } });
+
+		const foundChecklist = await Checklists.find({ where: { nowTask: found } });
+		foundChecklist.map(el => {
+			el.remove();
+		});
+		for (let i = 0; i < task.checkList.length; i++) {
+			const created = await Checklists.create({
+				nowTask: found,
+				desc: task.checkList[i].desc,
+				isChecked: task.checkList[i].isChecked,
+			});
+			await created.save();
+		}
+
+		const foundComment = await Task_comments.find({ where: { nowTask: found } });
+		foundComment.map(el => {
+			el.remove();
+		});
+		for (let i = 0; i < task.comment.length; i++) {
+			const created = await Task_comments.create({ writer: foundUser, body: task.comment[i].body, nowTask: found });
+			await created.save();
+		}
+
+		socket.broadcast.emit('editTaskItem', { targetIndex, targetListIndex, task });
 	});
 	socket.on('deleteTaskBox', async ({ targetListIndex, part }) => {
 		const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
