@@ -23,8 +23,12 @@ import editProject from './project/editProject';
 import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
 import addMembers from './project/addMembers';
-// 5. task(칸반보드, 캘린더)
-// 6. chat(채팅)
+// 5-1. task(칸반보드, 캘린더)
+import { showKanbanParts } from './workspace/showKanbanParts';
+import createKanbanPart from './workspace/createKanbanPart';
+import editKanbanPart from './workspace/editKanbanPart';
+import deleteKanbanPart from './workspace/deleteKanbanPart';
+// 5-2. chat(채팅)
 import { showChatRooms } from './workspace/showChatRooms';
 import createChatRoom from './workspace/createChatRoom';
 import editChatRoom from './workspace/editChatRoom';
@@ -61,6 +65,10 @@ export {
 	inviteMembers,
 	addMembers,
 	// task
+	showKanbanParts,
+	createKanbanPart,
+	editKanbanPart,
+	deleteKanbanPart,
 	// chat
 	showChatRooms,
 	createChatRoom,

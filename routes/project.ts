@@ -8,8 +8,7 @@ const projectRouter = express.Router();
 
 projectRouter.use('/project', authChecker);
 projectRouter.use('/project/:projectURL', projectChecker);
-projectRouter.use('/projectInvite', authChecker, projectChecker);
-
+projectRouter.use('/projectInvite/:projectURL', authChecker, projectChecker);
 
 // 프로젝트 리스트 조회
 projectRouter.get('/project', controller.showProjectList);

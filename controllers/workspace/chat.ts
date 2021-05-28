@@ -78,11 +78,12 @@ const socketChat = (socket: Socket) => {
 		}
 	});
 
-	// TODO: 💚/chat#editMessage - 채팅 메시지 수정
-	socket.on('editMessage', async ({ room, id, message }) => {
-		console.log('💚/chat#editMessage-', room, id, message);
+	// 💚/chat#editMessage - 채팅 메시지 수정
+	socket.on('editMessage', async ({ room, index, id, message }) => {
+		console.log('💚/chat#editMessage-', room, index, id, message);
 		try {
 			const foundChat = await Chats.findOne({
+				relations: ['writer', 'project'],
 				where: {
 					id,
 				},
@@ -90,16 +91,16 @@ const socketChat = (socket: Socket) => {
 			if (foundChat) {
 				foundChat.text = message;
 				await foundChat.save();
-				socket.broadcast.to(room).emit('editMessage', { ...foundChat });
+				socket.broadcast.to(room).emit('editMessage', { ...foundChat, index });
 			}
 		} catch (err) {
 			console.log('💚/chat#editMessage-err:', err.message);
 		}
 	});
 
-	// TODO: 💚/chat#deleteMessage - 채팅 메시지 삭제
-	socket.on('deleteMessage', async ({ room, id }) => {
-		console.log('💚/chat#deleteMessage-', room, id);
+	// 💚/chat#deleteMessage - 채팅 메시지 삭제
+	socket.on('deleteMessage', async ({ room, index, id }) => {
+		console.log('💚/chat#deleteMessage-', room, index, id);
 		try {
 			const foundChat = await Chats.findOne({
 				where: {
@@ -108,7 +109,7 @@ const socketChat = (socket: Socket) => {
 			});
 			if (foundChat) {
 				await foundChat.remove();
-				socket.broadcast.to(room).emit('deleteMessage', { id });
+				socket.broadcast.to(room).emit('deleteMessage', { index, id });
 			}
 		} catch (err) {
 			console.log('💚/chat#deleteMessage-err:', err.message);
