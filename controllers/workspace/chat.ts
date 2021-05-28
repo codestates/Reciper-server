@@ -70,8 +70,8 @@ const socketChat = (socket: Socket) => {
 	});
 
 	// 💚/chat#deleteMessage - 채팅 메시지 삭제
-	socket.on('deleteMessage', async ({ room, id }) => {
-		console.log('💚/chat#deleteMessage-', room, id);
+	socket.on('deleteMessage', async ({ room, index, id }) => {
+		console.log('💚/chat#deleteMessage-', room, index, id);
 		try {
 			const foundChat = await Chats.findOne({
 				where: {
@@ -80,7 +80,7 @@ const socketChat = (socket: Socket) => {
 			});
 			if (foundChat) {
 				await foundChat.remove();
-				socket.broadcast.to(room).emit('deleteMessage', { id });
+				socket.broadcast.to(room).emit('deleteMessage', { index, id });
 			}
 		} catch (err) {
 			console.log('💚/chat#deleteMessage-err:', err.message);
