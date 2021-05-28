@@ -49,6 +49,33 @@ const socketChat = (socket: Socket) => {
 		}
 	});
 
+	// TODO: 💚/chat#sendImage - 이미지 보내기/저장
+	socket.on('sendImage', async ({ room, name, uploadImage }) => {
+		console.log('💚/chat#sendImage-', room, name, uploadImage);
+		try {
+			const nowProject = await Projects.findOne({
+				where: {
+					id: Number(projectId),
+				},
+			});
+			const nowUser = await Users.findOne({
+				where: {
+					id: Number(userId),
+				},
+			});
+			let chat = await Chats.create({
+				uploadImage,
+				writer: nowUser,
+				project: nowProject,
+				room,
+			});
+			await chat.save();
+			socket.broadcast.to(room).emit('sendImage', { ...chat });
+		} catch (err) {
+			console.log('💚/chat#sendImage-err:', err.message);
+		}
+	});
+
 	// TODO: 💚/chat#editMessage - 채팅 메시지 수정
 	socket.on('editMessage', async ({ room, id, message }) => {
 		console.log('💚/chat#editMessage-', room, id, message);
