@@ -54,6 +54,7 @@ const socketChat = (socket: Socket) => {
 		console.log('💚/chat#editMessage-', room, id, message);
     try {
 			const foundChat = await Chats.findOne({
+				relations: ['writer', 'project'],
 				where: {
 					id,
 				},
