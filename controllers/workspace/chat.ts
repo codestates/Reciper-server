@@ -38,6 +38,7 @@ const socketChat = (socket: Socket) => {
 			});
 			let chat = await Chats.create({
 				text: message,
+				uploadImage: '',
 				writer: nowUser,
 				project: nowProject,
 				room,
@@ -65,6 +66,7 @@ const socketChat = (socket: Socket) => {
 			});
 			let chat = await Chats.create({
 				uploadImage,
+				text: '',
 				writer: nowUser,
 				project: nowProject,
 				room,
