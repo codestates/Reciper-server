@@ -29,6 +29,7 @@ const structuringData = async (part: string, projectId: number) => {
 	let taskItems: {
 		[index: string]: any;
 	} = {};
+	console.log('partOne!', partOne);
 	partOne.taskBoxesList.map(el => {
 		let tasks: any[] = [];
 
@@ -44,9 +45,10 @@ const structuringData = async (part: string, projectId: number) => {
 				assignees: JSON.parse(el.assignees),
 				checkList: el.checklistsList,
 				comment: el.commentsList,
+				dragging: false,
 			};
 		});
-		taskBox.push(Object.assign({}, { taskBoxTitle: el.title, tasks }));
+		taskBox.push(Object.assign({}, { taskBoxTitle: el.title, tasks, dragging: false }));
 	});
 	console.log(taskItems);
 	return { taskBox, taskItems };
@@ -81,8 +83,11 @@ const socketKanban = async (socket: Socket) => {
 	socket.on('leavePart', part => {
 		socket.leave(part);
 	});
-	socket.on('dragging', () => {
-		socket.emit('dragging');
+	socket.on('boxDragging', ({ targetListIndex, isDragging }) => {
+		socket.broadcast.emit('boxDragging', { targetListIndex, isDragging });
+	});
+	socket.on('taskDragging', () => {
+		socket.emit('taskDragging');
 	});
 
 	socket.on('addTaskBox', async ({ index, title, part }) => {
@@ -212,7 +217,7 @@ const socketKanban = async (socket: Socket) => {
 
 		socket.broadcast.emit('deleteTaskItem', { targetIndex, targetListIndex });
 	});
-	socket.on('boxMoving', async ({ currentIndex, targetIndex, part }) => {
+	socket.on('boxMoving', async ({ currentIndex, targetIndex, part, isDragging }) => {
 		// 데이터베이스 저장하고, taskBox,taskItem을 추출해서, 데이터포맷 맞춰서 emit시킨다.
 		const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
 		const foundBoxes = await Task_boxes.find({ where: { groupingPart: foundPart }, order: { index: 'ASC' } });
@@ -243,7 +248,7 @@ const socketKanban = async (socket: Socket) => {
 			//왼쪽으로 드래깅했음
 		}
 		console.log(structuringData(part, Number(projectId)));
-		socket.broadcast.emit('boxMoving', { currentIndex, targetIndex });
+		socket.broadcast.emit('boxMoving', { currentIndex, targetIndex, isDragging });
 	});
 	socket.on('taskMoving', async ({ currentIndex, targetIndex, currentListIndex, targetListIndex, part }) => {
 		// 데이터베이스 저장하고, taskBox,taskItem을 추출해서, 데이터포맷 맞춰서 emit시킨다.
