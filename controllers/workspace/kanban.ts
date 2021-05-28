@@ -16,20 +16,24 @@ const structuringData = async (part: string, projectId: number) => {
 		.where('projects.id = :id', { id: projectId })
 		.leftJoinAndSelect('projects.partsList', 'partsList', 'partsList.title = :title', { title: part })
 		.leftJoinAndSelect('partsList.taskBoxesList', 'taskBoxesList')
-		.orderBy('taskBoxesList.index', 'ASC')
 		.leftJoinAndSelect('taskBoxesList.tasksList', 'tasksList')
-		.orderBy('tasksList.index', 'ASC')
 		.leftJoinAndSelect('tasksList.checklistsList', 'checklistsList')
-		.orderBy('checklistsList.createdAt', 'ASC')
 		.leftJoinAndSelect('tasksList.commentsList', 'commentsList')
+		.orderBy('taskBoxesList.index', 'ASC')
+		.addOrderBy('tasksList.index', 'ASC')
+		.addOrderBy('checklistsList.createdAt', 'ASC')
+		// .getQuery();
 		.getMany();
-
+	console.log(projects);
 	const partOne = projects[0].partsList[0];
 	let taskBox: any[] = [];
 	let taskItems: {
 		[index: string]: any;
 	} = {};
-	console.log('partOne!', partOne);
+	// console.log('partOne!', partOne);
+	// if (partOne.taskBoxesList.length === 2) {
+	// 	[partOne.taskBoxesList[0], partOne.taskBoxesList[1]] = [partOne.taskBoxesList[1], partOne.taskBoxesList[0]];
+	// }
 	partOne.taskBoxesList.map(el => {
 		let tasks: any[] = [];
 
@@ -83,11 +87,11 @@ const socketKanban = async (socket: Socket) => {
 	socket.on('leavePart', part => {
 		socket.leave(part);
 	});
-	socket.on('boxDragging', ({ targetListIndex, isDragging }) => {
-		socket.broadcast.emit('boxDragging', { targetListIndex, isDragging });
+	socket.on('taskBoxBlock', ({ targetListIndex, isDragging }) => {
+		socket.broadcast.emit('taskBoxBlock', { targetListIndex, isDragging });
 	});
-	socket.on('taskDragging', () => {
-		socket.emit('taskDragging');
+	socket.on('taskItemBlock', ({ targetListIndex, targetIndex, isDragging }) => {
+		socket.broadcast.emit('taskItemBlock', { targetListIndex, targetIndex, isDragging });
 	});
 
 	socket.on('addTaskBox', async ({ index, title, part }) => {
@@ -126,7 +130,7 @@ const socketKanban = async (socket: Socket) => {
 		});
 		await created.save();
 		const tasks = {
-			assignees: created.assignees,
+			assignees: JSON.parse(created.assignees),
 			checkList: [],
 			comment: [],
 			taskTitle: created.title,
@@ -140,7 +144,7 @@ const socketKanban = async (socket: Socket) => {
 			task: tasks,
 		});
 	});
-	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part }) => {
+	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part, isDragging }) => {
 		console.log('에딧:', task, targetIndex, targetListIndex, part);
 		const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
 		const foundBox = await Task_boxes.findOne({ where: { index: targetListIndex, groupingPart: foundPart } });
@@ -178,7 +182,7 @@ const socketKanban = async (socket: Socket) => {
 			await created.save();
 		}
 
-		socket.broadcast.emit('editTaskItem', { targetIndex, targetListIndex, task });
+		socket.broadcast.emit('editTaskItem', { targetIndex, targetListIndex, task, isDragging });
 	});
 	socket.on('deleteTaskBox', async ({ targetListIndex, part }) => {
 		const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
@@ -250,84 +254,87 @@ const socketKanban = async (socket: Socket) => {
 		console.log(structuringData(part, Number(projectId)));
 		socket.broadcast.emit('boxMoving', { currentIndex, targetIndex, isDragging });
 	});
-	socket.on('taskMoving', async ({ currentIndex, targetIndex, currentListIndex, targetListIndex, part }) => {
-		// 데이터베이스 저장하고, taskBox,taskItem을 추출해서, 데이터포맷 맞춰서 emit시킨다.
-		const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
-		console.log(`테스크아이템: ${currentIndex} => ${targetIndex}
+	socket.on(
+		'taskMoving',
+		async ({ currentIndex, targetIndex, currentListIndex, targetListIndex, part, isDragging }) => {
+			// 데이터베이스 저장하고, taskBox,taskItem을 추출해서, 데이터포맷 맞춰서 emit시킨다.
+			const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
+			console.log(`테스크아이템: ${currentIndex} => ${targetIndex}
 		테스크박스 : ${currentListIndex} => ${targetListIndex}`);
-		if (currentListIndex === targetListIndex) {
-			//taskMoving의 로직
-			const foundBox = await Task_boxes.find({
-				where: { groupingPart: foundPart, index: currentListIndex },
-				relations: ['tasksList'],
-			});
-			const boxOne = foundBox[0];
-			if (currentIndex < targetIndex) {
-				//하행
-				let temp: any;
-				boxOne.tasksList.map(el => {
+			if (currentListIndex === targetListIndex) {
+				//taskMoving의 로직
+				const foundBox = await Task_boxes.find({
+					where: { groupingPart: foundPart, index: currentListIndex },
+					relations: ['tasksList'],
+				});
+				const boxOne = foundBox[0];
+				if (currentIndex < targetIndex) {
+					//하행
+					let temp: any;
+					boxOne.tasksList.map(el => {
+						if (el.index === currentIndex) {
+							el.index = -1;
+							temp = el;
+						} else if (el.index > currentIndex && el.index <= targetIndex) {
+							el.index--;
+							el.save();
+						}
+					});
+					temp!.index = targetIndex;
+					temp?.save();
+					console.log(temp!.index);
+				} else {
+					//상행
+					let temp: any;
+					boxOne.tasksList.map(el => {
+						console.log(el.index, currentIndex);
+						if (el.index === currentIndex) {
+							el.index = -1;
+							temp = el;
+						} else if (el.index < currentIndex && el.index >= targetIndex) {
+							el.index++;
+							el.save();
+						}
+					});
+					console.log(temp);
+					temp!.index = targetIndex;
+					temp?.save();
+					console.log(temp!.index);
+				}
+			} else {
+				//박스이동 + 테스크이동
+				const foundBoxes = await Task_boxes.find({
+					where: { groupingPart: foundPart },
+					relations: ['tasksList'],
+					order: { index: 'ASC' },
+				});
+				//위에 boxMoving의 로직이 어느정도 들어간다.
+
+				let tempTask: any;
+				foundBoxes[currentListIndex].tasksList.map(el => {
 					if (el.index === currentIndex) {
 						el.index = -1;
-						temp = el;
-					} else if (el.index > currentIndex && el.index <= targetIndex) {
+						tempTask = el;
+					} else if (el.index > currentIndex) {
 						el.index--;
 						el.save();
 					}
 				});
-				temp!.index = targetIndex;
-				temp?.save();
-				console.log(temp!.index);
-			} else {
-				//상행
-				let temp: any;
-				boxOne.tasksList.map(el => {
-					console.log(el.index, currentIndex);
-					if (el.index === currentIndex) {
-						el.index = -1;
-						temp = el;
-					} else if (el.index < currentIndex && el.index >= targetIndex) {
+				console.log('teeeeee', tempTask);
+				tempTask!.groupingBox = foundBoxes[targetListIndex];
+
+				foundBoxes[targetListIndex].tasksList.map(el => {
+					if (el.index >= targetIndex) {
 						el.index++;
 						el.save();
 					}
 				});
-				console.log(temp);
-				temp!.index = targetIndex;
-				temp?.save();
-				console.log(temp!.index);
+				tempTask!.index = targetIndex;
+				tempTask?.save();
 			}
-		} else {
-			//박스이동 + 테스크이동
-			const foundBoxes = await Task_boxes.find({
-				where: { groupingPart: foundPart },
-				relations: ['tasksList'],
-				order: { index: 'ASC' },
-			});
-			//위에 boxMoving의 로직이 어느정도 들어간다.
-
-			let tempTask: any;
-			foundBoxes[currentListIndex].tasksList.map(el => {
-				if (el.index === currentIndex) {
-					el.index = -1;
-					tempTask = el;
-				} else if (el.index > currentIndex) {
-					el.index--;
-					el.save();
-				}
-			});
-			console.log('teeeeee', tempTask);
-			tempTask!.groupingBox = foundBoxes[targetListIndex];
-
-			foundBoxes[targetListIndex].tasksList.map(el => {
-				if (el.index >= targetIndex) {
-					el.index++;
-					el.save();
-				}
-			});
-			tempTask!.index = targetIndex;
-			tempTask?.save();
-		}
-		socket.broadcast.emit('taskMoving', { targetListIndex, targetIndex, currentIndex, currentListIndex });
-	});
+			socket.broadcast.emit('taskMoving', { targetListIndex, targetIndex, currentIndex, currentListIndex, isDragging });
+		},
+	);
 	socket.on('moving', taskList => {
 		kanbanIo.emit('moving', taskList);
 	});
