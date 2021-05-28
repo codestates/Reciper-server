@@ -10,19 +10,19 @@ const socketChat = (socket: Socket) => {
 	const chatIo = app.get('chatIo');
 	const { projectId, userId } = socket.handshake.query;
 
-	// 💚/chat#joinRoom - 방 입장
+	// TODO: 💚/chat#joinRoom - 방 입장
 	socket.on('joinRoom', room => {
 		console.log('💚/chat#joinRoom-', room);
 		socket.join(room);
 	});
 
-	// 💚/chat#leaveRoom - 방 퇴장
+	// TODO: 💚/chat#leaveRoom - 방 퇴장
 	socket.on('leaveRoom', room => {
 		console.log('💚/chat#leaveRoom-', room);
 		socket.leave(room);
 	});
 
-	// 💚/chat#sendMessage - 채팅 메시지 보내기/저장
+	// TODO: 💚/chat#sendMessage - 채팅 메시지 보내기/저장
 	socket.on('sendMessage', async ({ room, name, message }) => {
 		console.log('💚/chat#sendMessage-', room, name, message);
 		try {
@@ -38,6 +38,7 @@ const socketChat = (socket: Socket) => {
 			});
 			let chat = await Chats.create({
 				text: message,
+				uploadImage: '',
 				writer: nowUser,
 				project: nowProject,
 				room,
@@ -46,6 +47,34 @@ const socketChat = (socket: Socket) => {
 			socket.broadcast.to(room).emit('sendMessage', { ...chat });
 		} catch (err) {
 			console.log('💚/chat#sendMessage-err:', err.message);
+		}
+	});
+
+	// TODO: 💚/chat#sendImage - 이미지 보내기/저장
+	socket.on('sendImage', async ({ room, name, uploadImage }) => {
+		console.log('💚/chat#sendImage-', room, name, uploadImage);
+		try {
+			const nowProject = await Projects.findOne({
+				where: {
+					id: Number(projectId),
+				},
+			});
+			const nowUser = await Users.findOne({
+				where: {
+					id: Number(userId),
+				},
+			});
+			let chat = await Chats.create({
+				uploadImage,
+				text: '',
+				writer: nowUser,
+				project: nowProject,
+				room,
+			});
+			await chat.save();
+			socket.broadcast.to(room).emit('sendImage', { ...chat });
+		} catch (err) {
+			console.log('💚/chat#sendImage-err:', err.message);
 		}
 	});
 
@@ -87,7 +116,7 @@ const socketChat = (socket: Socket) => {
 		}
 	});
 
-	// 💚/chat#getAllMessages - 모든 메시지 조회
+	// TODO: 💚/chat#getAllMessages - 모든 메시지 조회
 	socket.on('getAllMessages', async room => {
 		console.log('💚/chat#getAllMessages-', room);
 		const nowProject = await Projects.findOne({
