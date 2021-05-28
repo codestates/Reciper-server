@@ -10,19 +10,19 @@ const socketChat = (socket: Socket) => {
 	const chatIo = app.get('chatIo');
 	const { projectId, userId } = socket.handshake.query;
 
-	// 💚/chat#joinRoom - 방 입장
+	// TODO: 💚/chat#joinRoom - 방 입장
 	socket.on('joinRoom', room => {
 		console.log('💚/chat#joinRoom-', room);
 		socket.join(room);
 	});
 
-	// 💚/chat#leaveRoom - 방 퇴장
+	// TODO: 💚/chat#leaveRoom - 방 퇴장
 	socket.on('leaveRoom', room => {
 		console.log('💚/chat#leaveRoom-', room);
 		socket.leave(room);
 	});
 
-	// 💚/chat#sendMessage - 채팅 메시지 보내기/저장
+	// TODO: 💚/chat#sendMessage - 채팅 메시지 보내기/저장
 	socket.on('sendMessage', async ({ room, name, message }) => {
 		console.log('💚/chat#sendMessage-', room, name, message);
 		try {
@@ -48,27 +48,27 @@ const socketChat = (socket: Socket) => {
 			console.log('💚/chat#sendMessage-err:', err.message);
 		}
 	});
-  
-	// 💚/chat#editMessage - 채팅 메시지 수정
+
+	// TODO: 💚/chat#editMessage - 채팅 메시지 수정
 	socket.on('editMessage', async ({ room, id, message }) => {
 		console.log('💚/chat#editMessage-', room, id, message);
-    try {
+		try {
 			const foundChat = await Chats.findOne({
 				where: {
 					id,
 				},
 			});
 			if (foundChat) {
-        foundChat.text = message;
+				foundChat.text = message;
 				await foundChat.save();
 				socket.broadcast.to(room).emit('editMessage', { ...foundChat });
 			}
 		} catch (err) {
 			console.log('💚/chat#editMessage-err:', err.message);
-    }
-  });
+		}
+	});
 
-	// 💚/chat#deleteMessage - 채팅 메시지 삭제
+	// TODO: 💚/chat#deleteMessage - 채팅 메시지 삭제
 	socket.on('deleteMessage', async ({ room, id }) => {
 		console.log('💚/chat#deleteMessage-', room, id);
 		try {
@@ -86,7 +86,7 @@ const socketChat = (socket: Socket) => {
 		}
 	});
 
-	// 💚/chat#getAllMessages - 모든 메시지 조회
+	// TODO: 💚/chat#getAllMessages - 모든 메시지 조회
 	socket.on('getAllMessages', async room => {
 		console.log('💚/chat#getAllMessages-', room);
 		const nowProject = await Projects.findOne({
