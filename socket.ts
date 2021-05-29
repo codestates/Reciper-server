@@ -1,8 +1,8 @@
 import app from './app';
 import { Socket } from './node_modules/socket.io/dist/socket';
 import workspaceChecker from './middlewares/workspaceChecker';
-import socketChat from './controllers/workspace/chat';
-import socketKanban from './controllers/workspace/kanban';
+import socketChat from './controllers/workspace/socketChat';
+import socketKanban from './controllers/workspace/socketKanban';
 import * as dotenv from 'dotenv';
 dotenv.config();
 

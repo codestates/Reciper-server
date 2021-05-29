@@ -1,5 +1,5 @@
 import app from '../../app';
-import { Socket } from '../../node_modules/socket.io/dist/socket';
+import { Socket } from 'socket.io/dist/socket';
 import { getRepository } from 'typeorm';
 import { Projects } from '../../src/entity/Projects';
 import { Chats } from '../../src/entity/Chats';
