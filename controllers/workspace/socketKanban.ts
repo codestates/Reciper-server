@@ -1,7 +1,7 @@
 import { Parts } from '../../src/entity/Parts';
 import { Task_boxes } from '../../src/entity/Task_boxes';
 import app from '../../app';
-import { Socket } from '../../node_modules/socket.io/dist/socket';
+import { Socket } from 'socket.io/dist/socket';
 import { getRepository } from 'typeorm';
 import { Tasks } from '../../src/entity/Tasks';
 import { Checklists } from '../../src/entity/Checklists';

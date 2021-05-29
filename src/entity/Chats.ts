@@ -20,6 +20,9 @@ export class Chats extends BaseEntity {
 	@Column()
 	text!: string;
 
+	@Column()
+	uploadImage!: string;
+
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
 
