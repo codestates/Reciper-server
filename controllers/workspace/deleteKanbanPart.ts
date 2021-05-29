@@ -8,9 +8,9 @@ const deleteKanbanPart = async (req: Request, res: Response) => {
 	console.log('💚deleteKanbanPart-', req.params);
 	const { projectURL, part } = req.params;
 	let foundParts = await getRepository(Parts).find({
-		relations: ['project'],
+		relations: ['doingProject'],
 		where: {
-			title: part,
+			name: part,
 		},
 		order: {
 			index: 'ASC',
@@ -29,10 +29,10 @@ const deleteKanbanPart = async (req: Request, res: Response) => {
 			}
 		}
 		getPartsList(projectURL)
-			.then(partsList => {
-				console.log('💚deleteKanbanPart-result:', partsList); // test
+			.then(roomsList => {
+				console.log('💚deleteKanbanPart-result:', roomsList); // test
 				res.status(200).json({
-					partsList,
+					roomsList,
 				});
 			})
 			.catch(err => {

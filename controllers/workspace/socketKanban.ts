@@ -14,7 +14,7 @@ const structuringData = async (part: string, projectId: number) => {
 	const projects = await getRepository(Projects)
 		.createQueryBuilder('projects')
 		.where('projects.id = :id', { id: projectId })
-		.leftJoinAndSelect('projects.partsList', 'partsList', 'partsList.title = :title', { title: part })
+		.leftJoinAndSelect('projects.partsList', 'partsList', 'partsList.name = :name', { name: part })
 		.leftJoinAndSelect('partsList.taskBoxesList', 'taskBoxesList')
 		.leftJoinAndSelect('taskBoxesList.tasksList', 'tasksList')
 		.leftJoinAndSelect('tasksList.checklistsList', 'checklistsList')
@@ -25,6 +25,7 @@ const structuringData = async (part: string, projectId: number) => {
 		.getMany();
 	console.log(projects);
 	const partOne = projects[0].partsList[0];
+	console.log(partOne);
 	let taskBox: any[] = [];
 	let taskItems: {
 		[index: string]: any;
@@ -68,7 +69,7 @@ const socketKanban = async (socket: Socket) => {
 		const foundPartOne = await Parts.findOne({
 			where: {
 				doingProject: foundProject,
-				title: part,
+				name: part,
 			},
 		});
 		if (!foundPartOne) {
@@ -84,7 +85,7 @@ const socketKanban = async (socket: Socket) => {
 				}).index;
 			}
 			const created = await Parts.create({
-				title: part,
+				name: part,
 				doingProject: foundProject,
 				index: maxIndex + 1,
 			});
@@ -117,7 +118,7 @@ const socketKanban = async (socket: Socket) => {
 		console.log('💚/kanban#addTaskBox-');
 		const foundPart = await Parts.findOne({
 			where: {
-				title: part,
+				name: part,
 				doingProject: foundProject,
 			},
 		});
@@ -136,7 +137,7 @@ const socketKanban = async (socket: Socket) => {
 		console.log('💚/kanban#addTaskItem-');
 		const foundPart = await Parts.findOne({
 			where: {
-				title: part,
+				name: part,
 				doingProject: foundProject,
 			},
 		});
@@ -188,7 +189,7 @@ const socketKanban = async (socket: Socket) => {
 		console.log('💚/kanban#editTaskItem-', task, targetIndex, targetListIndex, part);
 		const foundPart = await Parts.findOne({
 			where: {
-				title: part,
+				name: part,
 				doingProject: foundProject,
 			},
 		});
@@ -259,7 +260,7 @@ const socketKanban = async (socket: Socket) => {
 		console.log('💚/kanban#deleteTaskBox-');
 		const foundPart = await Parts.findOne({
 			where: {
-				title: part,
+				name: part,
 				doingProject: foundProject,
 			},
 		});
@@ -291,7 +292,7 @@ const socketKanban = async (socket: Socket) => {
 	// TODO: 💚/kanban#deleteTaskItem - task 삭제
 	socket.on('deleteTaskItem', async ({ targetIndex, targetListIndex, part }) => {
 		console.log('💚/kanban#deleteTaskItem-');
-		const foundPart = await Parts.findOne({ where: { title: part, doingProject: foundProject } });
+		const foundPart = await Parts.findOne({ where: { name: part, doingProject: foundProject } });
 		const foundBox = await Task_boxes.findOne({ where: { index: targetListIndex, groupingPart: foundPart } });
 		console.log(targetIndex, targetListIndex);
 		console.log(foundBox);
@@ -330,7 +331,7 @@ const socketKanban = async (socket: Socket) => {
 		console.log('💚/kanban#boxMoving-');
 		const foundPart = await Parts.findOne({
 			where: {
-				title: part,
+				name: part,
 				doingProject: foundProject,
 			},
 		});
@@ -382,7 +383,7 @@ const socketKanban = async (socket: Socket) => {
 		테스크박스 : ${currentListIndex} => ${targetListIndex}`);
 			const foundPart = await Parts.findOne({
 				where: {
-					title: part,
+					name: part,
 					doingProject: foundProject,
 				},
 			});
