@@ -4,8 +4,7 @@ import { Recruits } from '../../src/entity/Recruits';
 
 const filterRecruitList = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 리스트 검색
-	console.log('💜filterRecruitList-');
-	console.log(req.body, req.params);
+	console.log('💜filterRecruitList-', req.body, req.params);
 	const searchStacksList = req.body.searchStacksList;
 	const order = Number(req.params.order);
 	const sort = req.params.sort === '오래된순' ? 1 : -1;

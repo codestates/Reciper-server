@@ -3,7 +3,7 @@ import { Stacks } from '../../src/entity/Stacks';
 
 const getStacks = async (req: Request, res: Response) => {
 	// 스택 리스트 요청
-	console.log('🤍getStacks-', req.body, req.query);
+	console.log('🤍getStacks-', req.query);
 	const q = req.query.q;
 	if (q) {
 		console.log('쿼리있음', q);

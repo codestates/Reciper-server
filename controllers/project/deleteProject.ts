@@ -6,8 +6,7 @@ import { Projects } from '../../src/entity/Projects';
 import { FindConditions } from '../../node_modules/typeorm/find-options/FindConditions';
 const deleteProject = async (req: Request, res: Response) => {
 	// 프로젝트 삭제
-	console.log('💛deleteProject-');
-	console.log(req.body, req.params);
+	console.log('💛deleteProject-', req.params);
 	const projectURL = req.params.projectURL;
 	try {
 		const foundProject = await Projects.findOne({

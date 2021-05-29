@@ -34,9 +34,9 @@ import { showChatRooms } from './workspace/showChatRooms';
 import createChatRoom from './workspace/createChatRoom';
 import editChatRoom from './workspace/editChatRoom';
 import deleteChatRoom from './workspace/deleteChatRoom';
-// 7. stack(스택)
+// 6. stack(스택)
 import getStacks from './stacks/getStacks';
-// 8. image(이미지)
+// 7. image(이미지)
 import postImage from './image/image';
 
 export {

@@ -5,7 +5,7 @@ import { getRoomsList } from './showChatRooms';
 
 const deleteChatRoom = async (req: Request, res: Response) => {
 	// 채팅방 삭제
-	console.log('💚deleteChatRoom-', req.body, req.params);
+	console.log('💚deleteChatRoom-', req.params);
 	const { projectURL, room } = req.params;
 	let foundRooms = await getRepository(Rooms).find({
 		relations: ['project'],

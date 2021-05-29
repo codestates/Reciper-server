@@ -5,7 +5,7 @@ import { getPartsList } from './showKanbanParts';
 
 const deleteKanbanPart = async (req: Request, res: Response) => {
 	// part 삭제
-	console.log('💚deleteKanbanPart-', req.body, req.params);
+	console.log('💚deleteKanbanPart-', req.params);
 	const { projectURL, part } = req.params;
 	let foundParts = await getRepository(Parts).find({
 		relations: ['project'],

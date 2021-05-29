@@ -5,8 +5,7 @@ import { Recruit_comments } from './../../src/entity/Recruit_comments';
 
 const showRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 상세내용 조회
-	console.log('💜showRecruitBoard-');
-	console.log(req.body, req.params);
+	console.log('💜showRecruitBoard-', req.params);
 	// 저장된 게시글 정보 불러오기
 	const boardId = Number(req.params.board_id);
 	let boardInfo;
@@ -54,7 +53,7 @@ const showRecruitBoard = async (req: Request, res: Response) => {
 				id: boardInfo.id,
 				name: boardInfo.name,
 			},
-			commentsList.map(el => el.id),
+			commentsList.map(el => el.body),
 		); // test
 		res.status(200).json({
 			...boardInfo,

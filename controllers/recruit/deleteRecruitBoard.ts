@@ -7,8 +7,7 @@ import * as fs from 'fs';
 
 const deleteRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 삭제
-	console.log('💜deleteRecruitBoard-');
-	console.log(req.body, req.params);
+	console.log('💜deleteRecruitBoard-', req.params);
 	const boardId = Number(req.params.board_id);
 	// users 테이블에서 해당 게시글 데이터 지우기
 	const userId = req.userId;

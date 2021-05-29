@@ -4,7 +4,7 @@ import { getRepository } from 'typeorm';
 
 const getProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 조회
-	console.log('🧡getProfile-', req.body);
+	console.log('🧡getProfile-');
 	const userId = req.userId;
 	// 저장된 유저 정보 불러오기
 	const userInfo = await Users.findOne({
