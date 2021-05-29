@@ -8,6 +8,8 @@ import imageRouter from './routes/image';
 import profileRouter from './routes/profile';
 import recruitRouter from './routes/recruit';
 import projectRouter from './routes/project';
+import workspaceRouter from './routes/workspace';
+
 dotenv.config();
 
 const app = express();
@@ -15,7 +17,7 @@ createConnection();
 
 const corsOption = {
 	Headers: { 'content-type': 'application/json' },
-	origin: '*',
+	origin: true,
 	method: ['post', 'get', 'delete', 'options'],
 	credentials: true,
 };
@@ -31,5 +33,6 @@ app.use('/images', express.static('uploads'));
 app.use('/', profileRouter);
 app.use('/', recruitRouter);
 app.use('/', projectRouter);
+app.use('/', workspaceRouter);
 
 export default app;

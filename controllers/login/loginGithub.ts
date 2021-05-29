@@ -10,8 +10,7 @@ const githubInfoURL = 'https://api.github.com/user';
 
 const loginGithub = async (req: Request, res: Response) => {
 	// 로그인 - OAuth 방식: github
-	console.log('💙login: github- ', req.body);
-
+	console.log('💙loginGithub-', req.body);
 	// authorization code를 이용해 access token을 발급받음
 	await axios
 		.post(
@@ -38,7 +37,7 @@ const loginGithub = async (req: Request, res: Response) => {
 				})
 				.then(result => result.data.login)
 				.catch(err => {
-					console.log('💙github: ', err.message);
+					console.log('💙loginGithub-err:', err.message);
 				});
 			// 유저정보 확인하여 새로운 유저면 데이터베이스에 저장
 			const userInfo = await Users.findOne({
@@ -52,7 +51,7 @@ const loginGithub = async (req: Request, res: Response) => {
 				try {
 					newUser.save();
 				} catch (err) {
-					console.log('💙github: ', err.message);
+					console.log('💙loginGithub-err:', err.message);
 				}
 			}
 			// cookie에 refresh token 저장
@@ -61,7 +60,7 @@ const loginGithub = async (req: Request, res: Response) => {
 				httpOnly: true,
 			});
 			// access token과 loginType을 응답으로 보내줌
-			console.log('💙github: at - ', accessToken);
+			console.log('💙loginGithub-at:', accessToken);
 			res.status(200).json({
 				accessToken,
 				loginType: 'github',
@@ -69,7 +68,7 @@ const loginGithub = async (req: Request, res: Response) => {
 			});
 		})
 		.catch(err => {
-			console.log('💙github: ', err.message);
+			console.log('💙loginGithub-err:', err.message);
 			res.status(401).json({
 				message: 'authorizationCode Error!' + err.message,
 			});

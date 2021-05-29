@@ -7,8 +7,7 @@ import * as fs from 'fs';
 
 const editRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 수정
-	console.log('💜editRecruitBoard- ');
-	console.log(req.body, req.params);
+	console.log('💜editRecruitBoard-', req.body, req.params);
 	const boardId = Number(req.params.board_id);
 	try {
 		const {
@@ -49,12 +48,12 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 				const imageRoute = foundBoard.uploadImage;
 				fs.access(`${__dirname}/../../uploads/${imageRoute}`, fs.constants.F_OK, err => {
 					if (err) {
-						return console.log('삭제할 수 없는 파일입니다', err.message);
+						return console.log('💜editRecruitBoard-err: 삭제할 수 없는 파일입니다', err.message);
 					}
 					fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
 						err
-							? console.log(err.message)
-							: console.log(`${__dirname}/../../uploads/${imageRoute} 를 정상적으로 삭제했습니다`),
+							? console.log('💜editRecruitBoard-err:', err.message)
+							: console.log(`💜editRecruitBoard-${__dirname}/../../uploads/${imageRoute}를 정상적으로 삭제했습니다`),
 					);
 				});
 			}
@@ -68,7 +67,12 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 					recruitBoard: foundBoard,
 				},
 			});
-			console.log(foundBoard); // test
+			console.log('💜editRecruitBoard-result:', {
+				...foundBoard,
+				recruitMembers: JSON.parse(foundBoard.recruitMembers),
+				requireStack: stackArray.map(el => el.name),
+				commentList: commentsList.map(el => el.body),
+			}); // test
 			res.status(200).json({
 				...foundBoard,
 				recruitMembers: JSON.parse(foundBoard.recruitMembers),
@@ -81,7 +85,7 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 			});
 		}
 	} catch (err) {
-		console.log('💜editRecruitBoard- err: ', err.message);
+		console.log('💜editRecruitBoard-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});

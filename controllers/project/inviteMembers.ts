@@ -8,8 +8,7 @@ dotenv.config();
 
 const inviteMembers = async (req: Request, res: Response) => {
 	// 프로젝트 팀원 초대
-	console.log('💛inviteMembers- ');
-	console.log(req.body, req.params);
+	console.log('💛inviteMembers-', req.body, req.params);
 	const inviteList = req.body.inviteList;
 	const projectURL = req.params.projectURL;
 	const userId = req.userId;
@@ -40,13 +39,13 @@ const inviteMembers = async (req: Request, res: Response) => {
 				});
 			}
 		} else {
-			console.log(userInfo, foundProject); // test
+			console.log('💛inviteMembers-err:', userInfo, foundProject); // test
 			res.status(400).json({
 				message: projectURL + ' project is not found',
 			});
 		}
 	} catch (err) {
-		console.log('💛inviteMembers- err: ', err.message);
+		console.log('💛inviteMembers-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});
@@ -54,6 +53,7 @@ const inviteMembers = async (req: Request, res: Response) => {
 };
 
 const sendInvitationEmail = async (email: string, inviterName: string, projectName: string, projectURL: string) => {
+	console.log('💛💛inviteMembers-send email', email);
 	// 초대목록에 있는 이메일로 초대메일 보내기
 	let transporter = nodemailer.createTransport({
 		service: 'Naver',
@@ -187,7 +187,7 @@ const sendInvitationEmail = async (email: string, inviterName: string, projectNa
 				</table>
 			</div>`,
 	});
-	console.log('💛inviteMembers- mail sent: %s', info.messageId);
+	console.log('💛inviteMembers-mail sent: %s', info.messageId);
 };
 
 export default inviteMembers;

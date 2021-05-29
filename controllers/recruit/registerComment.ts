@@ -6,8 +6,7 @@ import { getRepository } from 'typeorm';
 
 const registerComment = async (req: Request, res: Response) => {
 	// 댓글 등록
-	console.log('💜registerComment- ');
-	console.log(req.body, req.params);
+	console.log('💜registerComment-', req.body, req.params);
 	const boardId = Number(req.params.board_id);
 	const userId = req.userId;
 	const { body } = req.body;
@@ -42,7 +41,15 @@ const registerComment = async (req: Request, res: Response) => {
 					recruitBoard: foundBoard,
 				},
 			});
-			console.log(commentsList); // test
+			console.log(
+				'💜registerComment-result:',
+				{
+					id: foundBoard.id,
+					name: foundBoard.name,
+				},
+				'\n',
+				commentsList.map(el => el.body),
+			); // test
 			res.status(200).json({
 				...foundBoard,
 				recruitMembers: JSON.parse(foundBoard.recruitMembers),

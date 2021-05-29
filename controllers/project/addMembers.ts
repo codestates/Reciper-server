@@ -4,8 +4,7 @@ import { Projects } from '../../src/entity/Projects';
 
 const addMembers = async (req: Request, res: Response) => {
 	// 프로젝트 참가(팀원 초대 응답)
-	console.log('💛addMembers- ');
-	console.log(req.body, req.params);
+	console.log('💛addMembers-', req.body);
 	const { email, authorizationCode, projectURL } = req.body;
 	try {
 		const foundProject = await Projects.findOne({
@@ -14,7 +13,6 @@ const addMembers = async (req: Request, res: Response) => {
 				projectURL,
 			},
 		});
-		console.log(foundProject);
 		if (foundProject) {
 			// 초대 명단에 해당 email이 있는지 확인
 			let inviteList = JSON.parse(foundProject.inviteList);
@@ -29,7 +27,7 @@ const addMembers = async (req: Request, res: Response) => {
 						// 이미 member인지 확인
 						const membersArray = [...foundProject.members];
 						const chkMembers = membersArray.map(el => el.id);
-						console.log(chkMembers); // test
+						console.log('💛addMembers-chk:', foundProject.projectURL, 'member:', chkMembers); // test
 						if (!chkMembers.includes(userInfo.id)) {
 							membersArray.push(userInfo);
 							foundProject.members = membersArray;
@@ -38,7 +36,7 @@ const addMembers = async (req: Request, res: Response) => {
 							await foundProject.save();
 							isInvited = true;
 						} else {
-							console.log('💛addMembers- err: ', email, ' already member of the project');
+							console.log('💛addMembers-err:', email, 'already member of the project');
 							res.status(400).json({
 								message: email + ' already member of the project',
 							});
@@ -49,26 +47,38 @@ const addMembers = async (req: Request, res: Response) => {
 				}
 			}
 			if (isInvited) {
-				console.log('💛addMembers- result: ');
-				console.log(foundProject); // test
+				console.log('💛addMembers-result:', {
+					...foundProject,
+					members: foundProject.members.map(el => {
+						return {
+							id: el.id,
+							name: el.name,
+						};
+					}),
+				}); // test
 				res.status(200).json({
 					...foundProject,
-					members: foundProject.members.map(el => el.id),
+					members: foundProject.members.map(el => {
+						return {
+							id: el.id,
+							name: el.name,
+						};
+					}),
 				});
 			} else {
-				console.log('💛addMembers- err: invalid invitation memeber ' + email);
+				console.log('💛addMembers-err: invalid invitation memeber' + email);
 				res.status(400).json({
 					message: 'invalid invitation memeber ' + email,
 				});
 			}
 		} else {
-			console.log('💛addMembers- err: no data about project ' + projectURL);
+			console.log('💛addMembers-err: no data about project' + projectURL);
 			res.status(400).json({
 				message: 'no data about project ' + projectURL,
 			});
 		}
 	} catch (err) {
-		console.log('💛addMembers- err: ', err.message);
+		console.log('💛addMembers-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});

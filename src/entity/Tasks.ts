@@ -45,7 +45,7 @@ export class Tasks extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@ManyToOne(type => Task_boxes, taskBoxes => taskBoxes.tasksList)
+	@ManyToOne(type => Task_boxes, taskBoxes => taskBoxes.tasksList, { onDelete: 'CASCADE' })
 	groupingBox!: Task_boxes;
 
 	@OneToMany(type => Checklists, checklists => checklists.nowTask)

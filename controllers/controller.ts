@@ -3,6 +3,7 @@ import sendEmail from './login/sendEmail';
 import loginEmail from './login/loginEmail';
 import loginGoogle from './login/loginGoogle';
 import loginGithub from './login/loginGithub';
+import getNewAccessToken from './login/getNewAccessToken';
 // 2, profile(프로필)
 import getProfile from './profile/getProfile';
 import postProfile from './profile/postProfile';
@@ -23,11 +24,19 @@ import editProject from './project/editProject';
 import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
 import addMembers from './project/addMembers';
-// 5. task(칸반보드, 캘린더)
-// 6. chat(채팅)
-// 7. stack(스택)
+// 5-1. task(칸반보드, 캘린더)
+import { showKanbanParts } from './workspace/showKanbanParts';
+import createKanbanPart from './workspace/createKanbanPart';
+import editKanbanPart from './workspace/editKanbanPart';
+import deleteKanbanPart from './workspace/deleteKanbanPart';
+// 5-2. chat(채팅)
+import { showChatRooms } from './workspace/showChatRooms';
+import createChatRoom from './workspace/createChatRoom';
+import editChatRoom from './workspace/editChatRoom';
+import deleteChatRoom from './workspace/deleteChatRoom';
+// 6. stack(스택)
 import getStacks from './stacks/getStacks';
-// 8. image(이미지)
+// 7. image(이미지)
 import postImage from './image/image';
 
 export {
@@ -36,6 +45,7 @@ export {
 	loginEmail,
 	loginGoogle,
 	loginGithub,
+	getNewAccessToken,
 	// profile
 	getProfile,
 	postProfile,
@@ -57,7 +67,15 @@ export {
 	inviteMembers,
 	addMembers,
 	// task
+	showKanbanParts,
+	createKanbanPart,
+	editKanbanPart,
+	deleteKanbanPart,
 	// chat
+	showChatRooms,
+	createChatRoom,
+	editChatRoom,
+	deleteChatRoom,
 	//stack
 	getStacks,
 	// image

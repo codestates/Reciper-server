@@ -9,4 +9,7 @@ loginRouter.post('/loginEmail', controller.loginEmail.authorizationCode);
 loginRouter.post('/loginGoogle', controller.loginGoogle);
 loginRouter.post('/loginGithub', controller.loginGithub);
 
+// 새로운 access token 발급하기
+loginRouter.get('/newAccessToken', controller.getNewAccessToken);
+
 export default loginRouter;

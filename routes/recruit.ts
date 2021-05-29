@@ -3,12 +3,9 @@ import express from 'express';
 import authChecker from '../middlewares/authChecker';
 const recruitRouter = express.Router();
 
-recruitRouter.use('/recruitBoard', (req, res, next) => {
-	authChecker(req, res, next);
-});
-recruitRouter.use('/recruitBoardComment', (req, res, next) => {
-	authChecker(req, res, next);
-});
+// middleware
+recruitRouter.use('/recruitBoard', authChecker);
+recruitRouter.use('/recruitBoardComment', authChecker);
 
 // 팀원모집 게시글 등록
 recruitRouter.post('/recruitBoard', controller.registerRecruitBoard);

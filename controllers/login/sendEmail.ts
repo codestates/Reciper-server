@@ -31,7 +31,7 @@ const EmailValidationCheck = (email: string) => {
 };
 
 const sendEmail = async (req: Request, res: Response) => {
-	console.log('💙send: email- ', req.body);
+	console.log('💙sendEmail-', req.body);
 	const { email } = req.body;
 	if (EmailValidationCheck(email)) {
 		const username = email.split('@')[0];
@@ -46,7 +46,7 @@ const sendEmail = async (req: Request, res: Response) => {
 			},
 		});
 		const AuthorizationCode = await authorizationCodeGenerator();
-		console.log(AuthorizationCode);
+		console.log('💙sendEmail-code:', AuthorizationCode);
 		// send mail with defined transport object
 		const logoNameImage =
 			'https://user-images.githubusercontent.com/77570843/118992471-a3a00f00-b9bf-11eb-86b3-bdb1f0fa5a36.png';
@@ -59,25 +59,25 @@ const sendEmail = async (req: Request, res: Response) => {
 			to: email,
 			subject: 'Login to Reciper',
 			html: `
-			<style>
-.btn-grad {
-  background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5  51%, #00d2ff  100%);
-  margin: 10px;
-  padding: 15px 45px;
-  text-align: center;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;            
-  box-shadow: 0 0 20px #eee;
-  border-radius: 10px;
-  display: block;
-}
-.btn-grad:hover {
-  background-position: right center;
-  color: #fff;
-  text-decoration: none;
-}
+<style>
+  .btn-grad {
+    background-image: linear-gradient(to right, #00d2ff 0%, #3a7bd5  51%, #00d2ff  100%);
+    margin: 10px;
+    padding: 15px 45px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+  }
+  .btn-grad:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+  }
 </style>
 <div bgcolor="#fafafa" marginheight="0" marginwidth="0" style="width:100%!important;min-width:100%;background-color:#fafafa;color:#333333;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;text-align:center;line-height:20px;font-size:14px;margin:0;padding:0">
   <table style="border-spacing:0;border-collapse:collapse;vertical-align:top;text-align:center;height:100%;width:100%;background-color:#fafafa;color:#333333;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:normal;line-height:20px;font-size:14px;margin:0;padding:0" bgcolor="#fafafa">
@@ -166,7 +166,7 @@ const sendEmail = async (req: Request, res: Response) => {
 </div>`,
 		});
 
-		console.log('💙send: email- mail sent: %s', info.messageId);
+		console.log('💙sendEmail-mail sent: %s', info.messageId);
 
 		res.status(200).json({
 			status: 'Success',
@@ -174,6 +174,7 @@ const sendEmail = async (req: Request, res: Response) => {
 			message: 'Sent Auth Email',
 		});
 	} else {
+		console.log('💙sendEmail-err: invalid email domain');
 		res.status(400).json({
 			message: 'invalid email domain',
 		});

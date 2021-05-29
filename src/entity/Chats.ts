@@ -20,15 +20,21 @@ export class Chats extends BaseEntity {
 	@Column()
 	text!: string;
 
+	@Column()
+	uploadImage!: string;
+
 	@CreateDateColumn({ name: 'createdAt' })
 	createdAt!: Date;
 
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
+	@Column()
+	room!: string;
+
 	@ManyToOne(type => Users, writer => writer.chat)
 	writer!: Users;
 
-	@ManyToOne(type => Projects, doingProject => doingProject.chats)
+	@ManyToOne(type => Projects, project => project.chats)
 	project!: Projects;
 }

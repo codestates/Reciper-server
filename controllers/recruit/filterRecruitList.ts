@@ -4,8 +4,7 @@ import { Recruits } from '../../src/entity/Recruits';
 
 const filterRecruitList = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 리스트 검색
-	console.log('💜filterRecruitList- ');
-	console.log(req.body, req.params);
+	console.log('💜filterRecruitList-', req.body, req.params);
 	const searchStacksList = req.body.searchStacksList;
 	const order = Number(req.params.order);
 	const sort = req.params.sort === '오래된순' ? 1 : -1;
@@ -34,12 +33,8 @@ const filterRecruitList = async (req: Request, res: Response) => {
 		}
 		const countTotal = filterResult.length;
 		console.log(
-			filterResult.slice((order - 1) * 24, order * 24).map(el => {
-				return {
-					id: el.id,
-					requireStack: el.requireStack,
-				};
-			}),
+			'💜filterRecruitList-result:',
+			filterResult.slice((order - 1) * 24, order * 24).map(el => el.id),
 			countTotal <= order * 24 ? true : false,
 		); // test
 		res.status(200).json({
@@ -47,7 +42,7 @@ const filterRecruitList = async (req: Request, res: Response) => {
 			isEnd: countTotal <= order * 24 ? true : false,
 		});
 	} catch (err) {
-		console.log('💜filterRecruitList- err: ', err.message);
+		console.log('💜filterRecruitList-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});

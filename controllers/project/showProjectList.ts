@@ -5,13 +5,11 @@ import { Projects } from '../../src/entity/Projects';
 
 const showProjectList = async (req: Request, res: Response) => {
 	// 프로젝트 리스트 조회
-	console.log('💛showProjectList- ');
-	console.log(req.body, req.params);
+	console.log('💛showProjectList-');
 	const userId = req.userId;
 	// 유저 정보로 프로젝트 리스트 찾기
 	try {
 		const userInfo = await Users.findOne({
-			select: ['id', 'name', 'email', 'uploadImage', 'profileColor'],
 			where: {
 				id: userId,
 			},
@@ -31,20 +29,27 @@ const showProjectList = async (req: Request, res: Response) => {
 					projectList.push(obj);
 				}
 			}
-			console.log('💛showProjectList- result: ');
-			console.log(userInfo, projectList); //test
+			console.log(
+				'💛showProjectList-result:',
+				{
+					id: userInfo.id,
+					name: userInfo.name,
+				},
+				projectList.map(el => {
+					return { id: el.id, name: el.name };
+				}),
+			); //test
 			res.status(200).json({
-				...userInfo,
 				projectList,
 			});
 		} else {
-			console.log('💛showProjectList- err: user is not found');
+			console.log('💛showProjectList-err: user is not found');
 			res.status(400).json({
 				message: 'user is not found',
 			});
 		}
 	} catch (err) {
-		console.log('💛showProjectList- err: ', err.message);
+		console.log('💛showProjectList-err:', err.message);
 		res.status(400).json({
 			message: err.message,
 		});
