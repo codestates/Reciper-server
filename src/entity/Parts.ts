@@ -19,7 +19,7 @@ export class Parts extends BaseEntity {
 	id!: number;
 
 	@Column()
-	title!: string;
+	name!: string;
 
 	@Column()
 	index!: number;

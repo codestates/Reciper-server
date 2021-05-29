@@ -9,10 +9,10 @@ const showKanbanParts = async (req: Request, res: Response) => {
 	console.log('💚showKanbanParts-', req.params);
 	const { projectURL } = req.params;
 	getPartsList(projectURL)
-		.then(partsList => {
-			console.log('💚showKanbanParts-result:', partsList); // test
+		.then(roomsList => {
+			console.log('💚showKanbanParts-result:', roomsList); // test
 			res.status(200).json({
-				partsList,
+				roomsList,
 			});
 		})
 		.catch(err => {
@@ -33,18 +33,18 @@ const getPartsList = async (projectURL: string) => {
 	});
 	console.log(foundProject);
 	const allPartRooms = await getRepository(Parts).find({
-		relations: ['project'],
+		relations: ['doingProject'],
 		order: {
 			createdAt: 'ASC', // 파트 생성 순서
 		},
 	});
-	let partsList = [];
+	let roomsList = [];
 	for (let idx = 0; idx < allPartRooms.length; idx++) {
 		if (allPartRooms[idx].doingProject.projectURL === projectURL) {
-			partsList.push(allPartRooms[idx].title);
+			roomsList.push(allPartRooms[idx].name);
 		}
 	}
-	return partsList;
+	return roomsList;
 };
 
 export { showKanbanParts, getPartsList };

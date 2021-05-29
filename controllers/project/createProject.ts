@@ -3,6 +3,7 @@ import { Users } from '../../src/entity/Users';
 import { Projects } from '../../src/entity/Projects';
 import { Rooms } from '../../src/entity/Rooms';
 import randomColorGenerator from '../login/randomColorGenerator';
+import { Parts } from '../../src/entity/Parts';
 
 const createProject = async (req: Request, res: Response) => {
 	// 프로젝트 생성
@@ -31,6 +32,11 @@ const createProject = async (req: Request, res: Response) => {
 				project: created,
 			});
 			await generalRoom.save();
+			let generalPart = await Parts.create({
+				name: 'General',
+				doingProject: created,
+			});
+			await generalPart.save();
 			console.log('💛createProject-result:', {
 				...created,
 				members: created.members.map(el => el.id),
