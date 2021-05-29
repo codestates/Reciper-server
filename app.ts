@@ -17,7 +17,7 @@ createConnection();
 
 const corsOption = {
 	Headers: { 'content-type': 'application/json' },
-	origin: '*',
+	origin: true,
 	method: ['post', 'get', 'delete', 'options'],
 	credentials: true,
 };

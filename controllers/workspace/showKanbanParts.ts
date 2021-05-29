@@ -6,7 +6,7 @@ import { getRepository } from 'typeorm';
 
 const showKanbanParts = async (req: Request, res: Response) => {
 	// part 목록 조회
-	console.log('💚showKanbanParts-', req.body, req.params);
+	console.log('💚showKanbanParts-', req.params);
 	const { projectURL } = req.params;
 	getPartsList(projectURL)
 		.then(partsList => {
@@ -25,7 +25,7 @@ const showKanbanParts = async (req: Request, res: Response) => {
 
 const getPartsList = async (projectURL: string) => {
 	// part 목록을 배열 형태로 만들기
-	console.log('💚getPartList-', projectURL);
+	console.log('💚💚getPartList-', projectURL);
 	const foundProject = await Projects.find({
 		where: {
 			projectURL,

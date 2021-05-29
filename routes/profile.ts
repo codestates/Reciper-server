@@ -4,9 +4,7 @@ import authChecker from '../middlewares/authChecker';
 const profileRouter = express.Router();
 
 // middleware
-profileRouter.use('/profile', (req, res, next) => {
-	authChecker(req, res, next);
-});
+profileRouter.use('/profile', authChecker);
 
 // 프로필 정보 조회
 profileRouter.get('/profile', controller.getProfile);

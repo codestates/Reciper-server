@@ -7,8 +7,7 @@ import * as fs from 'fs';
 
 const editRecruitBoard = async (req: Request, res: Response) => {
 	// 팀원모집 게시글 수정
-	console.log('💜editRecruitBoard-');
-	console.log(req.body, req.params);
+	console.log('💜editRecruitBoard-', req.body, req.params);
 	const boardId = Number(req.params.board_id);
 	try {
 		const {
@@ -68,7 +67,12 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 					recruitBoard: foundBoard,
 				},
 			});
-			console.log('💜editRecruitBoard-result:', foundBoard); // test
+			console.log('💜editRecruitBoard-result:', {
+				...foundBoard,
+				recruitMembers: JSON.parse(foundBoard.recruitMembers),
+				requireStack: stackArray.map(el => el.name),
+				commentList: commentsList.map(el => el.body),
+			}); // test
 			res.status(200).json({
 				...foundBoard,
 				recruitMembers: JSON.parse(foundBoard.recruitMembers),

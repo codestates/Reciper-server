@@ -5,7 +5,7 @@ import { Rooms } from '../../src/entity/Rooms';
 
 const showChatRooms = async (req: Request, res: Response) => {
 	// 채팅방 목록 조회
-	console.log('💚showChatRooms-', req.body, req.params);
+	console.log('💚showChatRooms-', req.params);
 	const { projectURL } = req.params;
 	getRoomsList(projectURL)
 		.then(roomsList => {
@@ -24,7 +24,7 @@ const showChatRooms = async (req: Request, res: Response) => {
 
 const getRoomsList = async (projectURL: string) => {
 	// 채팅방 목록을 배열 형태로 만들기
-	console.log('💚getRoomsList-', projectURL);
+	console.log('💚💚getRoomsList-', projectURL);
 	const foundProject = await Projects.find({
 		where: {
 			projectURL,

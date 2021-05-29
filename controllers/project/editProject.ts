@@ -4,8 +4,7 @@ import randomColorGenerator from '../login/randomColorGenerator';
 
 const editProject = async (req: Request, res: Response) => {
 	// 프로젝트 수정
-	console.log('💛editProject-');
-	console.log(req.body, req.params);
+	console.log('💛editProject-', req.body, req.params);
 	const { name, projectURL } = req.body;
 	const nowProjectURL = req.params.projectURL;
 	try {
@@ -21,7 +20,10 @@ const editProject = async (req: Request, res: Response) => {
 			foundProject.projectURL = projectURL;
 			foundProject.projectColor = randomColorGenerator();
 			await foundProject.save();
-			console.log('💛editProject-result:', foundProject); // test
+			console.log('💛editProject-result:', {
+				...foundProject,
+				members: foundProject.members.map(el => el.id),
+			}); // test
 			res.status(200).json({
 				...foundProject,
 				members: foundProject.members.map(el => el.id),

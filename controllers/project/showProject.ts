@@ -3,8 +3,7 @@ import { Projects } from '../../src/entity/Projects';
 
 const showProject = async (req: Request, res: Response) => {
 	// 프로젝트 조회
-	console.log('💛showProject-');
-	console.log(req.body, req.params);
+	console.log('💛showProject-', req.params);
 	const projectURL = req.params.projectURL;
 	try {
 		const foundProject = await Projects.findOne({

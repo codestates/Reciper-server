@@ -6,8 +6,7 @@ import randomColorGenerator from '../login/randomColorGenerator';
 
 const createProject = async (req: Request, res: Response) => {
 	// 프로젝트 생성
-	console.log('💛createProject-');
-	console.log(req.body, req.params);
+	console.log('💛createProject-', req.body);
 	const userId = req.userId;
 	const { name, projectURL } = req.body;
 	// 유저 정보 가져오기
@@ -32,7 +31,10 @@ const createProject = async (req: Request, res: Response) => {
 				project: created,
 			});
 			await generalRoom.save();
-			console.log('💛createProject-result:', created); // test
+			console.log('💛createProject-result:', {
+				...created,
+				members: created.members.map(el => el.id),
+			}); // test
 			res.status(200).json({
 				...created,
 				members: created.members.map(el => el.id),

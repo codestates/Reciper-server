@@ -6,8 +6,7 @@ import randomColorGenerator from '../login/randomColorGenerator';
 
 const postProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 저장/수정
-	console.log('🧡postProfile-');
-	console.log(req.body);
+	console.log('🧡postProfile-', req.body);
 	const userId = req.userId;
 	const { name, mobile, aboutMe, gitId, career, stacks, isOpen, uploadImage } = req.body;
 	const foundUser = await Users.findOne({

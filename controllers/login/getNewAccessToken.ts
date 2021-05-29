@@ -64,9 +64,9 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 				loginType,
 			});
 		} else {
-			console.log('💙getNewAccessToken-err: no new access token error');
+			console.log('💙getNewAccessToken-err: new access token error');
 			res.status(400).json({
-				message: 'no new access token error',
+				message: 'new access token error',
 			});
 		}
 	} else {

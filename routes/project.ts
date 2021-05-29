@@ -5,7 +5,6 @@ import projectChecker from '../middlewares/projectChecker';
 const projectRouter = express.Router();
 
 // middleware
-
 projectRouter.use('/project', authChecker);
 projectRouter.use('/project/:projectURL', projectChecker);
 projectRouter.use('/projectInvite/:projectURL', authChecker, projectChecker);

@@ -5,8 +5,7 @@ import { Recruit_comments } from './../../src/entity/Recruit_comments';
 
 const deleteComment = async (req: Request, res: Response) => {
 	// 댓글 삭제
-	console.log('💜deleteComment-');
-	console.log(req.body, req.params);
+	console.log('💜deleteComment-', req.params);
 	const boardId = Number(req.params.board_id);
 	const commentId = Number(req.params.comment_id);
 	// 해당 게시글 찾기
@@ -69,7 +68,7 @@ const deleteComment = async (req: Request, res: Response) => {
 				id: boardInfo.id,
 				name: boardInfo.name,
 			},
-			commentsList.map(el => el.id),
+			commentsList.map(el => el.body),
 		); // test
 		if (boardInfo.recruitMembers) {
 			boardInfo.recruitMembers = JSON.parse(boardInfo.recruitMembers);
