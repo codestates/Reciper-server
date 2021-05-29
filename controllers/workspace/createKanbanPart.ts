@@ -32,7 +32,11 @@ const createKanbanPart = async (req: Request, res: Response) => {
 			});
 		} else {
 			// 새로운 part 생성
-			let countParts = await Parts.find({ where: { doingProject: foundProject } });
+			let countParts = await Parts.find({
+				where: {
+					doingProject: foundProject,
+				},
+			});
 			let index = countParts.length; // part의 최대길이만큼 다음index에 추가
 			let newPart = await Parts.create({
 				name,
