@@ -12,19 +12,19 @@ const socketChat = (socket: Socket) => {
 
 	// TODO: 💚/chat#joinRoom - 방 입장
 	socket.on('joinRoom', room => {
-		console.log('💚/chat#joinRoom-', room);
+		console.log('💚/chat#joinRoom-', { room });
 		socket.join(room);
 	});
 
 	// TODO: 💚/chat#leaveRoom - 방 퇴장
 	socket.on('leaveRoom', room => {
-		console.log('💚/chat#leaveRoom-', room);
+		console.log('💚/chat#leaveRoom-', { room });
 		socket.leave(room);
 	});
 
 	// TODO: 💚/chat#sendMessage - 채팅 메시지 보내기/저장
 	socket.on('sendMessage', async ({ room, name, message }) => {
-		console.log('💚/chat#sendMessage-', room, name, message);
+		console.log('💚/chat#sendMessage-', { room, name, message });
 		try {
 			const nowProject = await Projects.findOne({
 				where: {
@@ -52,7 +52,7 @@ const socketChat = (socket: Socket) => {
 
 	// TODO: 💚/chat#sendImage - 이미지 보내기/저장
 	socket.on('sendImage', async ({ room, name, uploadImage }) => {
-		console.log('💚/chat#sendImage-', room, name, uploadImage);
+		console.log('💚/chat#sendImage-', { room, name, uploadImage });
 		try {
 			const nowProject = await Projects.findOne({
 				where: {
@@ -78,9 +78,9 @@ const socketChat = (socket: Socket) => {
 		}
 	});
 
-	// 💚/chat#editMessage - 채팅 메시지 수정
+	// TODO: 💚/chat#editMessage - 채팅 메시지 수정
 	socket.on('editMessage', async ({ room, index, id, message }) => {
-		console.log('💚/chat#editMessage-', room, index, id, message);
+		console.log('💚/chat#editMessage-', { room, index, id, message });
 		try {
 			const foundChat = await Chats.findOne({
 				relations: ['writer', 'project'],
@@ -98,9 +98,9 @@ const socketChat = (socket: Socket) => {
 		}
 	});
 
-	// 💚/chat#deleteMessage - 채팅 메시지 삭제
+	// TODO: 💚/chat#deleteMessage - 채팅 메시지 삭제
 	socket.on('deleteMessage', async ({ room, index, id }) => {
-		console.log('💚/chat#deleteMessage-', room, index, id);
+		console.log('💚/chat#deleteMessage-', { room, index, id });
 		try {
 			const foundChat = await Chats.findOne({
 				where: {
