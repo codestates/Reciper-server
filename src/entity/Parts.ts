@@ -30,9 +30,9 @@ export class Parts extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Task_boxes, taskBoxes => taskBoxes.groupingPart)
+	@OneToMany(type => Task_boxes, taskBoxes => taskBoxes.groupingPart, { cascade: true })
 	taskBoxesList!: Task_boxes[];
 
-	@ManyToOne(type => Projects, doingProject => doingProject.partsList)
+	@ManyToOne(type => Projects, doingProject => doingProject.partsList, { onDelete: 'CASCADE' })
 	doingProject!: Projects;
 }
