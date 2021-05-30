@@ -25,11 +25,12 @@ try {
 	io.adapter(redisAdapter(pubClient, subClient));
 
 	// TODO: chat 기능 socket 통신
-	const chatIo = io.of('/chat'); // projectURL 추가하기
-	app.set('chatIo', chatIo);
+	const chatIo = io.of(/^\/chat\/\w{4,20}$/); // dynamic namespace(/chat/projectURL)
 	chatIo.use(workspaceChecker);
 	chatIo.on('connection', (socket: Socket) => {
 		console.log('💚/chat#connection\n', socket.handshake.query);
+		const projectChatIo = chatIo.nsp;
+		app.set('chatIo', projectChatIo);
 		socketChat(socket);
 	});
 
