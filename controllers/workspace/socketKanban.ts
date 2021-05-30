@@ -92,7 +92,7 @@ const socketKanban = async (socket: Socket) => {
 			created.save();
 		}
 		socket.join(part);
-		kanbanIo.to(socket.id).emit('getKanbanData', await structuringData(part, Number(projectId)));
+		socket.emit('getKanbanData', await structuringData(part, Number(projectId)));
 	});
 
 	// TODO: 💚/kanban#leavePart - part 퇴장
