@@ -25,7 +25,7 @@ try {
 	io.adapter(redisAdapter(pubClient, subClient));
 
 	// TODO: chat 기능 socket 통신
-	const chatIo = io.of('/chat');
+	const chatIo = io.of('/chat'); // projectURL 추가하기
 	app.set('chatIo', chatIo);
 	chatIo.use(workspaceChecker);
 	chatIo.on('connection', (socket: Socket) => {
