@@ -117,7 +117,7 @@ const socketChat = (socket: Socket) => {
 	});
 
 	// TODO: 💚/chat#getAllMessages - 모든 메시지 조회
-	socket.on('getAllMessages', async (room, order) => {
+	socket.on('getAllMessages', async ({ room, order }) => {
 		console.log('💚/chat#getAllMessages-', { room, order });
 		const nowProject = await Projects.findOne({
 			where: {
