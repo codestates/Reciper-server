@@ -135,7 +135,7 @@ const socketChat = (socket: Socket) => {
 			'💚/chat#getAllMessages-result:',
 			chats.map(el => el.text),
 		); // test
-		chatIo.to(room).emit('getAllMessages', chats);
+		socket.emit('getAllMessages', chats);
 	});
 };
 

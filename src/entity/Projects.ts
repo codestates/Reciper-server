@@ -39,7 +39,7 @@ export class Projects extends BaseEntity {
 	@UpdateDateColumn({ name: 'updatedAt' })
 	updatedAt!: Date;
 
-	@OneToMany(type => Parts, partsList => partsList.doingProject)
+	@OneToMany(type => Parts, partsList => partsList.doingProject, { cascade: true })
 	partsList!: Parts[];
 
 	@OneToMany(type => Chats, chats => chats.project)
