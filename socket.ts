@@ -34,12 +34,13 @@ try {
 		socketChat(socket);
 	});
 
-	// TODO: kanban기능 socket 통신
-	const kanbanIo = io.of('/kanban');
-	app.set('kanbanIo', kanbanIo);
+	// TODO: kanban 기능 socket 통신
+	const kanbanIo = io.of(/^\/kanban\/\w{4,20}$/); // dynamic namespace(/kanban/projectURL)
 	kanbanIo.use(workspaceChecker);
 	kanbanIo.on('connection', (socket: Socket) => {
 		console.log('💚/kanban#connection\n', socket.handshake.query);
+		const projectKanbanIo = kanbanIo.nsp;
+		app.set('kanbanIo', projectKanbanIo);
 		socketKanban(socket);
 	});
 } catch (err) {
