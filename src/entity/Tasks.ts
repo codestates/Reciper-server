@@ -36,7 +36,7 @@ export class Tasks extends BaseEntity {
 	@Column()
 	endDate!: string;
 
-	@Column()
+	@Column({ length: 5000 })
 	assignees!: string; // JSON.stringify
 
 	@CreateDateColumn({ name: 'createdAt' })
