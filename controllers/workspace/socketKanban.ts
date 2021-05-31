@@ -41,11 +41,14 @@ const structuringData = async (part: string, projectId: number) => {
 				taskColor: el.taskColor,
 				startDate: el.startDate,
 				endDate: el.endDate,
-				assignees: JSON.parse(el.assignees),
+				assignees: el.assignees,
 				checkList: el.checklistsList,
 				comment: el.commentsList,
 				dragging: false,
 			};
+			if (typeof el.assignees === 'string') {
+				taskItems[Object.keys(taskItems).length].assignees = JSON.parse(el.assignees);
+			}
 		});
 		taskBox.push(Object.assign({}, { taskBoxTitle: el.title, tasks, dragging: false }));
 	});
