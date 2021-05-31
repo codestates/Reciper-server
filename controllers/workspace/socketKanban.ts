@@ -101,18 +101,6 @@ const socketKanban = async (socket: Socket) => {
 		socket.leave(part);
 	});
 
-	// TODO: 💚/kanban#taskBoxBlock -
-	socket.on('taskBoxBlock', ({ targetListIndex, isDragging }) => {
-		console.log('💚/kanban#taskBoxBlock-');
-		socket.broadcast.emit('taskBoxBlock', { targetListIndex, isDragging });
-	});
-
-	// TODO: 💚/kanban#taskItemBlock -
-	socket.on('taskItemBlock', ({ targetListIndex, targetIndex, isDragging }) => {
-		console.log('💚/kanban#taskItemBlock-');
-		socket.broadcast.emit('taskItemBlock', { targetListIndex, targetIndex, isDragging });
-	});
-
 	// TODO: 💚/kanban#addTaskBox -
 	socket.on('addTaskBox', async ({ index, title, part }) => {
 		console.log('💚/kanban#addTaskBox-');
@@ -185,7 +173,7 @@ const socketKanban = async (socket: Socket) => {
 	});
 
 	// TODO: 💚/kanban#editTaskItem -
-	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part, isDragging }) => {
+	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part }) => {
 		console.log('💚/kanban#editTaskItem-', task, targetIndex, targetListIndex, part);
 		const foundPart = await Parts.findOne({
 			where: {
@@ -252,7 +240,7 @@ const socketKanban = async (socket: Socket) => {
 			});
 			await created.save();
 		}
-		socket.broadcast.emit('editTaskItem', { targetIndex, targetListIndex, task, isDragging });
+		socket.broadcast.to(part).emit('editTaskItem', { targetIndex, targetListIndex, task });
 	});
 
 	// TODO: 💚/kanban#deleteTaskBox -
@@ -322,11 +310,11 @@ const socketKanban = async (socket: Socket) => {
 				}
 			});
 		});
-		socket.broadcast.emit('deleteTaskItem', { targetIndex, targetListIndex });
+		socket.broadcast.to(part).emit('deleteTaskItem', { targetIndex, targetListIndex });
 	});
 
 	// TODO: 💚/kanban#boxMoving - task box 이동
-	socket.on('boxMoving', async ({ currentIndex, targetIndex, part, isDragging }) => {
+	socket.on('boxMoving', async ({ currentIndex, targetIndex, part }) => {
 		// 데이터베이스 저장하고, taskBox,taskItem을 추출해서, 데이터포맷 맞춰서 emit시킨다.
 		console.log('💚/kanban#boxMoving-');
 		const foundPart = await Parts.findOne({
@@ -370,107 +358,123 @@ const socketKanban = async (socket: Socket) => {
 			//왼쪽으로 드래깅했음
 		}
 		console.log(structuringData(part, Number(projectId)));
-		socket.broadcast.emit('boxMoving', { currentIndex, targetIndex, isDragging });
+		socket.broadcast.to(part).emit('boxMoving', { currentIndex, targetIndex });
+		// socket.broadcast.emit('boxDragEnd', { targetListIndex: targetIndex, isDragging: false });
 	});
 
 	// TODO: 💚/kanban#taskMoving - task 이동
-	socket.on(
-		'taskMoving',
-		async ({ currentIndex, targetIndex, currentListIndex, targetListIndex, part, isDragging }) => {
-			// 데이터베이스 저장하고, taskBox,taskItem을 추출해서, 데이터포맷 맞춰서 emit시킨다.
-			console.log('💚/kanban#taskMoving-');
-			console.log(`테스크아이템: ${currentIndex} => ${targetIndex} \n
+	socket.on('taskMoving', async ({ currentIndex, targetIndex, currentListIndex, targetListIndex, part }) => {
+		// 데이터베이스 저장하고, taskBox,taskItem을 추출해서, 데이터포맷 맞춰서 emit시킨다.
+		console.log('💚/kanban#taskMoving-');
+		console.log(`테스크아이템: ${currentIndex} => ${targetIndex} \n
 		테스크박스 : ${currentListIndex} => ${targetListIndex}`);
-			const foundPart = await Parts.findOne({
+		const foundPart = await Parts.findOne({
+			where: {
+				name: part,
+				doingProject: foundProject,
+			},
+		});
+		if (currentListIndex === targetListIndex) {
+			//taskMoving의 로직
+			const foundBox = await Task_boxes.find({
+				relations: ['tasksList'],
 				where: {
-					name: part,
-					doingProject: foundProject,
+					groupingPart: foundPart,
+					index: currentListIndex,
 				},
 			});
-			if (currentListIndex === targetListIndex) {
-				//taskMoving의 로직
-				const foundBox = await Task_boxes.find({
-					relations: ['tasksList'],
-					where: {
-						groupingPart: foundPart,
-						index: currentListIndex,
-					},
-				});
-				const boxOne = foundBox[0];
-				if (currentIndex < targetIndex) {
-					//하행
-					let temp: any;
-					boxOne.tasksList.map(el => {
-						if (el.index === currentIndex) {
-							el.index = -1;
-							temp = el;
-						} else if (el.index > currentIndex && el.index <= targetIndex) {
-							el.index--;
-							el.save();
-						}
-					});
-					temp!.index = targetIndex;
-					temp?.save();
-					console.log(temp!.index);
-				} else {
-					//상행
-					let temp: any;
-					boxOne.tasksList.map(el => {
-						console.log(el.index, currentIndex);
-						if (el.index === currentIndex) {
-							el.index = -1;
-							temp = el;
-						} else if (el.index < currentIndex && el.index >= targetIndex) {
-							el.index++;
-							el.save();
-						}
-					});
-					console.log(temp);
-					temp!.index = targetIndex;
-					temp?.save();
-					console.log(temp!.index);
-				}
-			} else {
-				//박스이동 + 테스크이동
-				const foundBoxes = await Task_boxes.find({
-					relations: ['tasksList'],
-					where: {
-						groupingPart: foundPart,
-					},
-					order: {
-						index: 'ASC',
-					},
-				});
-				//위에 boxMoving의 로직이 어느정도 들어간다.
-				let tempTask: any;
-				foundBoxes[currentListIndex].tasksList.map(el => {
+			const boxOne = foundBox[0];
+			if (currentIndex < targetIndex) {
+				//하행
+				let temp: any;
+				boxOne.tasksList.map(el => {
 					if (el.index === currentIndex) {
 						el.index = -1;
-						tempTask = el;
-					} else if (el.index > currentIndex) {
+						temp = el;
+					} else if (el.index > currentIndex && el.index <= targetIndex) {
 						el.index--;
 						el.save();
 					}
 				});
-				console.log(tempTask);
-				tempTask!.groupingBox = foundBoxes[targetListIndex];
-				foundBoxes[targetListIndex].tasksList.map(el => {
-					if (el.index >= targetIndex) {
+				temp!.index = targetIndex;
+				temp?.save();
+				console.log(temp!.index);
+			} else {
+				//상행
+				let temp: any;
+				boxOne.tasksList.map(el => {
+					console.log(el.index, currentIndex);
+					if (el.index === currentIndex) {
+						el.index = -1;
+						temp = el;
+					} else if (el.index < currentIndex && el.index >= targetIndex) {
 						el.index++;
 						el.save();
 					}
 				});
-				tempTask!.index = targetIndex;
-				tempTask?.save();
+				console.log(temp);
+				temp!.index = targetIndex;
+				temp?.save();
+				console.log(temp!.index);
 			}
-			socket.broadcast.emit('taskMoving', { targetListIndex, targetIndex, currentIndex, currentListIndex, isDragging });
-		},
-	);
-
-	// TODO: 💚/kanban#moving - 테스크 이동
-	socket.on('moving', taskList => {
-		kanbanIo.emit('moving', taskList);
+		} else {
+			//박스이동 + 테스크이동
+			const foundBoxes = await Task_boxes.find({
+				relations: ['tasksList'],
+				where: {
+					groupingPart: foundPart,
+				},
+				order: {
+					index: 'ASC',
+				},
+			});
+			//위에 boxMoving의 로직이 어느정도 들어간다.
+			let tempTask: any;
+			foundBoxes[currentListIndex].tasksList.map(el => {
+				if (el.index === currentIndex) {
+					el.index = -1;
+					tempTask = el;
+				} else if (el.index > currentIndex) {
+					el.index--;
+					el.save();
+				}
+			});
+			console.log(tempTask);
+			tempTask!.groupingBox = foundBoxes[targetListIndex];
+			foundBoxes[targetListIndex].tasksList.map(el => {
+				if (el.index >= targetIndex) {
+					el.index++;
+					el.save();
+				}
+			});
+			tempTask!.index = targetIndex;
+			tempTask?.save();
+		}
+		socket.broadcast.to(part).emit('taskMoving', { targetListIndex, targetIndex, currentIndex, currentListIndex });
 	});
+
+	socket.on('boxDragBlock', ({ part, targetListIndex, isDragging }) => {
+		socket.broadcast.to(part).emit('boxDragBlock', { targetListIndex, isDragging });
+	});
+
+	// socket.on('boxDragEnd', ({ boxTitle, isDragging }) => {
+	// 	socket.broadcast.emit('boxDragEnd', { boxTitle, isDragging });
+	// });
+
+	socket.on('itemDragStart', ({ part, targetListIndex, isDragging }) => {
+		socket.broadcast.to(part).emit('itemDragStart', { targetListIndex, isDragging });
+	});
+
+	socket.on('itemDragEnd', ({ part, currentListIndex, targetListIndex, targetIndex, isDragging }) => {
+		socket.broadcast.to(part).emit('itemDragEnd', { currentListIndex, targetListIndex, targetIndex, isDragging });
+	});
+
+	socket.on('itemEditBlock', ({ part, targetListIndex, isDragging }) => {
+		socket.broadcast.to(part).emit('itemEditBlock', { targetListIndex, isDragging });
+	});
+	// socket.on('itemEditBlock', ({ targetListIndex, isDragging }) => {
+	// 	socket.broadcast.emit('itemEditEnd', { targetListIndex, isDragging });
+	// });
 };
 
 export default socketKanban;
