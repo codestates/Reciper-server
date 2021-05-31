@@ -42,6 +42,7 @@ try {
 		const projectKanbanIo = kanbanIo.nsp;
 		app.set('kanbanIo', projectKanbanIo);
 		socketKanban(socket);
+		socket.emit('connection');
 	});
 } catch (err) {
 	console.log('💌 redis pub/sub-err:', err.message);
