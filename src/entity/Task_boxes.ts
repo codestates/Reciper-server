@@ -33,6 +33,6 @@ export class Task_boxes extends BaseEntity {
 	@OneToMany(type => Tasks, tasks => tasks.groupingBox, { cascade: true })
 	tasksList!: Tasks[];
 
-	@ManyToOne(type => Parts, parts => parts.taskBoxesList)
+	@ManyToOne(type => Parts, parts => parts.taskBoxesList, { onDelete: 'CASCADE' })
 	groupingPart!: Parts;
 }

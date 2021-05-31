@@ -48,9 +48,9 @@ export class Tasks extends BaseEntity {
 	@ManyToOne(type => Task_boxes, taskBoxes => taskBoxes.tasksList, { onDelete: 'CASCADE' })
 	groupingBox!: Task_boxes;
 
-	@OneToMany(type => Checklists, checklists => checklists.nowTask)
+	@OneToMany(type => Checklists, checklists => checklists.nowTask, { cascade: true })
 	checklistsList!: Checklists[];
 
-	@OneToMany(type => Task_comments, commentsList => commentsList.nowTask)
+	@OneToMany(type => Task_comments, commentsList => commentsList.nowTask, { cascade: true })
 	commentsList!: Task_comments[];
 }
