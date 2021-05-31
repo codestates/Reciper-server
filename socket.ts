@@ -25,21 +25,24 @@ try {
 	io.adapter(redisAdapter(pubClient, subClient));
 
 	// TODO: chat 기능 socket 통신
-	const chatIo = io.of('/chat');
-	app.set('chatIo', chatIo);
+	const chatIo = io.of(/^\/chat\/\w{4,20}$/); // dynamic namespace(/chat/projectURL)
 	chatIo.use(workspaceChecker);
 	chatIo.on('connection', (socket: Socket) => {
 		console.log('💚/chat#connection\n', socket.handshake.query);
+		const projectChatIo = chatIo.nsp;
+		app.set('chatIo', projectChatIo);
 		socketChat(socket);
 	});
 
-	// TODO: kanban기능 socket 통신
-	const kanbanIo = io.of('/kanban');
-	app.set('kanbanIo', kanbanIo);
+	// TODO: kanban 기능 socket 통신
+	const kanbanIo = io.of(/^\/kanban\/\w{4,20}$/); // dynamic namespace(/kanban/projectURL)
 	kanbanIo.use(workspaceChecker);
 	kanbanIo.on('connection', (socket: Socket) => {
 		console.log('💚/kanban#connection\n', socket.handshake.query);
+		const projectKanbanIo = kanbanIo.nsp;
+		app.set('kanbanIo', projectKanbanIo);
 		socketKanban(socket);
+		socket.emit('connection');
 	});
 } catch (err) {
 	console.log('💌 redis pub/sub-err:', err.message);

@@ -117,8 +117,8 @@ const socketChat = (socket: Socket) => {
 	});
 
 	// TODO: 💚/chat#getAllMessages - 모든 메시지 조회
-	socket.on('getAllMessages', async room => {
-		console.log('💚/chat#getAllMessages-', room);
+	socket.on('getAllMessages', async ({ room, order }) => {
+		console.log('💚/chat#getAllMessages-', { room, order });
 		const nowProject = await Projects.findOne({
 			where: {
 				id: Number(projectId),
@@ -131,11 +131,21 @@ const socketChat = (socket: Socket) => {
 				room,
 			},
 		});
+		const COUNT_SCROLL = 30;
+		let isEnd = false;
+		let total = chats.length;
+		let start_chat = total - (order + 1) * COUNT_SCROLL;
+		if (start_chat < 0) { // 마지막 chat인지 확인
+			start_chat = 0;
+			isEnd = true;
+		}
+		let end_chat = total - order * COUNT_SCROLL;
+		let sliceChats = chats.slice(start_chat, end_chat);
 		console.log(
 			'💚/chat#getAllMessages-result:',
-			chats.map(el => el.text),
+			sliceChats.map(el => el.text),
 		); // test
-		chatIo.to(room).emit('getAllMessages', chats);
+		socket.emit('getAllMessages', { chats: sliceChats, isEnd });
 	});
 };
 
