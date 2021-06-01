@@ -65,7 +65,7 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 					res.status(200).json({
 						accessToken,
 						loginType,
-						email: result.userEmail
+						email: result.userEmail,
 					});
 				})
 				.catch(err => {
@@ -73,7 +73,7 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 					res.status(400).json({
 						message: err.message,
 					});
-				})
+				});
 		} else {
 			console.log('💙getNewAccessToken-err: new access token error');
 			res.status(400).json({
