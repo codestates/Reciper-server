@@ -60,7 +60,7 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 		console.log('💙getNewAccessToken-result:', loginType, newAccessToken);
 		if (newAccessToken !== '') {
 			res.status(200).json({
-				newAccessToken,
+				accessToken,
 				loginType,
 			});
 		} else {
