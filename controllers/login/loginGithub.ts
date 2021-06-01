@@ -58,6 +58,8 @@ const loginGithub = async (req: Request, res: Response) => {
 			res.cookie('refreshToken', accessToken, {
 				maxAge: 1000 * 60 * 60 * 24 * 7,
 				httpOnly: true,
+				secure: true,
+				sameSite: 'none',
 			});
 			// access token과 loginType을 응답으로 보내줌
 			console.log('💙loginGithub-at:', accessToken);
