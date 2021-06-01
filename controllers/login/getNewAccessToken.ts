@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import getUserInfo from '../../middlewares/getUserInfo';
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { accessTokenGenerator } from '../../jwt/GenerateAccessToken';
 import axios from 'axios';
@@ -59,10 +60,20 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 		}
 		console.log('💙getNewAccessToken-result:', loginType, newAccessToken);
 		if (newAccessToken !== '') {
-			res.status(200).json({
-				accessToken,
-				loginType,
-			});
+			await getUserInfo(newAccessToken, loginType)
+				.then(result => {
+					res.status(200).json({
+						accessToken,
+						loginType,
+						email: result.userEmail
+					});
+				})
+				.catch(err => {
+					console.log('💙getNewAccessToken-err:', err.message);
+					res.status(400).json({
+						message: err.message,
+					});
+				})
 		} else {
 			console.log('💙getNewAccessToken-err: new access token error');
 			res.status(400).json({
