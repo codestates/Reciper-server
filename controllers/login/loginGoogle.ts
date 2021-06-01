@@ -53,6 +53,8 @@ const loginGoogle = async (req: Request, res: Response) => {
 			res.cookie('refreshToken', refreshToken, {
 				maxAge: 1000 * 60 * 60 * 24 * 7,
 				httpOnly: true,
+				secure: true,
+				sameSite: 'none',
 			});
 			// access token과 loginType, email을 응답으로 보내줌
 			console.log('💙loginGoogle-at:', accessToken, '\n💙loginGoogle-rt:', refreshToken);
