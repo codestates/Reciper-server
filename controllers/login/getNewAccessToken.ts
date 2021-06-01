@@ -63,7 +63,7 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 			await getUserInfo(newAccessToken, loginType)
 				.then(result => {
 					res.status(200).json({
-						accessToken,
+						accessToken: newAccessToken,
 						loginType,
 						email: result.userEmail,
 					});
