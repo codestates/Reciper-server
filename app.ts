@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
 import loginRouter from './routes/login';
@@ -22,7 +23,10 @@ const corsOption = {
 	credentials: true,
 };
 app.use(cors(corsOption));
-
+app.use(cookieParser());
+app.use(express.urlencoded({
+	extended: true
+}));
 app.use(express.json());
 
 // routes
