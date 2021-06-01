@@ -45,6 +45,7 @@ const socketChat = (socket: Socket) => {
 			});
 			await chat.save();
 			socket.broadcast.to(room).emit('sendMessage', { ...chat });
+			socket.to(socket.id).emit('nowMessageId', { id: chat.id });
 		} catch (err) {
 			console.log('💚/chat#sendMessage-err:', err.message);
 		}
@@ -135,7 +136,8 @@ const socketChat = (socket: Socket) => {
 		let isEnd = false;
 		let total = chats.length;
 		let start_chat = total - (order + 1) * COUNT_SCROLL;
-		if (start_chat < 0) { // 마지막 chat인지 확인
+		if (start_chat < 0) {
+			// 마지막 chat인지 확인
 			start_chat = 0;
 			isEnd = true;
 		}
