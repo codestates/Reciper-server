@@ -91,7 +91,7 @@ const socketChat = (socket: Socket) => {
 			if (foundChat) {
 				foundChat.text = message;
 				await foundChat.save();
-				socket.broadcast.to(room).emit('editMessage', { ...foundChat, index });
+				socket.broadcast.to(room).emit('editMessage', { chat: foundChat, index });
 			}
 		} catch (err) {
 			console.log('💚/chat#editMessage-err:', err.message);
