@@ -13,7 +13,15 @@ const showProject = async (req: Request, res: Response) => {
 			},
 		});
 		if (foundProject) {
-			console.log('💛showProject-result: ', foundProject); // test
+			console.log('💛showProject-result: ', {
+				...foundProject,
+				members: foundProject.members.map(el => {
+					return {
+						id: el.id,
+						name: el.name,
+					};
+				}),
+			}); // test
 			res.status(200).json({
 				...foundProject,
 			});
