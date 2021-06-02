@@ -19,6 +19,7 @@ const structuringData = async (part: string, projectId: number) => {
 		.leftJoinAndSelect('taskBoxesList.tasksList', 'tasksList')
 		.leftJoinAndSelect('tasksList.checklistsList', 'checklistsList')
 		.leftJoinAndSelect('tasksList.commentsList', 'commentsList')
+		.leftJoinAndSelect('commentsList.writer', 'writer')
 		.orderBy('taskBoxesList.index', 'ASC')
 		.addOrderBy('tasksList.index', 'ASC')
 		.addOrderBy('checklistsList.createdAt', 'ASC')
@@ -240,7 +241,9 @@ const socketKanban = async (socket: Socket) => {
 				nowTask: found,
 			});
 			await created.save();
+			console.log(created);
 		}
+		console.log(task);
 		socket.broadcast.to(part).emit('editTaskItem', { targetIndex, targetListIndex, task });
 	});
 
