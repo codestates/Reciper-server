@@ -34,7 +34,7 @@ const structuringData = async (part: string, projectId: number) => {
 	partOne.taskBoxesList.map(el => {
 		let tasks: any[] = [];
 		el.tasksList.map(el => {
-			console.log('adfadfasdfasgasdgasfdf', el);
+			// console.log('adfadfasdfasgasdgasfdf', el);
 			tasks.push(Object.keys(taskItems).length);
 			taskItems[Object.keys(taskItems).length] = {
 				taskTitle: el.title,
@@ -67,31 +67,6 @@ const socketKanban = async (socket: Socket) => {
 	// TODO: 💚/kanban#joinPart - part 입장
 	socket.on('joinPart', async part => {
 		console.log('💚/kanban#joinPart-', part);
-		const foundPartOne = await Parts.findOne({
-			where: {
-				doingProject: foundProject,
-				name: part,
-			},
-		});
-		if (!foundPartOne) {
-			const foundPart = await Parts.find({
-				where: {
-					doingProject: foundProject,
-				},
-			});
-			let maxIndex = -1;
-			if (foundPart.length !== 0) {
-				maxIndex = foundPart.reduce((acc, cur) => {
-					return acc.index > cur.index ? acc : cur;
-				}).index;
-			}
-			const created = await Parts.create({
-				name: part,
-				doingProject: foundProject,
-				index: maxIndex + 1,
-			});
-			created.save();
-		}
 		socket.join(part);
 		socket.emit('getKanbanData', await structuringData(part, Number(projectId)));
 	});
