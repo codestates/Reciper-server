@@ -44,8 +44,8 @@ const socketChat = (socket: Socket) => {
 				room,
 			});
 			await chat.save();
-			socket.broadcast.to(room).emit('sendMessage', { ...chat });
-			socket.to(socket.id).emit('nowMessageId', { id: chat.id });
+			socket.to(room).emit('sendMessage', { ...chat });
+			socket.emit('nowMessageId', { id: chat.id });
 		} catch (err) {
 			console.log('💚/chat#sendMessage-err:', err.message);
 		}
