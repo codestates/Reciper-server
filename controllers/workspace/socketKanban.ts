@@ -208,7 +208,6 @@ const socketKanban = async (socket: Socket) => {
 				id: userId,
 			},
 		});
-
 		const foundChecklist = await Checklists.find({
 			where: {
 				nowTask: found,
@@ -283,11 +282,26 @@ const socketKanban = async (socket: Socket) => {
 	// TODO: 💚/kanban#deleteTaskItem - task 삭제
 	socket.on('deleteTaskItem', async ({ targetIndex, targetListIndex, part }) => {
 		console.log('💚/kanban#deleteTaskItem-');
-		const foundPart = await Parts.findOne({ where: { name: part, doingProject: foundProject } });
-		const foundBox = await Task_boxes.findOne({ where: { index: targetListIndex, groupingPart: foundPart } });
+		const foundPart = await Parts.findOne({
+			where: {
+				name: part,
+				doingProject: foundProject,
+			},
+		});
+		const foundBox = await Task_boxes.findOne({
+			where: {
+				index: targetListIndex,
+				groupingPart: foundPart,
+			},
+		});
 		// console.log(targetIndex, targetListIndex);
 		// console.log(foundBox);
-		const foundTask = await Tasks.findOne({ where: { index: targetIndex, groupingBox: foundBox } });
+		const foundTask = await Tasks.findOne({
+			where: {
+				index: targetIndex,
+				groupingBox: foundBox,
+			},
+		});
 		// console.log(foundTask);
 		await foundTask?.remove();
 		//앞당기는 로직
