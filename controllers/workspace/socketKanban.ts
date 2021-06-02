@@ -199,6 +199,7 @@ const socketKanban = async (socket: Socket) => {
 				(found.desc = task.desc),
 				(found.startDate = task.startDate),
 				(found.endDate = task.endDate),
+				(found.taskColor = task.taskColor),
 				(found.assignees = JSON.stringify(task.assignees)),
 				await found.save();
 		}
