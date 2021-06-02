@@ -24,9 +24,9 @@ const structuringData = async (part: string, projectId: number) => {
 		.addOrderBy('tasksList.index', 'ASC')
 		.addOrderBy('checklistsList.createdAt', 'ASC')
 		.getMany();
-	console.log(projects);
+	// console.log(projects);
 	const partOne = projects[0].partsList[0];
-	console.log(partOne);
+	// console.log(partOne);
 	let taskBox: any[] = [];
 	let taskItems: {
 		[index: string]: any;
@@ -50,7 +50,7 @@ const structuringData = async (part: string, projectId: number) => {
 		});
 		taskBox.push(Object.assign({}, { taskBoxTitle: el.title, tasks, dragging: false }));
 	});
-	console.log(taskItems);
+	// console.log(taskItems);
 	return { taskBox, taskItems };
 };
 
@@ -117,7 +117,6 @@ const socketKanban = async (socket: Socket) => {
 			groupingPart: foundPart,
 		});
 		await created.save();
-		console.log(socket.id);
 		socket.broadcast.to(part).emit('addTaskBox', { taskBoxTitle: title, tasks: [] });
 	});
 
@@ -137,15 +136,15 @@ const socketKanban = async (socket: Socket) => {
 				groupingPart: foundPart,
 			},
 		});
-		console.log(foundBox?.tasksList);
+		// console.log(foundBox?.tasksList);
 		let maxIndex = -1;
 		if (foundBox?.tasksList.length !== 0) {
 			maxIndex = foundBox!.tasksList.reduce((acc, cur) => {
 				return cur.index > acc ? cur.index : acc;
 			}, 0);
 		}
-		console.log('max', maxIndex);
-		console.log('TLI', targetListIndex);
+		// console.log('max', maxIndex);
+		// console.log('TLI', targetListIndex);
 		const created = await Tasks.create({
 			index: maxIndex + 1,
 			title: taskTitle,
@@ -194,7 +193,7 @@ const socketKanban = async (socket: Socket) => {
 				index: targetIndex,
 			},
 		});
-		console.log('찾음', foundBox, found);
+		// console.log('찾음', foundBox, found);
 		if (found) {
 			(found.title = task.taskTitle),
 				(found.desc = task.desc),
@@ -241,9 +240,9 @@ const socketKanban = async (socket: Socket) => {
 				nowTask: found,
 			});
 			await created.save();
-			console.log(created);
+			// console.log(created);
 		}
-		console.log(task);
+		// console.log(task);
 		socket.broadcast.to(part).emit('editTaskItem', { targetIndex, targetListIndex, task });
 	});
 
@@ -286,10 +285,10 @@ const socketKanban = async (socket: Socket) => {
 		console.log('💚/kanban#deleteTaskItem-');
 		const foundPart = await Parts.findOne({ where: { name: part, doingProject: foundProject } });
 		const foundBox = await Task_boxes.findOne({ where: { index: targetListIndex, groupingPart: foundPart } });
-		console.log(targetIndex, targetListIndex);
-		console.log(foundBox);
+		// console.log(targetIndex, targetListIndex);
+		// console.log(foundBox);
 		const foundTask = await Tasks.findOne({ where: { index: targetIndex, groupingBox: foundBox } });
-		console.log(foundTask);
+		// console.log(foundTask);
 		await foundTask?.remove();
 		//앞당기는 로직
 		const foundBoxes = await Task_boxes.find({
@@ -335,7 +334,7 @@ const socketKanban = async (socket: Socket) => {
 				index: 'ASC',
 			},
 		});
-		console.log(foundPart, foundBoxes);
+		// console.log(foundPart, foundBoxes);
 		if (currentIndex < targetIndex) {
 			foundBoxes.map(el => {
 				if (el.index === currentIndex) {
@@ -361,7 +360,7 @@ const socketKanban = async (socket: Socket) => {
 			foundBoxes[currentIndex].index = targetIndex;
 			//왼쪽으로 드래깅했음
 		}
-		console.log(structuringData(part, Number(projectId)));
+		// console.log(structuringData(part, Number(projectId)));
 		socket.broadcast.to(part).emit('boxMoving', { currentIndex, targetIndex });
 		// socket.broadcast.emit('boxDragEnd', { targetListIndex: targetIndex, isDragging: false });
 	});
@@ -402,12 +401,12 @@ const socketKanban = async (socket: Socket) => {
 				});
 				temp!.index = targetIndex;
 				temp?.save();
-				console.log(temp!.index);
+				// console.log(temp!.index);
 			} else {
 				//상행
 				let temp: any;
 				boxOne.tasksList.map(el => {
-					console.log(el.index, currentIndex);
+					// console.log(el.index, currentIndex);
 					if (el.index === currentIndex) {
 						el.index = -1;
 						temp = el;
@@ -416,10 +415,10 @@ const socketKanban = async (socket: Socket) => {
 						el.save();
 					}
 				});
-				console.log(temp);
+				// console.log(temp);
 				temp!.index = targetIndex;
 				temp?.save();
-				console.log(temp!.index);
+				// console.log(temp!.index);
 			}
 		} else {
 			//박스이동 + 테스크이동
@@ -443,7 +442,7 @@ const socketKanban = async (socket: Socket) => {
 					el.save();
 				}
 			});
-			console.log(tempTask);
+			// console.log(tempTask);
 			tempTask!.groupingBox = foundBoxes[targetListIndex];
 			foundBoxes[targetListIndex].tasksList.map(el => {
 				if (el.index >= targetIndex) {
