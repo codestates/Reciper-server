@@ -102,7 +102,7 @@ const socketKanban = async (socket: Socket) => {
 		socket.leave(part);
 	});
 
-	// TODO: 💚/kanban#addTaskBox -
+	// TODO: 💚/kanban#addTaskBox - task box 추가
 	socket.on('addTaskBox', async ({ index, title, part }) => {
 		console.log('💚/kanban#addTaskBox-');
 		const foundPart = await Parts.findOne({
@@ -120,7 +120,7 @@ const socketKanban = async (socket: Socket) => {
 		socket.broadcast.to(part).emit('addTaskBox', { taskBoxTitle: title, tasks: [] });
 	});
 
-	// TODO: 💚/kanban#addTaskItem -
+	// TODO: 💚/kanban#addTaskItem - task 추가
 	socket.on('addTaskItem', async ({ targetListIndex, part, taskTitle, taskColor }) => {
 		console.log('💚/kanban#addTaskItem-');
 		const foundPart = await Parts.findOne({
@@ -172,7 +172,7 @@ const socketKanban = async (socket: Socket) => {
 		});
 	});
 
-	// TODO: 💚/kanban#editTaskItem -
+	// TODO: 💚/kanban#editTaskItem - task 수정
 	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part }) => {
 		console.log('💚/kanban#editTaskItem-', task, targetIndex, targetListIndex, part);
 		const foundPart = await Parts.findOne({
@@ -245,7 +245,7 @@ const socketKanban = async (socket: Socket) => {
 		socket.broadcast.to(part).emit('editTaskItem', { targetIndex, targetListIndex, task });
 	});
 
-	// TODO: 💚/kanban#deleteTaskBox -
+	// TODO: 💚/kanban#deleteTaskBox - task box 삭제
 	socket.on('deleteTaskBox', async ({ targetListIndex, part }) => {
 		console.log('💚/kanban#deleteTaskBox-');
 		const foundPart = await Parts.findOne({
@@ -470,28 +470,29 @@ const socketKanban = async (socket: Socket) => {
 		socket.broadcast.to(part).emit('taskMoving', { targetListIndex, targetIndex, currentIndex, currentListIndex });
 	});
 
+	// TODO: 💚/kanban#boxDragBlock - drag하고 있는 task box block 처리
 	socket.on('boxDragBlock', ({ part, targetListIndex, isDragging }) => {
+		console.log('💚/kanban#boxDragBlock-');
 		socket.broadcast.to(part).emit('boxDragBlock', { targetListIndex, isDragging });
 	});
 
-	// socket.on('boxDragEnd', ({ boxTitle, isDragging }) => {
-	// 	socket.broadcast.emit('boxDragEnd', { boxTitle, isDragging });
-	// });
-
+	// TODO: 💚/kanban#itemDragStart - item drag 시작 알림
 	socket.on('itemDragStart', ({ part, targetListIndex, isDragging }) => {
+		console.log('💚/kanban#itemDragStart-');
 		socket.broadcast.to(part).emit('itemDragStart', { targetListIndex, isDragging });
 	});
 
+	// TODO: 💚/kanban#itemDragEnd - item drag 종료 알림
 	socket.on('itemDragEnd', ({ part, currentListIndex, targetListIndex, targetIndex, isDragging }) => {
+		console.log('💚/kanban#itemDragEnd-');
 		socket.broadcast.to(part).emit('itemDragEnd', { currentListIndex, targetListIndex, targetIndex, isDragging });
 	});
 
+	// TODO: 💚/kanban#itemEditBlock - 수정하고 있는 item block 처리
 	socket.on('itemEditBlock', ({ part, targetListIndex, isDragging }) => {
+		console.log('💚/kanban#itemEditBlock-');
 		socket.broadcast.to(part).emit('itemEditBlock', { targetListIndex, isDragging });
 	});
-	// socket.on('itemEditBlock', ({ targetListIndex, isDragging }) => {
-	// 	socket.broadcast.emit('itemEditEnd', { targetListIndex, isDragging });
-	// });
 };
 
 export default socketKanban;
