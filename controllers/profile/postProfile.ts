@@ -46,7 +46,11 @@ const postProfile = async (req: Request, res: Response) => {
 						: console.log(`🧡postProfile-${__dirname}/../../uploads/${imageRoute}를 정상적으로 삭제했습니다`),
 				);
 			});
-			foundUser.uploadImage = uploadImage;
+			if (uploadImage === 'deleteImage') {
+				foundUser.uploadImage = '';
+			} else {
+				foundUser.uploadImage = uploadImage;
+			}
 		}
 		foundUser.profileColor = randomColorGenerator();
 		const stackArray = [];
