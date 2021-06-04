@@ -147,6 +147,35 @@ const socketKanban = async (socket: Socket) => {
 		});
 	});
 
+	// TODO: 💚/kanban#editTaskItem - task box 수정
+	socket.on('editTaskBox', async ({ targetListIndex, title, part }) => {
+		const foundPart = await Parts.findOne({
+			where: {
+				name: part,
+				doingProject: foundProject,
+			},
+		});
+
+		const foundTaskBox = await Task_boxes.findOne({
+			where: {
+				groupingPart: foundPart,
+				index: targetListIndex,
+			},
+		});
+
+		if (foundTaskBox) {
+			foundTaskBox.title = title;
+			await foundTaskBox.save();
+		} else {
+			console.log('taskBox not Found');
+		}
+
+		socket.to(part).emit('editTaskBox', {
+			targetListIndex,
+			title,
+		});
+	});
+
 	// TODO: 💚/kanban#editTaskItem - task 수정
 	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part }) => {
 		console.log('💚/kanban#editTaskItem-', task, targetIndex, targetListIndex, part);
