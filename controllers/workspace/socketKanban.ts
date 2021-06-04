@@ -19,13 +19,14 @@ const structuringData = async (part: string, projectId: number) => {
 		.leftJoinAndSelect('taskBoxesList.tasksList', 'tasksList')
 		.leftJoinAndSelect('tasksList.checklistsList', 'checklistsList')
 		.leftJoinAndSelect('tasksList.commentsList', 'commentsList')
+		.leftJoinAndSelect('commentsList.writer', 'writer')
 		.orderBy('taskBoxesList.index', 'ASC')
 		.addOrderBy('tasksList.index', 'ASC')
 		.addOrderBy('checklistsList.createdAt', 'ASC')
 		.getMany();
-	console.log(projects);
+	// console.log(projects);
 	const partOne = projects[0].partsList[0];
-	console.log(partOne);
+	// console.log(partOne);
 	let taskBox: any[] = [];
 	let taskItems: {
 		[index: string]: any;
@@ -33,7 +34,7 @@ const structuringData = async (part: string, projectId: number) => {
 	partOne.taskBoxesList.map(el => {
 		let tasks: any[] = [];
 		el.tasksList.map(el => {
-			console.log('adfadfasdfasgasdgasfdf', el);
+			// console.log('adfadfasdfasgasdgasfdf', el);
 			tasks.push(Object.keys(taskItems).length);
 			taskItems[Object.keys(taskItems).length] = {
 				taskTitle: el.title,
@@ -49,7 +50,7 @@ const structuringData = async (part: string, projectId: number) => {
 		});
 		taskBox.push(Object.assign({}, { taskBoxTitle: el.title, tasks, dragging: false }));
 	});
-	console.log(taskItems);
+	// console.log(taskItems);
 	return { taskBox, taskItems };
 };
 
@@ -66,31 +67,6 @@ const socketKanban = async (socket: Socket) => {
 	// TODO: 💚/kanban#joinPart - part 입장
 	socket.on('joinPart', async part => {
 		console.log('💚/kanban#joinPart-', part);
-		const foundPartOne = await Parts.findOne({
-			where: {
-				doingProject: foundProject,
-				name: part,
-			},
-		});
-		if (!foundPartOne) {
-			const foundPart = await Parts.find({
-				where: {
-					doingProject: foundProject,
-				},
-			});
-			let maxIndex = -1;
-			if (foundPart.length !== 0) {
-				maxIndex = foundPart.reduce((acc, cur) => {
-					return acc.index > cur.index ? acc : cur;
-				}).index;
-			}
-			const created = await Parts.create({
-				name: part,
-				doingProject: foundProject,
-				index: maxIndex + 1,
-			});
-			created.save();
-		}
 		socket.join(part);
 		socket.emit('getKanbanData', await structuringData(part, Number(projectId)));
 	});
@@ -101,7 +77,7 @@ const socketKanban = async (socket: Socket) => {
 		socket.leave(part);
 	});
 
-	// TODO: 💚/kanban#addTaskBox -
+	// TODO: 💚/kanban#addTaskBox - task box 추가
 	socket.on('addTaskBox', async ({ index, title, part }) => {
 		console.log('💚/kanban#addTaskBox-');
 		const foundPart = await Parts.findOne({
@@ -116,11 +92,10 @@ const socketKanban = async (socket: Socket) => {
 			groupingPart: foundPart,
 		});
 		await created.save();
-		console.log(socket.id);
 		socket.broadcast.to(part).emit('addTaskBox', { taskBoxTitle: title, tasks: [] });
 	});
 
-	// TODO: 💚/kanban#addTaskItem -
+	// TODO: 💚/kanban#addTaskItem - task 추가
 	socket.on('addTaskItem', async ({ targetListIndex, part, taskTitle, taskColor }) => {
 		console.log('💚/kanban#addTaskItem-');
 		const foundPart = await Parts.findOne({
@@ -136,15 +111,15 @@ const socketKanban = async (socket: Socket) => {
 				groupingPart: foundPart,
 			},
 		});
-		console.log(foundBox?.tasksList);
+		// console.log(foundBox?.tasksList);
 		let maxIndex = -1;
 		if (foundBox?.tasksList.length !== 0) {
 			maxIndex = foundBox!.tasksList.reduce((acc, cur) => {
 				return cur.index > acc ? cur.index : acc;
 			}, 0);
 		}
-		console.log('max', maxIndex);
-		console.log('TLI', targetListIndex);
+		// console.log('max', maxIndex);
+		// console.log('TLI', targetListIndex);
 		const created = await Tasks.create({
 			index: maxIndex + 1,
 			title: taskTitle,
@@ -172,7 +147,36 @@ const socketKanban = async (socket: Socket) => {
 		});
 	});
 
-	// TODO: 💚/kanban#editTaskItem -
+	// TODO: 💚/kanban#editTaskItem - task box 수정
+	socket.on('editTaskBox', async ({ targetListIndex, title, part }) => {
+		const foundPart = await Parts.findOne({
+			where: {
+				name: part,
+				doingProject: foundProject,
+			},
+		});
+
+		const foundTaskBox = await Task_boxes.findOne({
+			where: {
+				groupingPart: foundPart,
+				index: targetListIndex,
+			},
+		});
+
+		if (foundTaskBox) {
+			foundTaskBox.title = title;
+			await foundTaskBox.save();
+		} else {
+			console.log('taskBox not Found');
+		}
+
+		socket.to(part).emit('editTaskBox', {
+			targetListIndex,
+			title,
+		});
+	});
+
+	// TODO: 💚/kanban#editTaskItem - task 수정
 	socket.on('editTaskItem', async ({ task, targetListIndex, targetIndex, part }) => {
 		console.log('💚/kanban#editTaskItem-', task, targetIndex, targetListIndex, part);
 		const foundPart = await Parts.findOne({
@@ -193,12 +197,13 @@ const socketKanban = async (socket: Socket) => {
 				index: targetIndex,
 			},
 		});
-		console.log('찾음', foundBox, found);
+		// console.log('찾음', foundBox, found);
 		if (found) {
 			(found.title = task.taskTitle),
 				(found.desc = task.desc),
 				(found.startDate = task.startDate),
 				(found.endDate = task.endDate),
+				(found.taskColor = task.taskColor),
 				(found.assignees = JSON.stringify(task.assignees)),
 				await found.save();
 		}
@@ -207,7 +212,6 @@ const socketKanban = async (socket: Socket) => {
 				id: userId,
 			},
 		});
-
 		const foundChecklist = await Checklists.find({
 			where: {
 				nowTask: found,
@@ -239,11 +243,13 @@ const socketKanban = async (socket: Socket) => {
 				nowTask: found,
 			});
 			await created.save();
+			// console.log(created);
 		}
+		// console.log(task);
 		socket.broadcast.to(part).emit('editTaskItem', { targetIndex, targetListIndex, task });
 	});
 
-	// TODO: 💚/kanban#deleteTaskBox -
+	// TODO: 💚/kanban#deleteTaskBox - task box 삭제
 	socket.on('deleteTaskBox', async ({ targetListIndex, part }) => {
 		console.log('💚/kanban#deleteTaskBox-');
 		const foundPart = await Parts.findOne({
@@ -280,12 +286,27 @@ const socketKanban = async (socket: Socket) => {
 	// TODO: 💚/kanban#deleteTaskItem - task 삭제
 	socket.on('deleteTaskItem', async ({ targetIndex, targetListIndex, part }) => {
 		console.log('💚/kanban#deleteTaskItem-');
-		const foundPart = await Parts.findOne({ where: { name: part, doingProject: foundProject } });
-		const foundBox = await Task_boxes.findOne({ where: { index: targetListIndex, groupingPart: foundPart } });
-		console.log(targetIndex, targetListIndex);
-		console.log(foundBox);
-		const foundTask = await Tasks.findOne({ where: { index: targetIndex, groupingBox: foundBox } });
-		console.log(foundTask);
+		const foundPart = await Parts.findOne({
+			where: {
+				name: part,
+				doingProject: foundProject,
+			},
+		});
+		const foundBox = await Task_boxes.findOne({
+			where: {
+				index: targetListIndex,
+				groupingPart: foundPart,
+			},
+		});
+		// console.log(targetIndex, targetListIndex);
+		// console.log(foundBox);
+		const foundTask = await Tasks.findOne({
+			where: {
+				index: targetIndex,
+				groupingBox: foundBox,
+			},
+		});
+		// console.log(foundTask);
 		await foundTask?.remove();
 		//앞당기는 로직
 		const foundBoxes = await Task_boxes.find({
@@ -331,7 +352,7 @@ const socketKanban = async (socket: Socket) => {
 				index: 'ASC',
 			},
 		});
-		console.log(foundPart, foundBoxes);
+		// console.log(foundPart, foundBoxes);
 		if (currentIndex < targetIndex) {
 			foundBoxes.map(el => {
 				if (el.index === currentIndex) {
@@ -357,7 +378,7 @@ const socketKanban = async (socket: Socket) => {
 			foundBoxes[currentIndex].index = targetIndex;
 			//왼쪽으로 드래깅했음
 		}
-		console.log(structuringData(part, Number(projectId)));
+		// console.log(structuringData(part, Number(projectId)));
 		socket.broadcast.to(part).emit('boxMoving', { currentIndex, targetIndex });
 		// socket.broadcast.emit('boxDragEnd', { targetListIndex: targetIndex, isDragging: false });
 	});
@@ -398,12 +419,12 @@ const socketKanban = async (socket: Socket) => {
 				});
 				temp!.index = targetIndex;
 				temp?.save();
-				console.log(temp!.index);
+				// console.log(temp!.index);
 			} else {
 				//상행
 				let temp: any;
 				boxOne.tasksList.map(el => {
-					console.log(el.index, currentIndex);
+					// console.log(el.index, currentIndex);
 					if (el.index === currentIndex) {
 						el.index = -1;
 						temp = el;
@@ -412,10 +433,10 @@ const socketKanban = async (socket: Socket) => {
 						el.save();
 					}
 				});
-				console.log(temp);
+				// console.log(temp);
 				temp!.index = targetIndex;
 				temp?.save();
-				console.log(temp!.index);
+				// console.log(temp!.index);
 			}
 		} else {
 			//박스이동 + 테스크이동
@@ -439,7 +460,7 @@ const socketKanban = async (socket: Socket) => {
 					el.save();
 				}
 			});
-			console.log(tempTask);
+			// console.log(tempTask);
 			tempTask!.groupingBox = foundBoxes[targetListIndex];
 			foundBoxes[targetListIndex].tasksList.map(el => {
 				if (el.index >= targetIndex) {
@@ -453,28 +474,29 @@ const socketKanban = async (socket: Socket) => {
 		socket.broadcast.to(part).emit('taskMoving', { targetListIndex, targetIndex, currentIndex, currentListIndex });
 	});
 
+	// TODO: 💚/kanban#boxDragBlock - drag하고 있는 task box block 처리
 	socket.on('boxDragBlock', ({ part, targetListIndex, isDragging }) => {
+		console.log('💚/kanban#boxDragBlock-');
 		socket.broadcast.to(part).emit('boxDragBlock', { targetListIndex, isDragging });
 	});
 
-	// socket.on('boxDragEnd', ({ boxTitle, isDragging }) => {
-	// 	socket.broadcast.emit('boxDragEnd', { boxTitle, isDragging });
-	// });
-
+	// TODO: 💚/kanban#itemDragStart - item drag 시작 알림
 	socket.on('itemDragStart', ({ part, targetListIndex, isDragging }) => {
+		console.log('💚/kanban#itemDragStart-');
 		socket.broadcast.to(part).emit('itemDragStart', { targetListIndex, isDragging });
 	});
 
+	// TODO: 💚/kanban#itemDragEnd - item drag 종료 알림
 	socket.on('itemDragEnd', ({ part, currentListIndex, targetListIndex, targetIndex, isDragging }) => {
+		console.log('💚/kanban#itemDragEnd-');
 		socket.broadcast.to(part).emit('itemDragEnd', { currentListIndex, targetListIndex, targetIndex, isDragging });
 	});
 
+	// TODO: 💚/kanban#itemEditBlock - 수정하고 있는 item block 처리
 	socket.on('itemEditBlock', ({ part, targetListIndex, isDragging }) => {
+		console.log('💚/kanban#itemEditBlock-');
 		socket.broadcast.to(part).emit('itemEditBlock', { targetListIndex, isDragging });
 	});
-	// socket.on('itemEditBlock', ({ targetListIndex, isDragging }) => {
-	// 	socket.broadcast.emit('itemEditEnd', { targetListIndex, isDragging });
-	// });
 };
 
 export default socketKanban;
