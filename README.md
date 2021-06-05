@@ -6,45 +6,33 @@
 
 <br/>
 
-'Reciper' 소개 문구
+// 'Reciper' 소개 문구
 
 <br/>
 
-# 🛠 사용 Stack
+# 🛠 사용 stack
 
-// 사진 넣기(3d)
-
-<br/>
-
-# 🚗 Architecture
-
-### FRONT
-
-### BACK
+// 사진 넣기
 
 <br/>
 
-# 🧑‍💻 시연(일부)
+# 🚗 Flow Chart
 
-전체 시연영상은 wiki에서 보실 수 있습니다!
+### Client Side Flow Chart
 
-### LANDING
+// 사진 넣기
 
-### LOGIN
+### Server Side Flow Chart
 
-### PROFILE
+// 사진 넣기
 
-### RECRUIT
+<br/>
 
-### PROJECT
+# 🧑‍💻 Final Web View(일부)
 
-### WORKSPACE
+전체 시연영상은 [wiki](https://github.com/codestates/Reciper-client/wiki/Final-Web-View)에서 보실 수 있습니다!
 
-#### CHAT
-
-#### KANBAN BOARD
-
-#### CALENDAR
+// 사진 넣기
 
 <br/>
 
@@ -56,13 +44,12 @@
 우연히 우리 팀 멤버들의 성과 일치했기에 더욱 의미있는 팀 이름이 되었습니다🤗
 
 <br/>
-
-|  이름  |   담당    |
-| :----: | :-------: |
-| 곽은욱 | FRONT-END |
-| 이우성 | FRONT-END |
-| 정송이 | BACK-END  |
-| 신승길 | BACK-END  |
+|이름|담당|
+|:---:|:---:|
+|곽은욱|FRONT-END|
+|이우성|FRONT-END|
+|정송이|BACK-END|
+|신승길|BACK-END|
 
 <br/>
 
@@ -70,7 +57,7 @@
 
 [🖥 배포 사이트](https://reciper.me)
 
-[🏆 프로젝트 요약](https://www.notion.so/1-Reciper-de93f39a78844d7cb9af57c041ccfa27)
+[🌿 프로젝트 소개 문서](https://www.notion.so/1-Reciper-de93f39a78844d7cb9af57c041ccfa27)
 
 [📚 Reciper Wiki](https://github.com/codestates/Reciper-client/wiki)
 
