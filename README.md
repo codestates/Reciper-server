@@ -12,7 +12,7 @@
 
 # 🛠 사용 stack
 
-// 사진 넣기
+![stack_diagram](https://user-images.githubusercontent.com/77570843/120578890-7fcdd600-c461-11eb-9134-44ce31db21a3.png)
 
 <br/>
 
@@ -44,12 +44,13 @@
 우연히 우리 팀 멤버들의 성과 일치했기에 더욱 의미있는 팀 이름이 되었습니다🤗
 
 <br/>
-|이름|담당|
-|:---:|:---:|
-|곽은욱|FRONT-END|
-|이우성|FRONT-END|
-|정송이|BACK-END|
-|신승길|BACK-END|
+
+| 역할 |  이름  |   담당    | Github                                                                                                                                                                      |
+| :--: | :----: | :-------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 팀원 | 곽은욱 | FRONT-END | <a href="https://github.com/Woogie-94" target="_blank"><img src="https://img.shields.io/badge/Woogie_94-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a>       |
+| 팀원 | 이우성 | FRONT-END | <a href="https://github.com/useonglee" target="_blank"><img src="https://img.shields.io/badge/useonglee-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a>       |
+| 팀장 | 정송이 | BACK-END  | <a href="https://github.com/lovelysi0113" target="_blank"><img src="https://img.shields.io/badge/lovelysi0113-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a> |
+| 팀원 | 신승길 | BACK-END  | <a href="https://github.com/gatsukichi" target="_blank"><img src="https://img.shields.io/badge/gatsukichi-5294E2?style=for-the-badge&logo=GitHub&logoColor=white"/></a>     |
 
 <br/>
 
