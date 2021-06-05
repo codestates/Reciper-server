@@ -3,6 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import createConnection from './src/index';
+// routers
 import loginRouter from './routes/login';
 import notLoginRouter from './routes/notLoginRouter';
 import imageRouter from './routes/image';
@@ -24,9 +25,11 @@ const corsOption = {
 };
 app.use(cors(corsOption));
 app.use(cookieParser());
-app.use(express.urlencoded({
-	extended: true
-}));
+app.use(
+	express.urlencoded({
+		extended: true,
+	}),
+);
 app.use(express.json());
 
 // routes
