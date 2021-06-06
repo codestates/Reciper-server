@@ -71,11 +71,11 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 				if (err) {
 					return console.log('💜deleteRecruitBoard-err: 삭제할 수 없는 파일입니다', err.message);
 				}
-				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
-					err
-						? console.log('💜deleteRecruitBoard-err:', err.message)
-						: console.log(`💜deleteRecruitBoard-${__dirname}/../../uploads/${imageRoute}를 정상적으로 삭제했습니다`),
-				);
+				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err => {
+					if (err) {
+						console.log('💜deleteRecruitBoard-err:', err.message);
+					}
+				});
 			});
 		}
 		const deleteBoard = await Recruits.delete({
@@ -88,7 +88,6 @@ const deleteRecruitBoard = async (req: Request, res: Response) => {
 		});
 	}
 	// 삭제 성공 응답 보내기
-	console.log('💜deleteRecruitBoard-result: delete success board ', boardId);
 	res.status(200).json({
 		message: 'delete success board ' + boardId,
 	});

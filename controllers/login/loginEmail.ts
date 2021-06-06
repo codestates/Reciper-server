@@ -36,7 +36,7 @@ const loginEmail = {
 				accessToken = await accessTokenGenerator(user.id, email);
 				refreshToken = await refreshTokenGenerator(user.id, email);
 			}
-			console.log('💙loginEmail-at:', accessToken, '\n💙loginEmail-rt:', refreshToken);
+			//console.log('💙loginEmail-at:', accessToken, '\n💙loginEmail-rt:', refreshToken);
 			res.cookie('refreshToken', refreshToken, {
 				maxAge: 1000 * 60 * 60 * 24 * 7,
 				httpOnly: true,

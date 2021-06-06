@@ -35,7 +35,6 @@ const editChatRoom = async (req: Request, res: Response) => {
 		}
 		getRoomsList(projectURL)
 			.then(roomsList => {
-				console.log('💚editChatRoom-result:', roomsList); // test
 				res.status(200).json({
 					roomsList,
 				});

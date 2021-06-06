@@ -3,6 +3,7 @@ import { Socket } from './node_modules/socket.io/dist/socket';
 import workspaceChecker from './middlewares/workspaceChecker';
 import socketChat from './controllers/workspace/socketChat';
 import socketKanban from './controllers/workspace/socketKanban';
+import socketWebRTC from './controllers/workspace/socketWebRTC';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -42,6 +43,18 @@ try {
 		const projectKanbanIo = kanbanIo.nsp;
 		app.set('kanbanIo', projectKanbanIo);
 		socketKanban(socket);
+		socket.emit('connection');
+	});
+
+	// TODO: WebRTC 기능 socket 통신
+	const webRTCIo = io.of(/^\/webRTC\/\w{4,20}$/); // dynamic namespace(/webRTC/projectURL)
+	webRTCIo.use(workspaceChecker);
+	webRTCIo.on('connection', (socket: Socket) => {
+		console.log('💚/webRTC#connection\n', socket.handshake.query);
+		const projectWebRTCIo = webRTCIo.nsp;
+		app.set('webRTCIo', projectWebRTCIo);
+		socketWebRTC(socket);
+		console.log(socket.handshake.query);
 		socket.emit('connection');
 	});
 } catch (err) {

@@ -46,11 +46,6 @@ const registerRecruitBoard = async (req: Request, res: Response) => {
 			}
 			created.stacks = stackArray;
 			created.save();
-			console.log('💜registerRecruitBoard-result:', {
-				...created,
-				recruitMembers: JSON.parse(created.recruitMembers),
-				requireStack: stackArray.map(el => el.name),
-			}); // test
 			res.status(200).json({
 				...created,
 				recruitMembers: JSON.parse(created.recruitMembers),

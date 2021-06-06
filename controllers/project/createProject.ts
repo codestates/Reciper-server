@@ -32,15 +32,12 @@ const createProject = async (req: Request, res: Response) => {
 				project: created,
 			});
 			await generalRoom.save();
+			// kanban part - General 생성
 			let generalPart = await Parts.create({
 				name: 'General',
 				doingProject: created,
 			});
 			await generalPart.save();
-			console.log('💛createProject-result:', {
-				...created,
-				members: created.members.map(el => el.id),
-			}); // test
 			res.status(200).json({
 				...created,
 				members: created.members.map(el => el.id),

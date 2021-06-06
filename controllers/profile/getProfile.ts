@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
-import { Users } from '../../src/entity/Users';
 import { getRepository } from 'typeorm';
+import { Users } from '../../src/entity/Users';
+import { Projects } from '../../src/entity/Projects';
 
 const getProfile = async (req: Request, res: Response) => {
 	// 프로필 정보 조회
@@ -31,18 +32,26 @@ const getProfile = async (req: Request, res: Response) => {
 				stackArray.push(stack.name);
 			});
 		});
-		console.log(
-			'🧡getProfile-result:',
-			{
-				id: userInfo.id,
-				name: userInfo.name,
+		// project 데이터 가져오기
+		const allProjects = await getRepository(Projects).find({
+			relations: ['members'],
+			order: {
+				createdAt: 'DESC', // 순서: 최신순
 			},
-			stackArray,
-		); // test
+		});
+		let projectList = [];
+		for (let idx = 0; idx < allProjects.length; idx++) {
+			let members: number[] = allProjects[idx].members.map(el => el.id);
+			if (members.includes(userInfo.id)) {
+				let obj = { ...allProjects[idx], members };
+				projectList.push(obj);
+			}
+		}
 		res.status(200).json({
 			...userInfo,
 			career: userInfo.career !== undefined && userInfo.career !== '' ? JSON.parse(userInfo.career) : '{}',
 			stacks: stackArray,
+			projectList,
 		});
 	}
 };

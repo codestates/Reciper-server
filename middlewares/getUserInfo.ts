@@ -12,7 +12,7 @@ interface Itoken {
 }
 
 const getUserInfo = async (accessToken: string, loginType: string) => {
-	console.log('🔎getUserInfo-\n', { accessToken, loginType });
+	console.log('🔎getUserInfo-start');
 	const result = {
 		userEmail: '',
 		userId: -1,

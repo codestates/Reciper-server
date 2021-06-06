@@ -14,6 +14,6 @@ export async function accessTokenGenerator(id: number, email: string): Promise<s
 		},
 		process.env.ACCESS_SECRET,
 	);
-	console.log('uat', token);
+	//console.log('uat', token);
 	return token;
 }

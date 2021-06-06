@@ -62,14 +62,6 @@ const deleteComment = async (req: Request, res: Response) => {
 				},
 			},
 		});
-		console.log(
-			'💜deleteComment-result:',
-			{
-				id: boardInfo.id,
-				name: boardInfo.name,
-			},
-			commentsList.map(el => el.body),
-		); // test
 		if (boardInfo.recruitMembers) {
 			boardInfo.recruitMembers = JSON.parse(boardInfo.recruitMembers);
 		}

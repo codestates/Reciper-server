@@ -6,7 +6,7 @@ const getStacks = async (req: Request, res: Response) => {
 	console.log('🤍getStacks-', req.query);
 	const q = req.query.q;
 	if (q) {
-		console.log('쿼리있음', q);
+		//console.log('쿼리있음', q);
 		try {
 			const found = await Stacks.find();
 			const filtered = found.filter(el => {
@@ -27,7 +27,7 @@ const getStacks = async (req: Request, res: Response) => {
 			});
 		}
 	} else {
-		console.log('쿼리없음', q);
+		//console.log('쿼리없음', q);
 		try {
 			const found = await Stacks.find();
 			res.status(200).json({
