@@ -16,7 +16,7 @@ const addMembers = async (req: Request, res: Response) => {
 		if (foundProject) {
 			// 초대 명단에 해당 email이 있는지 확인
 			let inviteList = JSON.parse(foundProject.inviteList);
-			console.log(inviteList);
+			//console.log(inviteList);
 			let isInvited = false;
 			for (let idx = 0; idx < inviteList.length; idx++) {
 				if (inviteList[idx] === email) {
@@ -27,7 +27,7 @@ const addMembers = async (req: Request, res: Response) => {
 						// 이미 member인지 확인
 						const membersArray = [...foundProject.members];
 						const chkMembers = membersArray.map(el => el.id);
-						console.log('💛addMembers-chk:', foundProject.projectURL, 'member:', chkMembers); // test
+						//console.log('💛addMembers-chk:', foundProject.projectURL, 'member:', chkMembers); // test
 						if (!chkMembers.includes(userInfo.id)) {
 							membersArray.push(userInfo);
 							foundProject.members = membersArray;
@@ -47,15 +47,6 @@ const addMembers = async (req: Request, res: Response) => {
 				}
 			}
 			if (isInvited) {
-				console.log('💛addMembers-result:', {
-					...foundProject,
-					members: foundProject.members.map(el => {
-						return {
-							id: el.id,
-							name: el.name,
-						};
-					}),
-				}); // test
 				res.status(200).json({
 					...foundProject,
 					members: foundProject.members.map(el => {

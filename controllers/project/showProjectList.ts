@@ -29,16 +29,6 @@ const showProjectList = async (req: Request, res: Response) => {
 					projectList.push(obj);
 				}
 			}
-			console.log(
-				'💛showProjectList-result:',
-				{
-					id: userInfo.id,
-					name: userInfo.name,
-				},
-				projectList.map(el => {
-					return { id: el.id, name: el.name };
-				}),
-			); //test
 			res.status(200).json({
 				projectList,
 			});

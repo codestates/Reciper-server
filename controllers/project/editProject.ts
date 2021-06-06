@@ -20,10 +20,6 @@ const editProject = async (req: Request, res: Response) => {
 			foundProject.projectURL = projectURL;
 			foundProject.projectColor = randomColorGenerator();
 			await foundProject.save();
-			console.log('💛editProject-result:', {
-				...foundProject,
-				members: foundProject.members.map(el => el.id),
-			}); // test
 			res.status(200).json({
 				...foundProject,
 				members: foundProject.members.map(el => el.id),
