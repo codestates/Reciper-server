@@ -40,7 +40,6 @@ const createChatRoom = async (req: Request, res: Response) => {
 			await newRoom.save();
 			getRoomsList(projectURL)
 				.then(roomsList => {
-					console.log('💚createChatRoom-result:', roomsList); // test
 					res.status(200).json({
 						roomsList,
 					});
