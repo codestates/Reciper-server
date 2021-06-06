@@ -46,7 +46,7 @@ const sendEmail = async (req: Request, res: Response) => {
 			},
 		});
 		const AuthorizationCode = await authorizationCodeGenerator();
-		console.log('💙sendEmail-code:', AuthorizationCode);
+		//console.log('💙sendEmail-code:', AuthorizationCode);
 		// send mail with defined transport object
 		const logoNameImage =
 			'https://user-images.githubusercontent.com/77570843/118992471-a3a00f00-b9bf-11eb-86b3-bdb1f0fa5a36.png';
@@ -166,7 +166,7 @@ const sendEmail = async (req: Request, res: Response) => {
 </div>`,
 		});
 
-		console.log('💙sendEmail-mail sent: %s', info.messageId);
+		//console.log('💙sendEmail-mail sent: %s', info.messageId);
 
 		res.status(200).json({
 			status: 'Success',

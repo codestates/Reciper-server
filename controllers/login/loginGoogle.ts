@@ -57,7 +57,7 @@ const loginGoogle = async (req: Request, res: Response) => {
 				sameSite: 'none',
 			});
 			// access token과 loginType, email을 응답으로 보내줌
-			console.log('💙loginGoogle-at:', accessToken, '\n💙loginGoogle-rt:', refreshToken);
+			//console.log('💙loginGoogle-at:', accessToken, '\n💙loginGoogle-rt:', refreshToken);
 			res.status(200).json({
 				accessToken,
 				loginType: 'google',

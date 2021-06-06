@@ -58,7 +58,7 @@ const getNewAccessToken = async (req: Request, res: Response) => {
 			// 로그인 방식 - github
 			newAccessToken = refreshToken;
 		}
-		console.log('💙getNewAccessToken-result:', loginType, newAccessToken);
+		//console.log('💙getNewAccessToken-result:', loginType, newAccessToken);
 		if (newAccessToken !== '') {
 			await getUserInfo(newAccessToken, loginType)
 				.then(result => {
