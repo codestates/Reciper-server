@@ -8,11 +8,7 @@ dotenv.config();
 
 const getNewAccessToken = async (req: Request, res: Response) => {
 	// 새로운 access token 발급하기
-	console.log('💙getNewAccessToken-\n', {
-		accessToken: req.headers.authorization,
-		loginType: req.headers.logintype,
-		cookies: req.cookies,
-	});
+	console.log('💙getNewAccessToken-start');
 	if (req.cookies.refreshToken && req.headers.authorization) {
 		const { refreshToken } = req.cookies;
 		const accessToken = req.headers.authorization.split('Bearer ')[1];
