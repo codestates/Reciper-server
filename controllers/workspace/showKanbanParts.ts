@@ -10,7 +10,6 @@ const showKanbanParts = async (req: Request, res: Response) => {
 	const { projectURL } = req.params;
 	getPartsList(projectURL)
 		.then(roomsList => {
-			console.log('💚showKanbanParts-result:', roomsList); // test
 			res.status(200).json({
 				roomsList,
 			});
@@ -31,7 +30,6 @@ const getPartsList = async (projectURL: string) => {
 			projectURL,
 		},
 	});
-	console.log(foundProject);
 	const allPartRooms = await getRepository(Parts).find({
 		relations: ['doingProject'],
 		order: {

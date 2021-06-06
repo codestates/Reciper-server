@@ -1,13 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import getUserInfo from './getUserInfo';
 
-interface Itoken {
-	userId: number;
-	email: string;
-	iat: number;
-	exp: number;
-}
-
 const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 	console.log('🔒authChecker-start');
 	if (req.headers.authorization) {
@@ -17,7 +10,7 @@ const authChecker = async (req: Request, res: Response, next: NextFunction) => {
 			.then(result => {
 				const { userEmail, userId } = result;
 				// access token을 확인한 결과를 토대로 결정
-				console.log('🔒authChecker-result:', loginType, userEmail, userId);
+				// console.log('🔒authChecker-result:', loginType, userEmail, userId);
 				if (req.userId !== -1 && req.userEmail !== '') {
 					req.userId = userId;
 					req.userEmail = userEmail;

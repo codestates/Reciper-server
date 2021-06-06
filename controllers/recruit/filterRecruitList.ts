@@ -32,11 +32,6 @@ const filterRecruitList = async (req: Request, res: Response) => {
 			}
 		}
 		const countTotal = filterResult.length;
-		console.log(
-			'💜filterRecruitList-result:',
-			filterResult.slice((order - 1) * 24, order * 24).map(el => el.id),
-			countTotal <= order * 24 ? true : false,
-		); // test
 		res.status(200).json({
 			boardList: filterResult.slice((order - 1) * 24, order * 24),
 			isEnd: countTotal <= order * 24 ? true : false,

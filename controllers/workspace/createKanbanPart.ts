@@ -46,7 +46,6 @@ const createKanbanPart = async (req: Request, res: Response) => {
 			await newPart.save();
 			getPartsList(projectURL)
 				.then(roomsList => {
-					console.log('💚createKanbanPart-result:', roomsList); // test
 					res.status(200).json({
 						roomsList,
 					});

@@ -24,16 +24,17 @@ import editProject from './project/editProject';
 import deleteProject from './project/deleteProject';
 import inviteMembers from './project/inviteMembers';
 import addMembers from './project/addMembers';
-// 5-1. task(칸반보드, 캘린더)
-import { showKanbanParts } from './workspace/showKanbanParts';
-import createKanbanPart from './workspace/createKanbanPart';
-import editKanbanPart from './workspace/editKanbanPart';
-import deleteKanbanPart from './workspace/deleteKanbanPart';
-// 5-2. chat(채팅)
+// 5. Workspace(협업 툴)
+// 5-1. chat(채팅)
 import { showChatRooms } from './workspace/showChatRooms';
 import createChatRoom from './workspace/createChatRoom';
 import editChatRoom from './workspace/editChatRoom';
 import deleteChatRoom from './workspace/deleteChatRoom';
+// 5-2. task(칸반보드, 캘린더)
+import { showKanbanParts } from './workspace/showKanbanParts';
+import createKanbanPart from './workspace/createKanbanPart';
+import editKanbanPart from './workspace/editKanbanPart';
+import deleteKanbanPart from './workspace/deleteKanbanPart';
 // 6. stack(스택)
 import getStacks from './stacks/getStacks';
 // 7. image(이미지)
@@ -66,16 +67,16 @@ export {
 	deleteProject,
 	inviteMembers,
 	addMembers,
-	// task
-	showKanbanParts,
-	createKanbanPart,
-	editKanbanPart,
-	deleteKanbanPart,
 	// chat
 	showChatRooms,
 	createChatRoom,
 	editChatRoom,
 	deleteChatRoom,
+	// task
+	showKanbanParts,
+	createKanbanPart,
+	editKanbanPart,
+	deleteKanbanPart,
 	//stack
 	getStacks,
 	// image

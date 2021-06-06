@@ -143,10 +143,6 @@ const socketChat = (socket: Socket) => {
 		}
 		let end_chat = total - order * COUNT_SCROLL;
 		let sliceChats = chats.slice(start_chat, end_chat);
-		console.log(
-			'💚/chat#getAllMessages-result:',
-			sliceChats.map(el => el.text),
-		); // test
 		socket.emit('getAllMessages', { chats: sliceChats, isEnd });
 	});
 };

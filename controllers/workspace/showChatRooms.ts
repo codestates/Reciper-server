@@ -9,7 +9,6 @@ const showChatRooms = async (req: Request, res: Response) => {
 	const { projectURL } = req.params;
 	getRoomsList(projectURL)
 		.then(roomsList => {
-			console.log('💚showChatRooms-result:', roomsList); // test
 			res.status(200).json({
 				roomsList,
 			});
@@ -30,7 +29,6 @@ const getRoomsList = async (projectURL: string) => {
 			projectURL,
 		},
 	});
-	console.log(foundProject);
 	const allChatRooms = await getRepository(Rooms).find({
 		relations: ['project'],
 		order: {

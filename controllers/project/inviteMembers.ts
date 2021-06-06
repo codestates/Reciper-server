@@ -26,7 +26,6 @@ const inviteMembers = async (req: Request, res: Response) => {
 			if (Array.isArray(inviteList)) {
 				foundProject.inviteList = JSON.stringify(inviteList);
 				await foundProject.save();
-				console.log(foundProject); // test
 				for (let idx = 0; idx < inviteList.length; idx++) {
 					await sendInvitationEmail(inviteList[idx], userInfo.name, projectName, projectURL);
 				}
@@ -66,8 +65,6 @@ const sendInvitationEmail = async (email: string, inviterName: string, projectNa
 		},
 	});
 	const AuthorizationCode = await authorizationCodeGenerator();
-	console.log(AuthorizationCode);
-	// 로고 이미지 완료되면 추후 html 디자인 보완하기
 	const logoNameImage =
 		'https://user-images.githubusercontent.com/77570843/118992471-a3a00f00-b9bf-11eb-86b3-bdb1f0fa5a36.png';
 	const logoImage =
@@ -187,7 +184,7 @@ const sendInvitationEmail = async (email: string, inviterName: string, projectNa
 				</table>
 			</div>`,
 	});
-	console.log('💛inviteMembers-mail sent: %s', info.messageId);
+	//console.log('💛inviteMembers-mail sent: %s', info.messageId);
 };
 
 export default inviteMembers;

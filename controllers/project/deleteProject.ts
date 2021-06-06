@@ -32,20 +32,17 @@ const deleteProject = async (req: Request, res: Response) => {
 				},
 				where: (qb: any) => {
 					qb.where({
-						// Filter Role fields
 						project: foundProject,
 					});
 				},
 			});
 			for (let i = 0; i < foundChats.length; i++) {
 				await foundChats[i].remove();
-				// console.log(foundChats[i], '댓글 삭제 완료');
 			}
 			// 프로젝트 삭제
 			const delProject = await Projects.delete({
 				projectURL,
 			});
-			console.log('💛deleteProject-result:', delProject); // test
 			res.status(200).json({
 				message: 'delete success project ' + projectURL,
 			});
