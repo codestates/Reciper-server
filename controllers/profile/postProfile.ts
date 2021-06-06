@@ -40,11 +40,11 @@ const postProfile = async (req: Request, res: Response) => {
 				if (err) {
 					return console.log('🧡postProfile-err: 삭제할 수 없는 파일입니다', err.message);
 				}
-				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
-					err
-						? console.log('🧡postProfile-err:', err.message)
-						: console.log(`🧡postProfile-${__dirname}/../../uploads/${imageRoute}를 정상적으로 삭제했습니다`),
-				);
+				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err => {
+					if (err) {
+						console.log('🧡postProfile-err:', err.message);
+					}
+				});
 			});
 			if (uploadImage === 'deleteImage') {
 				foundUser.uploadImage = '';
@@ -64,17 +64,8 @@ const postProfile = async (req: Request, res: Response) => {
 				stackArray.push(foundStack!);
 			}
 		}
-
 		foundUser.stacks = stackArray;
 		const saved = await foundUser.save();
-		console.log(
-			'🧡postProfile-result:',
-			{
-				id: saved.id,
-				name: saved.name,
-			},
-			stackArray.map(el => el.name),
-		); // test
 		res.status(200).json({
 			...saved,
 			career: career !== undefined && career !== '' ? JSON.parse(saved.career) : '{}',

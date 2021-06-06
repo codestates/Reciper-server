@@ -13,6 +13,6 @@ export async function refreshTokenGenerator(id: number, email: string): Promise<
 		},
 		process.env.REFRESH_SECRET,
 	);
-	console.log('urt', token);
+	//console.log('urt', token);
 	return token;
 }

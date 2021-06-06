@@ -31,14 +31,6 @@ const getProfile = async (req: Request, res: Response) => {
 				stackArray.push(stack.name);
 			});
 		});
-		console.log(
-			'🧡getProfile-result:',
-			{
-				id: userInfo.id,
-				name: userInfo.name,
-			},
-			stackArray,
-		); // test
 		res.status(200).json({
 			...userInfo,
 			career: userInfo.career !== undefined && userInfo.career !== '' ? JSON.parse(userInfo.career) : '{}',
