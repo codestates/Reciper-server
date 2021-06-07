@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 import { Users } from '../../src/entity/Users';
 import { Stacks } from '../../src/entity/Stacks';
+import { Projects } from '../../src/entity/Projects';
 import * as fs from 'fs';
 import randomColorGenerator from '../login/randomColorGenerator';
 
@@ -40,11 +42,11 @@ const postProfile = async (req: Request, res: Response) => {
 				if (err) {
 					return console.log('🧡postProfile-err: 삭제할 수 없는 파일입니다', err.message);
 				}
-				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
-					err
-						? console.log('🧡postProfile-err:', err.message)
-						: console.log(`🧡postProfile-${__dirname}/../../uploads/${imageRoute}를 정상적으로 삭제했습니다`),
-				);
+				fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err => {
+					if (err) {
+						console.log('🧡postProfile-err:', err.message);
+					}
+				});
 			});
 			if (uploadImage === 'deleteImage') {
 				foundUser.uploadImage = '';
@@ -64,21 +66,28 @@ const postProfile = async (req: Request, res: Response) => {
 				stackArray.push(foundStack!);
 			}
 		}
-
 		foundUser.stacks = stackArray;
 		const saved = await foundUser.save();
-		console.log(
-			'🧡postProfile-result:',
-			{
-				id: saved.id,
-				name: saved.name,
+		// project 데이터 가져오기
+		const allProjects = await getRepository(Projects).find({
+			relations: ['members'],
+			order: {
+				createdAt: 'DESC', // 순서: 최신순
 			},
-			stackArray.map(el => el.name),
-		); // test
+		});
+		let projectList = [];
+		for (let idx = 0; idx < allProjects.length; idx++) {
+			let members: number[] = allProjects[idx].members.map(el => el.id);
+			if (members.includes(foundUser.id)) {
+				let obj = { ...allProjects[idx], members };
+				projectList.push(obj);
+			}
+		}
 		res.status(200).json({
 			...saved,
 			career: career !== undefined && career !== '' ? JSON.parse(saved.career) : '{}',
 			stacks: stackArray.map(el => el.name),
+			projectList,
 		});
 	} else {
 		res.status(400).json({
