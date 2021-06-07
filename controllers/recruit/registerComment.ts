@@ -18,7 +18,7 @@ const registerComment = async (req: Request, res: Response) => {
 	});
 	if (foundUser) {
 		const foundBoard = await getRepository(Recruits).findOne({
-			relations: ['writer'],
+			relations: ['writer', 'stacks'],
 			where: {
 				id: boardId,
 			},
