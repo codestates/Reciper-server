@@ -21,7 +21,9 @@ const deleteProject = async (req: Request, res: Response) => {
 					project: foundProject,
 				},
 			});
-			await delRooms.forEach(el => el.remove());
+			for (let idx = 0; idx < delRooms.length; idx++) {
+				await delRooms[idx].remove();
+			}
 			// chats 정보 삭제
 			const foundChats = await getRepository(Chats).find({
 				join: {

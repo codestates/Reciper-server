@@ -12,7 +12,7 @@ const deleteComment = async (req: Request, res: Response) => {
 	let boardInfo;
 	try {
 		boardInfo = await getRepository(Recruits).findOne({
-			relations: ['writer'],
+			relations: ['writer', 'stacks'],
 			where: {
 				id: boardId,
 			},
