@@ -1,7 +1,7 @@
 import { Projects } from '../src/entity/Projects';
 
 const getMemberInfo = async (userId: number, projectURL: string | string[]) => {
-	console.log('🔎getMemberInfo-\n', { userId, projectURL });
+	console.log('🔎getMemberInfo-start');
 	const result = {
 		projectId: -1,
 	};
@@ -14,7 +14,7 @@ const getMemberInfo = async (userId: number, projectURL: string | string[]) => {
 		});
 		if (foundProject) {
 			const chkMembers = foundProject.members.map(el => el.id);
-			console.log('🔎getMemberInfo-chk:', projectURL, 'member:', chkMembers);
+			//console.log('🔎getMemberInfo-chk:', projectURL, 'member:', chkMembers);
 			if (chkMembers.includes(userId)) {
 				console.log('🔎getMemberInfo-result:', userId, 'is member in', projectURL);
 				result.projectId = foundProject.id;

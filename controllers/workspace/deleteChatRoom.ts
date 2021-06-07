@@ -23,7 +23,6 @@ const deleteChatRoom = async (req: Request, res: Response) => {
 		}
 		getRoomsList(projectURL)
 			.then(roomsList => {
-				console.log('💚deleteChatRoom-result:', roomsList); // test
 				res.status(200).json({
 					roomsList,
 				});

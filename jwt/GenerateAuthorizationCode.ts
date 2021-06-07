@@ -16,7 +16,7 @@ export default async function authorizationCodeGenerator() {
 				return new Error('Not generation AuthorizationCode');
 			}
 			token = encoded;
-			console.log(encoded);
+			//console.log(encoded);
 		},
 	);
 	return token;

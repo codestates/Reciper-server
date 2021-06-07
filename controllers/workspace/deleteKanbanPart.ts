@@ -30,7 +30,6 @@ const deleteKanbanPart = async (req: Request, res: Response) => {
 		}
 		getPartsList(projectURL)
 			.then(roomsList => {
-				console.log('💚deleteKanbanPart-result:', roomsList); // test
 				res.status(200).json({
 					roomsList,
 				});

@@ -35,7 +35,6 @@ const editKanbanPart = async (req: Request, res: Response) => {
 		}
 		getPartsList(projectURL)
 			.then(roomsList => {
-				console.log('💚editKanbanPart-result:', roomsList); // test
 				res.status(200).json({
 					roomsList,
 				});

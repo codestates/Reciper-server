@@ -62,7 +62,7 @@ const loginGithub = async (req: Request, res: Response) => {
 				sameSite: 'none',
 			});
 			// access token과 loginType을 응답으로 보내줌
-			console.log('💙loginGithub-at:', accessToken);
+			//console.log('💙loginGithub-at:', accessToken);
 			res.status(200).json({
 				accessToken,
 				loginType: 'github',

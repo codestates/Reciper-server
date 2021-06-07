@@ -50,11 +50,11 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 					if (err) {
 						return console.log('💜editRecruitBoard-err: 삭제할 수 없는 파일입니다', err.message);
 					}
-					fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err =>
-						err
-							? console.log('💜editRecruitBoard-err:', err.message)
-							: console.log(`💜editRecruitBoard-${__dirname}/../../uploads/${imageRoute}를 정상적으로 삭제했습니다`),
-					);
+					fs.unlink(`${__dirname}/../../uploads/${imageRoute}`, err => {
+						if (err) {
+							console.log('💜editRecruitBoard-err:', err.message);
+						}
+					});
 				});
 			}
 			foundBoard.uploadImage = uploadImage;
@@ -67,12 +67,6 @@ const editRecruitBoard = async (req: Request, res: Response) => {
 					recruitBoard: foundBoard,
 				},
 			});
-			console.log('💜editRecruitBoard-result:', {
-				...foundBoard,
-				recruitMembers: JSON.parse(foundBoard.recruitMembers),
-				requireStack: stackArray.map(el => el.name),
-				commentList: commentsList.map(el => el.body),
-			}); // test
 			res.status(200).json({
 				...foundBoard,
 				recruitMembers: JSON.parse(foundBoard.recruitMembers),

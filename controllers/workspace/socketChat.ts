@@ -23,7 +23,7 @@ const socketChat = (socket: Socket) => {
 	});
 
 	// TODO: 💚/chat#sendMessage - 채팅 메시지 보내기/저장
-	socket.on('sendMessage', async ({ room, name, message }) => {
+	socket.on('sendMessage', async ({ room, name, message, chatLength }) => {
 		console.log('💚/chat#sendMessage-', { room, name, message });
 		try {
 			const nowProject = await Projects.findOne({
@@ -45,7 +45,7 @@ const socketChat = (socket: Socket) => {
 			});
 			await chat.save();
 			socket.to(room).emit('sendMessage', { ...chat });
-			socket.emit('nowMessageId', { id: chat.id });
+			socket.emit('nowMessageId', { id: chat.id, chatLength });
 		} catch (err) {
 			console.log('💚/chat#sendMessage-err:', err.message);
 		}
@@ -143,10 +143,6 @@ const socketChat = (socket: Socket) => {
 		}
 		let end_chat = total - order * COUNT_SCROLL;
 		let sliceChats = chats.slice(start_chat, end_chat);
-		console.log(
-			'💚/chat#getAllMessages-result:',
-			sliceChats.map(el => el.text),
-		); // test
 		socket.emit('getAllMessages', { chats: sliceChats, isEnd });
 	});
 };
