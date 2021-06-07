@@ -24,6 +24,21 @@ const socketWebRTC = async (socket: Socket) => {
 
 		socket.emit('all users', usersInThisRoom);
 	});
+	socket.on('leave room', roomID => {
+		console.log('리브!!!', roomID);
+
+		for (let i = 0; i < users[roomID].length; i++) {
+			if (users[roomID][i] === socket.id) {
+				users[roomID].splice(i, 1);
+				i--;
+			}
+		}
+
+		delete socketToRoom[socket.id];
+		const usersInThisRoom = users[roomID].filter((id: string) => id !== socket.id);
+
+		socket.emit('all users', usersInThisRoom);
+	});
 
 	socket.on('sending signal', payload => {
 		socket.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });
