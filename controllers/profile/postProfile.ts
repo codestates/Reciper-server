@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
 import { Users } from '../../src/entity/Users';
 import { Stacks } from '../../src/entity/Stacks';
+import { Projects } from '../../src/entity/Projects';
 import * as fs from 'fs';
 import randomColorGenerator from '../login/randomColorGenerator';
 
@@ -66,10 +68,26 @@ const postProfile = async (req: Request, res: Response) => {
 		}
 		foundUser.stacks = stackArray;
 		const saved = await foundUser.save();
+		// project 데이터 가져오기
+		const allProjects = await getRepository(Projects).find({
+			relations: ['members'],
+			order: {
+				createdAt: 'DESC', // 순서: 최신순
+			},
+		});
+		let projectList = [];
+		for (let idx = 0; idx < allProjects.length; idx++) {
+			let members: number[] = allProjects[idx].members.map(el => el.id);
+			if (members.includes(foundUser.id)) {
+				let obj = { ...allProjects[idx], members };
+				projectList.push(obj);
+			}
+		}
 		res.status(200).json({
 			...saved,
 			career: career !== undefined && career !== '' ? JSON.parse(saved.career) : '{}',
 			stacks: stackArray.map(el => el.name),
+			projectList,
 		});
 	} else {
 		res.status(400).json({
