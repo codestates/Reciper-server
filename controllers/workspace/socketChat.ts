@@ -52,7 +52,7 @@ const socketChat = (socket: Socket) => {
 	});
 
 	// TODO: 💚/chat#sendImage - 이미지 보내기/저장
-	socket.on('sendImage', async ({ room, name, uploadImage }) => {
+	socket.on('sendImage', async ({ room, name, uploadImage, chatLength }) => {
 		console.log('💚/chat#sendImage-', { room, name, uploadImage });
 		try {
 			const nowProject = await Projects.findOne({
@@ -73,7 +73,8 @@ const socketChat = (socket: Socket) => {
 				room,
 			});
 			await chat.save();
-			socket.broadcast.to(room).emit('sendImage', { ...chat });
+			socket.to(room).emit('sendImage', { ...chat });
+			socket.emit('nowMessageId', { id: chat.id, chatLength });
 		} catch (err) {
 			console.log('💚/chat#sendImage-err:', err.message);
 		}
